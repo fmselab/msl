@@ -4,7 +4,7 @@
 
 [Library of MAPE patterns]()
 
-[Eclipse update site of MSL editor and ASM generator]()
+Eclipse update site of MSL editor and ASM generator: [http://fmse.di.unimi.it/sw/msl/updatesite/](http://fmse.di.unimi.it/sw/msl/updatesite/)
 
 [Example of MAPE pattern instantiation]()
 
