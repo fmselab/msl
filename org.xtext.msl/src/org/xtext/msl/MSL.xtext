@@ -1,0 +1,98 @@
+grammar org.xtext.msl.MSL with org.eclipse.xtext.common.Terminals
+
+generate mSL "http://www.xtext.org/msl/MSL"
+
+Specification:
+	(imports+=Import)*
+	(absPattern=AbstractPattern)?
+	(pattern+=Pattern)*
+	(configuration=Configuration)?;
+
+Import:
+    'import' importedNamespace=[AbstractPattern|PATTERN_ID];
+
+AbstractPattern:
+	'abstract' 'pattern' name=PATTERN_ID '{'
+	managedSystems+=AbstractSystem*
+	abstractGroups+=AbstractGroup*
+	interactions+=AbstractInteraction*
+	'}';
+
+AbstractSystem:
+	'system' name=PATTERN_ID;
+
+AbstractComponent: name=COMPONENT_TYPE;
+
+GroupDef:
+	grp=[AbstractGroup|PATTERN_ID] ('[' mult=MULTIPLICITY ']')?
+;
+
+AbstractGroup:
+	'group' name=PATTERN_ID '{'
+	('managedSyS' manSys=[AbstractSystem|PATTERN_ID])?
+	('managedGrp' manGrp+=GroupDef (',' manGrp+=GroupDef)*)?
+	'components' components+=AbstractComponent (',' components+=AbstractComponent)*
+	'}';
+
+AbstractInteraction:
+	'interaction' start=AbstractComponentName '->' end=AbstractComponentName
+	('[' low=MULTIPLICITY ',' high=MULTIPLICITY']')?;
+
+AbstractComponentName: type=[AbstractComponent|FQN_COMPONENT];
+
+SystemBinding:
+	'system' name=PATTERN_ID ':' absSys=[AbstractSystem|FQN_PATTERN_ID];
+
+GroupBinding:
+	'group' name=PATTERN_ID ':' absGroup=[AbstractGroup|FQN_PATTERN_ID];
+
+Pattern:
+	'concrete' 'pattern' name=PATTERN_ID 'concretizationOf' absPattern=[AbstractPattern|PATTERN_ID] '{'
+	managedSystems+=SystemBinding*
+	groups+=GroupBinding*
+	'}';
+
+Configuration:
+	'configuration' name=PATTERN_ID 'instanceOf' (pattern+=[Pattern|PATTERN_ID] (',' pattern+=[Pattern|PATTERN_ID])*) '{'
+	concreteSystems+=ConcreteSystem*
+	concreteGroups+=ConcreteGroup*
+	concreteInteractions+=Interaction*
+	'}';
+
+ConcreteSystem:
+	name=INSTANCE_ID ':' (bindings+=[SystemBinding|FQN_PATTERN_ID] (',' bindings+=[SystemBinding|FQN_PATTERN_ID])*);
+
+ConcreteGroup:
+	name=INSTANCE_ID ':' (abstractGroups+=[GroupBinding|FQN_PATTERN_ID] (',' abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{'
+	('managedSyS' manSys=[ConcreteSystem|INSTANCE_ID])?
+	('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (','manGrp+=[ConcreteGroup|INSTANCE_ID])*)?
+	'components' components+=ComponentInstance (',' components+=ComponentInstance)*
+	'}';
+
+ComponentInstance:
+	name=INSTANCE_ID ':' type=COMPONENT_TYPE;
+
+Interaction:
+	(start=ComponentName '->' end=ComponentName);
+
+ComponentName: component=[ComponentInstance|FQN_INSTANCE_ID];
+
+terminal COMPONENT_TYPE:
+	'M' | 'A' | 'P' | 'E';
+
+terminal MULTIPLICITY: '1' | '*-ALL' | '*-SOME' | '*-ONE';
+
+terminal PATTERN_ID:
+	('A'..'Z') ('a'..'z' | 'A'..'Z' | '_')+;
+
+terminal INSTANCE_ID:
+	('a'..'z') ('a'..'z' | '0'..'9' | '_')+;
+
+terminal FQN_PATTERN_ID:
+	PATTERN_ID ("." PATTERN_ID)+;
+
+terminal FQN_INSTANCE_ID:
+	INSTANCE_ID "." INSTANCE_ID;
+
+terminal FQN_COMPONENT:
+	PATTERN_ID "." COMPONENT_TYPE;

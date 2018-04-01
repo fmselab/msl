@@ -1,0 +1,53 @@
+//A DSL for MAPE patterns and their instances
+//Example of pattern and instance
+pattern SimpleMAPE2
+system Heater 
+system WaterHeater
+
+group MainES {
+	components M, A, P, E
+} 
+
+group InterfaceTemperature {
+	managedSyS Heater
+	components M, E
+}
+group InterfaceWaterHeater {
+	managedSyS WaterHeater
+	components M, E
+}
+
+interaction InterfaceTemperature.M -> MainES.M [*,1]
+interaction InterfaceWaterHeater.M -> MainES.M [*,1]
+interaction MainES.E -> InterfaceTemperature.E [1,*]
+interaction MainES.E -> InterfaceWaterHeater.E [1,*]
+interaction MainES.M -> MainES.A [1,1]
+interaction MainES.A -> MainES.P [1,1]
+interaction MainES.P -> MainES.E [1,1]
+
+instance ElectricitySavingMAPE {
+	hs: Heater 
+	whs: WaterHeater 
+
+	es : MainES {
+		components m_es:M, a_es:A, p_es:P, e_es:E 
+	}
+
+	h : InterfaceTemperature{
+		managedSyS hs
+		components  m_h:M , e_h:E 
+	}
+
+	wh : InterfaceWaterHeater {
+	  managedSyS whs
+	  components m_wh:M, e_wh:E
+	}
+
+	es.m_es -> es.a_es
+	es.a_es -> es.p_es
+	es.p_es -> es.e_es
+	es.e_es -> h.e_h
+	es.e_es -> wh.e_h
+	h.m_h -> es.m_es
+	wh.m_wh -> es.m_es
+}

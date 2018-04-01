@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="mSL" nsURI="http://www.xtext.org/msl/MSL" nsPrefix="mSL">
+  <eClassifiers xsi:type="ecore:EClass" name="Specification">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="imports" upperBound="-1"
+        eType="#//Import" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="absPattern" eType="#//AbstractPattern"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" upperBound="-1"
+        eType="#//Pattern" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="configuration" eType="#//Configuration"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Import">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="importedNamespace" eType="#//AbstractPattern"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractPattern">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="managedSystems" upperBound="-1"
+        eType="#//AbstractSystem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstractGroups" upperBound="-1"
+        eType="#//AbstractGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interactions" upperBound="-1"
+        eType="#//AbstractInteraction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractSystem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractComponent">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupDef">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="grp" eType="#//AbstractGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="mult" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manSys" eType="#//AbstractSystem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manGrp" upperBound="-1"
+        eType="#//GroupDef" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//AbstractComponent" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractInteraction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//AbstractComponentName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="end" eType="#//AbstractComponentName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="low" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="high" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="AbstractComponentName">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="#//AbstractComponent"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SystemBinding">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="absSys" eType="#//AbstractSystem"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="GroupBinding">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="absGroup" eType="#//AbstractGroup"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Pattern">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="absPattern" eType="#//AbstractPattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="managedSystems" upperBound="-1"
+        eType="#//SystemBinding" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="groups" upperBound="-1"
+        eType="#//GroupBinding" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Configuration">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="pattern" unique="false"
+        upperBound="-1" eType="#//Pattern"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concreteSystems" upperBound="-1"
+        eType="#//ConcreteSystem" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concreteGroups" upperBound="-1"
+        eType="#//ConcreteGroup" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="concreteInteractions" upperBound="-1"
+        eType="#//Interaction" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConcreteSystem">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" unique="false"
+        upperBound="-1" eType="#//SystemBinding"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConcreteGroup">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="abstractGroups" unique="false"
+        upperBound="-1" eType="#//GroupBinding"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manSys" eType="#//ConcreteSystem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manGrp" unique="false"
+        upperBound="-1" eType="#//ConcreteGroup"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
+        eType="#//ComponentInstance" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentInstance">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Interaction">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//ComponentName"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="end" eType="#//ComponentName"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ComponentName">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//ComponentInstance"/>
+  </eClassifiers>
+</ecore:EPackage>

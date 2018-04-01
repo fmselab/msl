@@ -1,0 +1,43 @@
+//A DSL for MAPE patterns and their instances
+//Example of pattern and instance
+pattern SimpleMAPE
+system S
+group Main {
+	components M, A, P, E
+} 
+group Interface {
+	managedSyS S
+	components M, E
+}
+interaction Interface.M -> Main.M [*,1]
+interaction Main.E -> Interface.E [1,*]
+interaction Main.M -> Main.A [1,1]
+interaction Main.A -> Main.P [1,1]
+interaction Main.P -> Main.E [1,1]
+
+instance SimpleMapeInst {
+	s1 : S
+	s2 : S
+
+	mape0 : Main {
+		components m0:M, a0:A, p0:P, e0:E 
+	}
+
+	me1 : Interface {
+		managedSyS s1
+		components  m1:M , e1:E 
+	}
+
+	me2 : Interface {
+	  managedSyS s2
+	  components m2:M, e2:E
+	}
+
+	mape0.m0 -> mape0.a0
+	mape0.a0 -> mape0.p0
+	mape0.p0 -> mape0.e0
+	mape0.e0 -> me1.e1
+	mape0.e0 -> me2.e2
+	me1.m1 -> mape0.m0
+	me2.m2 -> mape0.m0
+}

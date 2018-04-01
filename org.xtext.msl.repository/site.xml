@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.xtext.msl.asmgenerator.feature_1.0.2.jar" id="org.xtext.msl.asmgenerator.feature" version="1.0.2">
+      <category name="MSL"/>
+   </feature>
+   <feature url="features/org.xtext.msl.feature_1.0.2.jar" id="org.xtext.msl.feature" version="1.0.2">
+      <category name="MSL"/>
+   </feature>
+   <category-def name="MSL" label="MSL framework">
+      <description>
+         The MAPE Specification Language (MSL) for specifying MAPE patterns and a generator from MSL models to Abstract State Machine (ASM) models.
+      </description>
+   </category-def>
+</site>

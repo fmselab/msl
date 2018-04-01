@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.xtext.msl.feature"
+      label="MAPE Specification Language"
+      version="1.0.2"
+      provider-name="fmse.di.unimi.it">
+
+   <license url="">
+      Eclipse Public License
+   </license>
+
+   <url>
+      <update url="http://fmse.di.unimi.it/msl/updatesite/"/>
+   </url>
+
+   <plugin
+         id="org.xtext.msl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.xtext.msl.ide"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.xtext.msl.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

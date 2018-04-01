@@ -1,0 +1,67 @@
+asm SimpleMAPE
+signature:
+	domain SMdA subsetof Agent
+	domain MainMgA subsetof Agent
+	domain InterfaceMgA subsetof Agent
+	static SMdAManagedByInterfaceMgA: InterfaceMgA -> SMdA
+	//I: Interface.M -> Main.M
+	static mainM: InterfaceMgA -> MainMgA
+	static interfaceM: MainMgA -> Powerset(InterfaceMgA)
+	controlled sgnInterfaceMMainM: Prod(InterfaceMgA, MainMgA) -> Boolean
+	//I: Main.E -> Interface.E
+	static interfaceE: MainMgA -> Powerset(InterfaceMgA)
+	static mainE: InterfaceMgA -> MainMgA
+	controlled sgnMainEInterfaceE: Prod(MainMgA, InterfaceMgA) -> Boolean
+	//I: Main.M -> Main.A
+	//I: Main.A -> Main.P
+	//I: Main.P -> Main.E
+	//SimpleMapeInst
+	static s1: SMdA
+	static s2: SMdA
+	static mape0: MainMgA
+	static me1: InterfaceMgA
+	static me2: InterfaceMgA
+definitions:
+	rule r_MainMgA_M[]=
+		//TODO
+
+	rule r_MainMgA_A[]=
+		//TODO
+
+	rule r_MainMgA_P[]=
+		//TODO
+
+	rule r_MainMgA_E[]=
+		//TODO
+
+	rule r_programMainMgA=
+		par
+			r_MainMgA_P[]
+			r_MainMgA_A[]
+			r_MainMgA_E[]
+			r_MainMgA_M[]
+		endpar
+
+	rule r_InterfaceMgA_M[]=
+		//TODO
+
+	rule r_InterfaceMgA_E[]=
+		//TODO
+
+	rule r_programInterfaceMgA=
+		par
+			r_InterfaceMgA_M[]
+			r_InterfaceMgA_E[]
+		endpar
+
+	rule r_SMdA[]=
+		skip //placeholder
+
+	rule r_main =
+		forall $a in Agent with true do
+			program($a)
+
+default init s0:
+	agent SMdA: r_SMdA[]
+	agent MainMgA: r_programMainMgA[]
+	agent InterfaceMgA: r_programInterfaceMgA[]

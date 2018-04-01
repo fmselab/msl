@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.xtext.msl.asmgenerator.feature"
+      label="ASM generator"
+      version="1.0.2"
+      provider-name="fmse.di.unimi.it">
+
+   <license url="">
+      Eclipse Public License
+   </license>
+
+   <url>
+      <update url="http://fmse.di.unimi.it/msl/updatesite/"/>
+   </url>
+
+   <plugin
+         id="org.xtext.msl.asmgenerator.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.xtext.msl.asmgenerator"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

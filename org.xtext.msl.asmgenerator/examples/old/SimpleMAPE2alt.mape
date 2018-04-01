@@ -1,0 +1,66 @@
+//A DSL for MAPE patterns and their instances
+//Example of pattern and instance
+
+//A MAPE pattern establishes a schema of MAPE structure: 
+//group roles and relationships between them
+abstract pattern SimpleMAPE {
+
+	group Main {
+		components M, A, P, E
+	}
+
+	group Interface {
+		managedSyS S
+		components M, E
+	}
+
+	interaction Interface.M -> Main.M [*,1]
+	interaction Main.E -> Interface.E [1,*]
+	interaction Main.M -> Main.A [1,1]
+	interaction Main.A -> Main.P [1,1]
+	interaction Main.P -> Main.E [1,1]
+}
+//In a model, a pattern instance bind roles (and relationships) to 
+//specific entities of the system being modeled 
+pattern ElectricitySavingMAPE1 instanceOf SimpleMAPE {
+	Heater: S 
+	MainES: Main
+	InterfaceTemperature: Interface
+}
+
+model myModel instanceOf ElectricitySavingMAPE1 {
+	hs: Heater 
+	whs: WaterHeater 
+
+	es : MainES {
+		components m_es:M, a_es:A, p_es:P, e_es:E 
+	}
+
+	h0 : InterfaceTemperature {
+		managedSyS hs
+		components  m_h:M , e_h:E 
+	}
+
+	h1 : InterfaceTemperature{
+		managedSyS hs
+		components m_h:M , e_h:E 
+	}
+
+	h2 : InterfaceTemperature{
+		managedSyS hs
+		components  m_h:M , e_h:E 
+	}
+
+	wh : InterfaceWaterHeater {
+	  managedSyS whs
+	  components m_wh:M, e_wh:E
+	}
+
+	es.m_es -> es.a_es
+	es.a_es -> es.p_es
+	es.p_es -> es.e_es
+	es.e_es -> h.e_h
+	es.e_es -> wh.e_h
+	h.m_h -> es.m_es
+	wh.m_wh -> es.m_es
+}
