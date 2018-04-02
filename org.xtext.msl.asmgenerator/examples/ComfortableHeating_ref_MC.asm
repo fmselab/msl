@@ -1,7 +1,8 @@
+//version of ComfortableHeating_ref adapted for model checking
+
 asm ComfortableHeating_ref_MC
 import StandardLibrary
 import LTLlibrary
-import CTLlibrary
 
 signature:
 	//ComfortableHeatingMAPE
@@ -209,10 +210,6 @@ definitions:
 	LTLSPEC not f(setHeatingStatus(hs0) = VERY_HOT)//this is expected to be false
 	LTLSPEC not f(setHeatingStatus(hs1) = FAIRLY_HOT)//this is expected to be false
 	LTLSPEC not f(setHeatingStatus(hs1) = VERY_HOT)//this is expected to be false
-	CTLSPEC not ef(setHeatingStatus(hs0) = FAIRLY_HOT)//this is expected to be false
-	CTLSPEC not ef(setHeatingStatus(hs0) = VERY_HOT)//this is expected to be false
-	CTLSPEC not ef(setHeatingStatus(hs1) = FAIRLY_HOT)//this is expected to be false
-	CTLSPEC not ef(setHeatingStatus(hs1) = VERY_HOT)//this is expected to be false
 
 	main rule r_main =
 		par

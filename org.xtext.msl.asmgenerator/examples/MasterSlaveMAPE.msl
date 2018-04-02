@@ -9,8 +9,8 @@ abstract pattern MasterSlaveMAPE {
 
 	group Master {
 		components A, P
-	} 
-	
+	}
+
 	group Slave {
 		managedSyS Sys
 		components M, E

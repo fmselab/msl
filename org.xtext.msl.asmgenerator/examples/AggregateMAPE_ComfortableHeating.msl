@@ -27,16 +27,16 @@ configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
     hs0: ComfortableHeatingMAPE.Heater
     hs1: ComfortableHeatingMAPE.Heater
 
-	ch : ComfortableHeatingMAPE.MainCH {
+	ch: ComfortableHeatingMAPE.MainCH {
 		components m_ch:M, a_ch:A, p_ch:P, e_ch:E
 	}
 
-	h0 : ComfortableHeatingMAPE.IntTemp {
+	h0: ComfortableHeatingMAPE.IntTemp {
 		managedSyS hs0
 		components m_h0:M, e_h0:E
 	}
 
-    h1 : ComfortableHeatingMAPE.IntTemp {
+    h1: ComfortableHeatingMAPE.IntTemp {
 		managedSyS hs1
 		components m_h1:M, e_h1:E
 	}

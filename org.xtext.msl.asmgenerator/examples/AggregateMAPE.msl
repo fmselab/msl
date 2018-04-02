@@ -1,6 +1,3 @@
-//A MAPE pattern establishes a schema of MAPE structure: 
-//group roles and relationships between them
-//------Begin pattern definition---------
 abstract pattern AggregateMAPE {
 	system Sys
 
@@ -19,5 +16,3 @@ abstract pattern AggregateMAPE {
 	interaction Main.A -> Main.P [1,1]
 	interaction Main.P -> Main.E [1,1]
 }
-//------End pattern definition---------
-
