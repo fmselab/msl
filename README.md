@@ -1,11 +1,9 @@
 # MSL: MAPE Specification Language
 
-[Grammar]()
+[MSL Xtext grammar](http://fmse.di.unimi.it/sw/msl/MSL.xtext) ([syntax graph](http://fmse.di.unimi.it/sw/msl/MSL.png))
 
-[Library of MAPE patterns]()
+[Library of MAPE patterns](http://fmse.di.unimi.it/sw/msl/MAPEpatterns.zip)
 
 Eclipse update site of MSL editor and ASM generator: [http://fmse.di.unimi.it/sw/msl/updatesite/](http://fmse.di.unimi.it/sw/msl/updatesite/)
 
-[Example of MAPE pattern instantiation]()
-
-[Example of generated ASM model and refined one]()
+[Smart heating case study (MAPE concretization, generated ASM, and refined ASM)](http://fmse.di.unimi.it/sw/msl/smartHeatingCaseStudyECSA2018.zip)
