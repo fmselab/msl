@@ -10,6 +10,9 @@ import org.xtext.msl.mSL.AbstractPattern
 import org.xtext.msl.mSL.MSLPackage
 import org.xtext.msl.mSL.Configuration
 import org.xtext.msl.mSL.AbstractGroup
+import java.util.Map
+import java.util.HashMap
+import org.xtext.msl.mSL.Interaction
 
 /**
  * This class contains custom validation rules. 
@@ -17,19 +20,6 @@ import org.xtext.msl.mSL.AbstractGroup
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
 class MSLValidator extends AbstractMSLValidator {
-	
-//	public static val INVALID_NAME = 'invalidName'
-//
-//	@Check
-//	def checkGreetingStartsWithCapital(Greeting greeting) {
-//		if (!Character.isUpperCase(greeting.name.charAt(0))) {
-//			warning('Name should start with a capital', 
-//					MSLPackage.Literals.GREETING__NAME,
-//					INVALID_NAME)
-//		}
-//	}
-
-	
 	public static val MULTIPLE_CONCRETIZATION = 'multipleConcretization'
 	public static val NO_CONCRETIZATION = 'noConcretization'
 	public static val NOT_MATCHED_INTERACTION = 'notMatchedInteraction'
@@ -69,44 +59,29 @@ class MSLValidator extends AbstractMSLValidator {
 			}
 		}
 	}
-
-	@Check
-	def checkConfiguration(Configuration configuration) {
-		/*for(ci: configuration.concreteInteractions) {
-			//println('ci.name '+  ci.start.com)
-			matched = false
-			startAbsGroup = null
-			endAbsGroup = null
-			for(cg: configuration.concreteGroups) {
-				println('cg.name '+  cg.name)
-				if(ci.start.component.name == cg.name) {
-					startAbsGroup = cg.abstractGroups.get(0).absGroup
-				}
-				if(ci.end.component.name == cg.name) {
-					endAbsGroup = cg.abstractGroups.get(0).absGroup
-				}
-			}
-			if(startAbsGroup === null) {
-				error('No abstract group found for starting group of ' + ci, MSLPackage.Literals.CONFIGURATION__CONCRETE_INTERACTIONS, NOT_MATCHED_INTERACTION)
-			}
-			if(endAbsGroup === null) {
-				error('No abstract group found for ending group of ' + ci, MSLPackage.Literals.CONFIGURATION__CONCRETE_INTERACTIONS, NOT_MATCHED_INTERACTION)
-			}
-			for(p: configuration.pattern) {
-				for(ai: p.absPattern.interactions) {
-					if(ci.start.component.type == ai.start.type.name &&
-						ci.end.component.type == ai.end.type.name	
-					) {
-						println(ai.start.type)
-						println(ai.end.type)
-						matched = true
-					}
-				}
-			}
-			if(!matched) {
-				error('Interaction ' + ci + ' does not match any abstract interaction', MSLPackage.Literals.CONFIGURATION__CONCRETE_INTERACTIONS, NOT_MATCHED_INTERACTION)
-			}
-		}*/
-	}
 	
+	@Check
+	def checkInteraction(Interaction ci) {
+		matched = false
+		//now we assume that there is only one abstract group for each concrete group
+		startAbsGroup = (ci.start.component.eContainer as ConcreteGroup).abstractGroups.get(0).absGroup
+		endAbsGroup = (ci.end.component.eContainer as ConcreteGroup).abstractGroups.get(0).absGroup
+		for(p: (ci.eContainer as Configuration).pattern) {
+			for(ai: p.absPattern.interactions) {
+				if(ci.start.component.type == ai.start.type.name &&
+					ci.end.component.type == ai.end.type.name &&
+					startAbsGroup == ai.start.type.eContainer &&
+					endAbsGroup == ai.end.type.eContainer
+				) {
+					//println(ai.start.type)
+					//println(ai.end.type)
+					matched = true
+				}
+			}
+		}
+		if(!matched) {
+			error('Interaction ' + ci + ' does not match any abstract interaction', MSLPackage.Literals.INTERACTION__START, NOT_MATCHED_INTERACTION)
+			//error('Interaction ' + ci + ' does not match any abstract interaction', MSLPackage.Literals.INTERACTION, MSLPackage.Literals.INTERACTION__START)
+		}
+	}
 }

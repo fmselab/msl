@@ -3,12 +3,17 @@
  */
 package org.xtext.msl.validation;
 
+import com.google.common.base.Objects;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
 import org.xtext.msl.mSL.AbstractGroup;
+import org.xtext.msl.mSL.AbstractInteraction;
 import org.xtext.msl.mSL.AbstractSystem;
+import org.xtext.msl.mSL.ConcreteGroup;
 import org.xtext.msl.mSL.Configuration;
 import org.xtext.msl.mSL.GroupBinding;
+import org.xtext.msl.mSL.Interaction;
 import org.xtext.msl.mSL.MSLPackage;
 import org.xtext.msl.mSL.Pattern;
 import org.xtext.msl.mSL.SystemBinding;
@@ -92,7 +97,27 @@ public class MSLValidator extends AbstractMSLValidator {
   }
   
   @Check
-  public Object checkConfiguration(final Configuration configuration) {
-    return null;
+  public void checkInteraction(final Interaction ci) {
+    this.matched = false;
+    EObject _eContainer = ci.getStart().getComponent().eContainer();
+    this.startAbsGroup = ((ConcreteGroup) _eContainer).getAbstractGroups().get(0).getAbsGroup();
+    EObject _eContainer_1 = ci.getEnd().getComponent().eContainer();
+    this.endAbsGroup = ((ConcreteGroup) _eContainer_1).getAbstractGroups().get(0).getAbsGroup();
+    EObject _eContainer_2 = ci.eContainer();
+    EList<Pattern> _pattern = ((Configuration) _eContainer_2).getPattern();
+    for (final Pattern p : _pattern) {
+      EList<AbstractInteraction> _interactions = p.getAbsPattern().getInteractions();
+      for (final AbstractInteraction ai : _interactions) {
+        if ((((Objects.equal(ci.getStart().getComponent().getType(), ai.getStart().getType().getName()) && 
+          Objects.equal(ci.getEnd().getComponent().getType(), ai.getEnd().getType().getName())) && 
+          Objects.equal(this.startAbsGroup, ai.getStart().getType().eContainer())) && 
+          Objects.equal(this.endAbsGroup, ai.getEnd().getType().eContainer()))) {
+          this.matched = true;
+        }
+      }
+    }
+    if ((!this.matched)) {
+      this.error((("Interaction " + ci) + " does not match any abstract interaction"), MSLPackage.Literals.INTERACTION__START, MSLValidator.NOT_MATCHED_INTERACTION);
+    }
   }
 }
