@@ -712,11 +712,9 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		//	name=INSTANCE_ID ':' (bindings+=[SystemBinding|FQN_PATTERN_ID] (',' bindings+=[SystemBinding|FQN_PATTERN_ID])*);
 		@Override public ParserRule getRule() { return rule; }
 		
-		////'system'
 		//name=INSTANCE_ID ':' (bindings+=[SystemBinding|FQN_PATTERN_ID] (',' bindings+=[SystemBinding|FQN_PATTERN_ID])*)
 		public Group getGroup() { return cGroup; }
 		
-		////'system'
 		//name=INSTANCE_ID
 		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 		
@@ -801,14 +799,12 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		//	'}';
 		@Override public ParserRule getRule() { return rule; }
 		
-		////'group'
 		//name=INSTANCE_ID ':' (abstractGroups+=[GroupBinding|FQN_PATTERN_ID] (','
 		//abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{' ('managedSyS' manSys=[ConcreteSystem|INSTANCE_ID])? ('managedGrp'
 		//manGrp+=[ConcreteGroup|INSTANCE_ID] (',' manGrp+=[ConcreteGroup|INSTANCE_ID])*)? 'components'
 		//components+=ComponentInstance (',' components+=ComponentInstance)* '}'
 		public Group getGroup() { return cGroup; }
 		
-		////'group'
 		//name=INSTANCE_ID
 		public Assignment getNameAssignment_0() { return cNameAssignment_0; }
 		

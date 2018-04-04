@@ -3,6 +3,13 @@
  */
 package org.xtext.msl.validation
 
+import org.eclipse.xtext.validation.Check
+import org.xtext.msl.mSL.ConcreteGroup
+import org.xtext.msl.mSL.Pattern
+import org.xtext.msl.mSL.AbstractPattern
+import org.xtext.msl.mSL.MSLPackage
+import org.xtext.msl.mSL.Configuration
+import org.xtext.msl.mSL.AbstractGroup
 
 /**
  * This class contains custom validation rules. 
@@ -21,5 +28,85 @@ class MSLValidator extends AbstractMSLValidator {
 //					INVALID_NAME)
 //		}
 //	}
+
+	
+	public static val MULTIPLE_CONCRETIZATION = 'multipleConcretization'
+	public static val NO_CONCRETIZATION = 'noConcretization'
+	public static val NOT_MATCHED_INTERACTION = 'notMatchedInteraction'
+	int found
+	boolean matched
+	AbstractGroup startAbsGroup
+	AbstractGroup endAbsGroup
+
+	@Check
+	def checkPattern(Pattern pattern) {
+		for(g: pattern.absPattern.abstractGroups) {
+			found = 0
+			for(cg: pattern.groups) {
+				if(cg.absGroup.name.equals(g.name)) {
+					found++
+				}
+			}
+			if(found == 0) {
+				error('Group ' + g.name + ' has not been concretized', MSLPackage.Literals.PATTERN__NAME, MULTIPLE_CONCRETIZATION)
+			}
+			else if(found > 1) {
+				error('Group '+ g.name + ' has been concretized more than once', MSLPackage.Literals.PATTERN__NAME, NO_CONCRETIZATION)
+			}
+		}
+		for(s: pattern.absPattern.managedSystems) {
+			found = 0
+			for(ms: pattern.managedSystems) {
+				if(ms.absSys.name.equals(s.name)) {
+					found++
+				}
+			}
+			if(found == 0) {
+				error('System ' + s.name + ' has not been concretized', MSLPackage.Literals.PATTERN__NAME, MULTIPLE_CONCRETIZATION)
+			}
+			else if(found > 1) {
+				error('System ' + s.name + ' has been concretized more than once', MSLPackage.Literals.PATTERN__NAME, NO_CONCRETIZATION)
+			}
+		}
+	}
+
+	@Check
+	def checkConfiguration(Configuration configuration) {
+		/*for(ci: configuration.concreteInteractions) {
+			//println('ci.name '+  ci.start.com)
+			matched = false
+			startAbsGroup = null
+			endAbsGroup = null
+			for(cg: configuration.concreteGroups) {
+				println('cg.name '+  cg.name)
+				if(ci.start.component.name == cg.name) {
+					startAbsGroup = cg.abstractGroups.get(0).absGroup
+				}
+				if(ci.end.component.name == cg.name) {
+					endAbsGroup = cg.abstractGroups.get(0).absGroup
+				}
+			}
+			if(startAbsGroup === null) {
+				error('No abstract group found for starting group of ' + ci, MSLPackage.Literals.CONFIGURATION__CONCRETE_INTERACTIONS, NOT_MATCHED_INTERACTION)
+			}
+			if(endAbsGroup === null) {
+				error('No abstract group found for ending group of ' + ci, MSLPackage.Literals.CONFIGURATION__CONCRETE_INTERACTIONS, NOT_MATCHED_INTERACTION)
+			}
+			for(p: configuration.pattern) {
+				for(ai: p.absPattern.interactions) {
+					if(ci.start.component.type == ai.start.type.name &&
+						ci.end.component.type == ai.end.type.name	
+					) {
+						println(ai.start.type)
+						println(ai.end.type)
+						matched = true
+					}
+				}
+			}
+			if(!matched) {
+				error('Interaction ' + ci + ' does not match any abstract interaction', MSLPackage.Literals.CONFIGURATION__CONCRETE_INTERACTIONS, NOT_MATCHED_INTERACTION)
+			}
+		}*/
+	}
 	
 }
