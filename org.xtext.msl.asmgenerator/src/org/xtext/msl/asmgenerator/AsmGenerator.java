@@ -80,12 +80,10 @@ public class AsmGenerator {
 	private Map<String, String> ruleAction;
 	private Map<String, String> ruleBody;
 	private String modelName;
-	private StringBuilder sb;
 
 	public AsmGenerator(Specification spec, PrintWriter pw) {
 		this.spec = spec;
 		this.pw = pw;
-		sb = new StringBuilder();
 	}
 
 	public AsmGenerator(String path, PrintWriter pw) {
@@ -372,15 +370,6 @@ public class AsmGenerator {
 							funcBody = funcBody.replaceAll("\\$a", "\\$a" + (counter++));
 
 							String operator = "and";
-							/*if(low.equals(VariationPointSemantics.AND_SEMANTICS.getValue())) {
-								operator = " and ";
-							}
-							else if(low.equals(VariationPointSemantics.OR_SEMANTICS.getValue())) {
-								operator = " or ";
-							}
-							else {
-								operator = " xor ";
-							}*/
 
 							funcBody = oldBody + operator + funcBody;
 						}
