@@ -3,8 +3,6 @@
  */
 package org.xtext.msl.ide;
 
-import org.xtext.msl.ide.AbstractMSLIdeModule;
-
 /**
  * Use this class to register ide components.
  */

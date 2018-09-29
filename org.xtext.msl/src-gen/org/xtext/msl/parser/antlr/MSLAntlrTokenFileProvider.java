@@ -4,6 +4,7 @@
 package org.xtext.msl.parser.antlr;
 
 import java.io.InputStream;
+
 import org.eclipse.xtext.parser.antlr.IAntlrTokenFileProvider;
 
 public class MSLAntlrTokenFileProvider implements IAntlrTokenFileProvider {

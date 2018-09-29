@@ -1,4 +1,4 @@
-package org.xtext.msl.asmgenerator.ui.handlers;
+package org.xtext.msl.generator.asmgenerator.ui.handlers;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -24,7 +24,7 @@ import org.eclipse.ui.console.IConsoleManager;
 import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.handlers.HandlerUtil;
-import org.xtext.msl.asmgenerator.AsmGenerator;
+import org.xtext.msl.generator.asmgenerator.AsmGenerator;
 
 /**
  * @see org.eclipse.core.commands.IHandler

@@ -3,8 +3,8 @@
  */
 package org.xtext.msl.serializer;
 
-import com.google.inject.Inject;
 import java.util.Set;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.xtext.Action;
@@ -34,6 +34,8 @@ import org.xtext.msl.mSL.Pattern;
 import org.xtext.msl.mSL.Specification;
 import org.xtext.msl.mSL.SystemBinding;
 import org.xtext.msl.services.MSLGrammarAccess;
+
+import com.google.inject.Inject;
 
 @SuppressWarnings("all")
 public class MSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {

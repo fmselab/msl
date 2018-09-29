@@ -3,10 +3,8 @@
  */
 package org.xtext.msl;
 
-import com.google.inject.Binder;
-import com.google.inject.Provider;
-import com.google.inject.name.Names;
 import java.util.Properties;
+
 import org.eclipse.xtext.Constants;
 import org.eclipse.xtext.IGrammarAccess;
 import org.eclipse.xtext.generator.IGenerator2;
@@ -49,6 +47,10 @@ import org.xtext.msl.serializer.MSLSemanticSequencer;
 import org.xtext.msl.serializer.MSLSyntacticSequencer;
 import org.xtext.msl.services.MSLGrammarAccess;
 import org.xtext.msl.validation.MSLValidator;
+
+import com.google.inject.Binder;
+import com.google.inject.Provider;
+import com.google.inject.name.Names;
 
 /**
  * Manual modifications go to {@link MSLRuntimeModule}.

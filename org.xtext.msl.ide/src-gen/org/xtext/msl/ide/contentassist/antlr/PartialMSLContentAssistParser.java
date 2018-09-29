@@ -5,6 +5,7 @@ package org.xtext.msl.ide.contentassist.antlr;
 
 import java.util.Collection;
 import java.util.Collections;
+
 import org.eclipse.xtext.AbstractRule;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.FollowElement;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.AbstractInternalContentAssistParser;

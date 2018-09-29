@@ -6,16 +6,11 @@ package org.xtext.msl.mSL.impl;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
-
 import org.xtext.msl.mSL.ConcreteSystem;
 import org.xtext.msl.mSL.MSLPackage;
 import org.xtext.msl.mSL.SystemBinding;

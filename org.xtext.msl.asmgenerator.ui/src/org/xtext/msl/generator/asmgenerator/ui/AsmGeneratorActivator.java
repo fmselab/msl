@@ -1,4 +1,4 @@
-package org.xtext.msl.asmgenerator.ui;
+package org.xtext.msl.generator.asmgenerator.ui;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
