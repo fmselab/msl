@@ -3,11 +3,12 @@
  */
 package org.xtext.msl.parser.antlr;
 
-import com.google.inject.Inject;
 import org.eclipse.xtext.parser.antlr.AbstractAntlrParser;
 import org.eclipse.xtext.parser.antlr.XtextTokenStream;
 import org.xtext.msl.parser.antlr.internal.InternalMSLParser;
 import org.xtext.msl.services.MSLGrammarAccess;
+
+import com.google.inject.Inject;
 
 public class MSLParser extends AbstractAntlrParser {
 

@@ -3,13 +3,15 @@
  */
 package org.xtext.msl.ide.contentassist.antlr;
 
-import com.google.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
+
 import org.eclipse.xtext.AbstractElement;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.AbstractContentAssistParser;
 import org.xtext.msl.ide.contentassist.antlr.internal.InternalMSLParser;
 import org.xtext.msl.services.MSLGrammarAccess;
+
+import com.google.inject.Inject;
 
 public class MSLParser extends AbstractContentAssistParser {
 

@@ -1,4 +1,4 @@
-package org.xtext.msl.asmgenerator;
+package org.xtext.msl.generator.asmgenerator;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -6,58 +6,30 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.xtext.msl.Loader;
+import org.xtext.msl.generator.Generator;
+import org.xtext.msl.generator.VariationPointSemantics;
 import org.xtext.msl.mSL.AbstractComponent;
 import org.xtext.msl.mSL.AbstractComponentName;
 import org.xtext.msl.mSL.AbstractGroup;
 import org.xtext.msl.mSL.AbstractInteraction;
-import org.xtext.msl.mSL.AbstractPattern;
 import org.xtext.msl.mSL.AbstractSystem;
 import org.xtext.msl.mSL.ComponentInstance;
 import org.xtext.msl.mSL.ComponentName;
 import org.xtext.msl.mSL.ConcreteGroup;
 import org.xtext.msl.mSL.ConcreteSystem;
-import org.xtext.msl.mSL.Configuration;
-import org.xtext.msl.mSL.GroupBinding;
 import org.xtext.msl.mSL.Interaction;
-import org.xtext.msl.mSL.Pattern;
 import org.xtext.msl.mSL.Specification;
 import org.xtext.msl.mSL.SystemBinding;
 
-enum VariationPointSemantics {
-	AND_SEMANTICS("*-ALL"), OR_SEMANTICS("*-SOME"), XOR_SEMANTICS("*-ONE"), ONE_SEMANTICS("1");
-
-	private final String value;
-
-	VariationPointSemantics(String value) {
-		this.value = value;
-	}
-
-	public String getValue() {
-		return value;
-	}
-}
-
-public class AsmGenerator {
+public class AsmGenerator extends Generator {
 	private int counter = 0;
 	private static final String CLEAN_UP_PREFIX = "r_CleanUp_";
-	private AbstractPattern absPattern;
-	private Pattern pattern;
-	private Configuration configuration;
 	private Map<String, String> agentNames = new HashMap<String, String>();
 	private Specification spec;
-	private List<ConcreteSystem> concrSys;
-	private List<AbstractGroup> absGroups;
-	private List<AbstractSystem> absSys;
-	private List<ConcreteGroup> concreteGroups;
-	private List<AbstractInteraction> absInteractions;
-	private Map<String, String> nameBinding;
-	// private Map<String, Set<String>> agentRules;// the rules of an agent, but not
 	// the program
 	private Map<String, String> agentPrograms;
 	// private List<AbstractSystem> managedSys;
@@ -65,7 +37,6 @@ public class AsmGenerator {
 	private Map<String, Map<String, String>> managingFuncManagingInstToManagedInst;
 	private Set<String[]> signalFunctions;
 	private Map<String, String> functionDomain = new HashMap<>();
-	private PrintWriter pw;
 	private Set<String[]> absIntFuncs;
 	private Map<String, String> componentTypes;
 	private Map<String, Map<String, ArrayList<String>>> componentInteractions;
@@ -82,8 +53,7 @@ public class AsmGenerator {
 	private String modelName;
 
 	public AsmGenerator(Specification spec, PrintWriter pw) {
-		this.spec = spec;
-		this.pw = pw;
+		super(spec, pw);
 	}
 
 	public AsmGenerator(String path, PrintWriter pw) {
@@ -99,48 +69,8 @@ public class AsmGenerator {
 		return nameBinding.get(a);
 	}
 
-	public void generate() {
-		absPattern = spec.getAbsPattern();
-		EList<Pattern> patterns = spec.getPattern();
-		if(patterns.size() > 1) {
-			System.out.println("Multiple concrete pattern are not supported yet by the generator");
-			return;
-		}
-		else if(patterns.size() == 0) {
-			System.out.println("You have to specify a concrete pattern");
-			return;
-		}
-		pattern = patterns.get(0);
-		configuration = spec.getConfiguration();
-
-		absGroups = absPattern.getAbstractGroups();
-		absSys = absPattern.getManagedSystems();
-
-		/*
-		 * for(AbstractGroup ag: absGroups) { AbstractSystem manSys = ag.getManSys();
-		 * assert manSys != null; absSys.add(manSys); }
-		 */
-		absInteractions = absPattern.getInteractions();
-		concrSys = configuration.getConcreteSystems();
-		concreteGroups = configuration.getConcreteGroups();
-
-		nameBinding = new HashMap<>();
-		for (SystemBinding ms : pattern.getManagedSystems()) {
-			assert !nameBinding.containsKey(ms.getAbsSys().getName());
-			nameBinding.put(ms.getAbsSys().getName(), ms.getName());
-			// System.err.println(ms.getAbsSys().getName() + "-> " + ms.getName());
-		}
-		for (GroupBinding g : pattern.getGroups()) {
-			// System.err.println(g.getAbsGroup().getName() + "-> " + g.getName());
-			assert !nameBinding.containsKey(g.getAbsGroup().getName());
-			nameBinding.put(g.getAbsGroup().getName(), g.getName());
-		}
-		/*
-		 * for(Binding b: pattern.getConcrete()) { Abstract abs = b.getAbs(); assert
-		 * !nameBinding.containsKey(abs); String name = b.getName();
-		 * nameBinding.put(abs, name); System.err.println(abs + "-> " + name); }
-		 */
-		// System.out.println(nameBinding);
+	@Override
+	public void generateCode() {
 		generateSignature();
 		generateBody();
 		generateInitState();

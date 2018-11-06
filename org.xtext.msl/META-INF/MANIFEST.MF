@@ -15,15 +15,37 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.emf.common,
  org.eclipse.xtend.lib
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: org.xtext.msl.parser.antlr.internal,
- org.xtext.msl,
- org.xtext.msl.services,
+Export-Package: org.xtext.msl,
+ org.xtext.msl.generator;uses:="org.eclipse.xtext.generator,org.eclipse.emf.ecore.resource",
+ org.xtext.msl.mSL;uses:="org.eclipse.emf.ecore,org.eclipse.emf.common.util",
+ org.xtext.msl.mSL.impl;
+  uses:="org.eclipse.emf.ecore,
+   org.eclipse.emf.ecore.impl,
+   org.eclipse.emf.common.util,
+   org.eclipse.emf.common.notify,
+   org.xtext.msl.mSL",
+ org.xtext.msl.mSL.util;
+  uses:="org.eclipse.emf.ecore,
+   org.eclipse.emf.common.notify,
+   org.eclipse.emf.common.notify.impl,
+   org.eclipse.emf.ecore.util,
+   org.xtext.msl.mSL",
+ org.xtext.msl.parser.antlr;uses:="org.xtext.msl.parser.antlr.internal,org.xtext.msl.services,org.eclipse.xtext.parser.antlr",
+ org.xtext.msl.parser.antlr.internal;
+  uses:="org.eclipse.emf.ecore,
+   org.xtext.msl.services,
+   org.eclipse.xtext.parser.antlr,
+   org.antlr.runtime",
  org.xtext.msl.scoping,
- org.xtext.msl.mSL.impl,
- org.xtext.msl.parser.antlr,
- org.xtext.msl.generator,
- org.xtext.msl.validation,
- org.xtext.msl.mSL.util,
- org.xtext.msl.mSL,
- org.xtext.msl.serializer
+ org.xtext.msl.serializer;
+  uses:="org.eclipse.emf.ecore,
+   org.eclipse.xtext.nodemodel,
+   org.xtext.msl.services,
+   org.eclipse.xtext.serializer.analysis,
+   org.eclipse.xtext.serializer.sequencer,
+   org.eclipse.xtext,
+   org.eclipse.xtext.serializer,
+   org.xtext.msl.mSL",
+ org.xtext.msl.services;uses:="org.eclipse.xtext.common.services,org.eclipse.xtext.service,org.eclipse.xtext",
+ org.xtext.msl.validation;uses:="org.xtext.msl.mSL"
 Import-Package: org.apache.log4j

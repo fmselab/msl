@@ -6,12 +6,28 @@ package org.xtext.msl.mSL.impl;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
-
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
-
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-
-import org.xtext.msl.mSL.*;
+import org.xtext.msl.mSL.AbstractComponent;
+import org.xtext.msl.mSL.AbstractComponentName;
+import org.xtext.msl.mSL.AbstractGroup;
+import org.xtext.msl.mSL.AbstractInteraction;
+import org.xtext.msl.mSL.AbstractPattern;
+import org.xtext.msl.mSL.AbstractSystem;
+import org.xtext.msl.mSL.ComponentInstance;
+import org.xtext.msl.mSL.ComponentName;
+import org.xtext.msl.mSL.ConcreteGroup;
+import org.xtext.msl.mSL.ConcreteSystem;
+import org.xtext.msl.mSL.Configuration;
+import org.xtext.msl.mSL.GroupBinding;
+import org.xtext.msl.mSL.GroupDef;
+import org.xtext.msl.mSL.Import;
+import org.xtext.msl.mSL.Interaction;
+import org.xtext.msl.mSL.MSLFactory;
+import org.xtext.msl.mSL.MSLPackage;
+import org.xtext.msl.mSL.Pattern;
+import org.xtext.msl.mSL.Specification;
+import org.xtext.msl.mSL.SystemBinding;
 
 /**
  * <!-- begin-user-doc -->

@@ -3,9 +3,6 @@
  */
 package org.xtext.msl.ui;
 
-import com.google.inject.Binder;
-import com.google.inject.Provider;
-import com.google.inject.name.Names;
 import org.eclipse.compare.IViewerCreator;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -76,6 +73,10 @@ import org.xtext.msl.ui.labeling.MSLDescriptionLabelProvider;
 import org.xtext.msl.ui.labeling.MSLLabelProvider;
 import org.xtext.msl.ui.outline.MSLOutlineTreeProvider;
 import org.xtext.msl.ui.quickfix.MSLQuickfixProvider;
+
+import com.google.inject.Binder;
+import com.google.inject.Provider;
+import com.google.inject.name.Names;
 
 /**
  * Manual modifications go to {@link MSLUiModule}.

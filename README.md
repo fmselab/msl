@@ -18,3 +18,7 @@ The model generator **MSL2ASM** implements such a mapping, i.e., it transforms a
 Eclipse update site of MSL editor and ASM generator: [http://fmse.di.unimi.it/sw/msl/updatesite/](http://fmse.di.unimi.it/sw/msl/updatesite/)
 
 [Smart heating case study (MAPE concretization, generated ASM, and refined ASM)](http://fmse.di.unimi.it/sw/msl/smartHeatingCaseStudyECSA2018.zip)
+
+## Paper
+
+Arcaini P., Mirandola R., Riccobene E., Scandurra P. (2018) A DSL for MAPE Patterns Representation in Self-adapting Systems. In: Cuesta C., Garlan D., Pérez J. (eds) Software Architecture. ECSA 2018. Lecture Notes in Computer Science, vol 11048. Springer, Cham \[[doi](https://doi.org/10.1007/978-3-030-00761-4_1)\]

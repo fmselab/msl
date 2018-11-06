@@ -9,4 +9,4 @@ Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.emf.common,
  org.xtext.msl,
  org.eclipse.emf.ecore
-Export-Package: org.xtext.msl.asmgenerator
+Export-Package: org.xtext.msl.generator.asmgenerator

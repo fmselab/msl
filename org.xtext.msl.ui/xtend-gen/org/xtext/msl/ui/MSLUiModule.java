@@ -5,7 +5,6 @@ package org.xtext.msl.ui;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor;
-import org.xtext.msl.ui.AbstractMSLUiModule;
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
