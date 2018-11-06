@@ -1,0 +1,59 @@
+abstract pattern AggregateMAPE {
+	system Sys
+
+	group Main {
+		components M, A, P, E
+	} 
+	
+	group Interface {
+		managedSyS Sys
+		components M, E
+	}
+
+	interaction Interface.M -> Main.M [*-SOME,1]
+	interaction Main.E -> Interface.E [1,*-SOME]
+	interaction Main.M -> Main.A [1,1]
+	interaction Main.A -> Main.P [1,1]
+	interaction Main.P -> Main.E [1,1]
+}
+
+//Aggregate MAPE loop for the concern Heating Comfort
+concrete pattern HC_MAPE concretizationOf AggregateMAPE {
+	system Heating: AggregateMAPE.Sys
+    group MainHC: AggregateMAPE.Main
+    group IntHC: AggregateMAPE.Interface
+}
+
+//My smart home heating system; two zones: First Floor, Ground floor 
+configuration MySmartHomeHC instanceOf HC_MAPE {
+    hsGF: HC_MAPE.Heating //heating system for First Floor
+    hsFF: HC_MAPE.Heating //heating system for Ground Floor
+
+	//main group
+	gHC: HC_MAPE.MainHC {
+		components m_HC:M, a_HC:A, p_HC:P, e_HC:E
+	}
+
+    //ground floor group
+	gGF: HC_MAPE.IntHC {
+		managedSyS hsGF
+		components m_GF:M, e_GF:E
+	}
+
+    //first floor group
+    gFF: HC_MAPE.IntHC {
+		managedSyS hsFF
+		components m_FF:M, e_FF:E
+	}
+
+	//inter-interactions
+	gHC.m_HC -> gHC.a_HC
+	gHC.a_HC -> gHC.p_HC
+	gHC.p_HC -> gHC.e_HC
+	
+	//intra-interactions
+	gGF.m_GF -> gHC.m_HC
+	gFF.m_FF -> gHC.m_HC
+	gHC.e_HC -> gGF.e_GF
+	gHC.e_HC -> gFF.e_FF
+}
