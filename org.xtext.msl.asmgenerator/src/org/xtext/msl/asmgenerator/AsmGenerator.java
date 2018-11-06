@@ -637,7 +637,8 @@ public class AsmGenerator {
 	}
 
 	public static void main(String[] args) {
-		AsmGenerator g = new AsmGenerator("examples/AggregateMAPE_ComfortableHeating.msl");
+		//AsmGenerator g = new AsmGenerator("examples/AggregateMAPE_ComfortableHeating.msl");
+		AsmGenerator g = new AsmGenerator(args[0]);
 		g.generate();
 	}
 }

@@ -41,6 +41,7 @@ configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
 		components m_h1:M, e_h1:E
 	}
 
+
 	ch.m_ch -> ch.a_ch
 	ch.a_ch -> ch.p_ch
 	ch.p_ch -> ch.e_ch

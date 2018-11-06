@@ -12,7 +12,7 @@ Import:
     'import' importedNamespace=[AbstractPattern|PATTERN_ID];
 
 AbstractPattern:
-	'abstract' 'pattern' name=PATTERN_ID '{'
+	'abstract' 'pattern' name=PATTERN_ID '{' 
 	managedSystems+=AbstractSystem*
 	abstractGroups+=AbstractGroup*
 	interactions+=AbstractInteraction*
