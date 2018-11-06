@@ -26,34 +26,34 @@ concrete pattern HC_MAPE concretizationOf AggregateMAPE {
 
 //My smart home heating system; two zones: First Floor, Ground floor 
 configuration MySmartHomeHC instanceOf HC_MAPE {
-    hsGF: HC_MAPE.Heating //heating system for First Floor
-    hsFF: HC_MAPE.Heating //heating system for Ground Floor
+    hs_gf: HC_MAPE.Heating //heating system for First Floor
+    hs_ff: HC_MAPE.Heating //heating system for Ground Floor
 
 	//main group
-	gHC: HC_MAPE.MainHC {
+	ghc: HC_MAPE.MainHC {
 		components m_HC:M, a_HC:A, p_HC:P, e_HC:E
 	}
 
     //ground floor group
-	gGF: HC_MAPE.IntHC {
-		managedSyS hsGF
+	ggf: HC_MAPE.IntHC {
+		managedSyS hs_gf
 		components m_GF:M, e_GF:E
 	}
 
     //first floor group
-    gFF: HC_MAPE.IntHC {
-		managedSyS hsFF
+    gff: HC_MAPE.IntHC {
+		managedSyS hs_ff
 		components m_FF:M, e_FF:E
 	}
 
 	//inter-interactions
-	gHC.m_HC -> gHC.a_HC
-	gHC.a_HC -> gHC.p_HC
-	gHC.p_HC -> gHC.e_HC
+	ghc.m_HC -> ghc.a_HC
+	ghc.a_HC -> ghc.p_HC
+	ghc.p_HC -> ghc.e_HC
 	
 	//intra-interactions
-	gGF.m_GF -> gHC.m_HC
-	gFF.m_FF -> gHC.m_HC
-	gHC.e_HC -> gGF.e_GF
-	gHC.e_HC -> gFF.e_FF
+	ggf.m_GF -> ghc.m_HC
+	gff.m_FF -> ghc.m_HC
+	ghc.e_HC -> ggf.e_GF
+	ghc.e_HC -> gff.e_FF
 }

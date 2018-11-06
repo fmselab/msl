@@ -19,6 +19,8 @@ Group FF_Childrenroom   "Children' Room" (gFF)
 Group FF_Bedroom    "Bedroom"       (gFF)
 Group FF_Corridor   "Corridor"      (gFF)
 
+Group Fire
+
 ??Group Status
 ????/* active groups */????
 
@@ -29,10 +31,10 @@ Group:Number:AVG                Temperature "Avg. Room Temperature [%.1f °C]"  
 Group:Contact:OR(OPEN, CLOSED)  Windows     "Open windows [(%d)]"               <contact>
 
 /* Outside Air Quality service*/
-Number   OutsideAqi  "Outside Air Quality Index [%d]" <flow> (Outside){channel="airquality:aqi:gergamo:aqiLevel"}
+Number   OutsideAqi  "Outside Air Quality Index [%d]" <flow> (Outside){channel="airquality:aqi:bergamo:aqiLevel"}
 
 /* Inside Air Quality sensors*/
-Number GF_Bathroom_Aq  "Bathroom air [%d]" <flow> { channel="mysensors:airquality:gateway:airq01:level" }
+Number GF_Bathroom_Aq  "Bathroom air [%d]" <flow> 
 Number GF_Kitchen_Aq  "Kitchen air [%d]" <flow> 
 Number GF_Living_Aq  "Living room air [%d]" <flow> 
 Number FF_Corridor_Aq  "First floor air [%d]" <flow> 
@@ -46,16 +48,16 @@ Contact FF_Bedroom_Window  "Bedroom window [%s]"                    (FF_Bedroom,
 Contact FF_ChildrenRoom_Window "Children's room window [%s]"              (FF_Childrenroom, Windows)
 
 /* Smoke detectors */
-String   GF_Kitchen_Smoke_Alarm   "Kitchen Smoke Alarm [%s]"                                         { channel="nest:smoke_detector:demo_account:hallway_smoke:smoke_alarm_state" }
-String   GF_Living_Smoke_Alarm   "Living Smoke Alarm [%s]"                                         
-String   FF_Corridor_Smoke_Alarm   "First Floor Smoke Alarm [%s]"                                         
+String   GF_Kitchen_Smoke_Alarm   "Kitchen Smoke Alarm [%s]" (Fire)
+String   GF_Living_Smoke_Alarm   "Living Smoke Alarm [%s]"   (Fire)                                      
+String   FF_Corridor_Smoke_Alarm   "First Floor Smoke Alarm [%s]"  (Fire)                                       
 
 /* Temperature sensors */
 Number GF_Bathroom_Temperature    "Bathroom temperature [%.1f ºC]" <temperature>   (Temperature, GF_Bathroom, GF_Thermostat)
-{ channel = "mihome:sensor_ht:158d000182eb02:temperature" }
+
 
 Number GF_Kitchen_Temperature   "Kitchen temperature [%.1f °C]" <temperature>   (Temperature, GF_Kitchen, GF_Thermostat) 
-{ channel = "mihome:sensor_ht:158d000182eb02:temperature" }
+
 
 Number GF_LZone1_Temperature    "Living 1 temperature [%.1f °C]" <temperature>   (Temperature, GF_Living, GF_LZone1)
 
