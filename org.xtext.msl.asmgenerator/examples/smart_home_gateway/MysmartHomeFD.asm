@@ -20,7 +20,11 @@ signature:
 	derived orSelectorfromMasterFDPtoSlaveFDE: MasterFDMgA -> Powerset(SlaveFDMgA)
 	controlled fromSlaveFDEtoMasterFDP: SlaveFDMgA -> MasterFDMgA
 	//MySmartHomeFD
-
+	static fds_ff: FDsysMdA
+	static fds_gf: FDsysMdA
+	static fd_master: MasterFDMgA
+	static gf_slave: SlaveFDMgA
+	static ff_slave: SlaveFDMgA
 definitions:
 	function startMasterFDA($b in MasterFDMgA) =
 		(exist $a in fromMasterFDAtoSlaveFDM($b) with sgnSlaveFDMMasterFDA($a, $b))

@@ -25,34 +25,34 @@ concrete pattern FD_MAPE concretizationOf MasterSlaveMAPE {
 //My smart home fire detection subsystem; two zones: Corridor (First Floor), kitchen and LivingRoom (Ground floor) 
 configuration MySmartHomeFD instanceOf FD_MAPE {
     
-    fdsFF: FD_MAPE.FDsys //fire detection system for First Floor
-    fdsGF: FD_MAPE.FDsys //fire detection system for Ground Floor
+    fds_ff: FD_MAPE.FDsys //fire detection system for First Floor
+    fds_gf: FD_MAPE.FDsys //fire detection system for Ground Floor
     
     //master
-	masterFD: FD_MAPE.MasterFD {
-		components a_FD:A, p_FD:P
+	fd_master: FD_MAPE.MasterFD {
+		components a_fd:A, p_fd:P
 	}
     
     //ground floor slave
-	slaveGF: FD_MAPE.SlaveFD {
-		managedSyS fdsGF
-		components m_GF:M, e_GF:E
+	gf_slave: FD_MAPE.SlaveFD {
+		managedSyS fds_gf
+		components m_gf:M, e_gf:E
 	}
 
     //first floor slave
-    slaveFF: FD_MAPE.SlaveFD {
-		managedSyS fdsFF
-		components m_FF:M, e_FF:E
+    ff_slave: FD_MAPE.SlaveFD {
+		managedSyS fds_ff
+		components m_ff:M, e_ff:E
 	}
 
 	//inter-interactions
-	masterFD.a_FD -> masterFD.p_FD
-	masterFD.p_FD -> masterFD.e_FD
+	fd_master.a_fd -> fd_master.p_fd
+	fd_master.p_fd -> fd_master.e_fd
 	
 	//intra-interactions
-	slaveGF.m_GF -> masterFD.a_FD
-	slaveFF.m_FF -> masterFD.a_FD
-	masterFD.p_FD -> slaveGF.e_GF
-	masterFD.p_FD -> slaveFF.e_FF
+	gf_slave.m_gf -> fd_master.a_fd
+	ff_slave.m_ff -> fd_master.a_fd
+	fd_master.p_fd -> gf_slave.e_gf
+	fd_master.p_fd -> ff_slave.e_ff
 }
 
