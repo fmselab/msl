@@ -3,6 +3,8 @@
  */
 package org.xtext.msl.scoping;
 
+import org.xtext.msl.scoping.AbstractMSLScopeProvider;
+
 /**
  * This class contains custom scoping description.
  * 

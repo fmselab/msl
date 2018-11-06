@@ -46,7 +46,7 @@ configuration MySmartHomeFD instanceOf FD_MAPE {
 	}
 
 	//inter-interactions
-	masterFD.a_FD_ -> masterFD.p_FD
+	masterFD.a_FD -> masterFD.p_FD
 	masterFD.p_FD -> masterFD.e_FD
 	
 	//intra-interactions

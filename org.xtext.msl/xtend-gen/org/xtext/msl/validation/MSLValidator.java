@@ -3,6 +3,7 @@
  */
 package org.xtext.msl.validation;
 
+import com.google.common.base.Objects;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.xtext.validation.Check;
@@ -16,8 +17,7 @@ import org.xtext.msl.mSL.Interaction;
 import org.xtext.msl.mSL.MSLPackage;
 import org.xtext.msl.mSL.Pattern;
 import org.xtext.msl.mSL.SystemBinding;
-
-import com.google.common.base.Objects;
+import org.xtext.msl.validation.AbstractMSLValidator;
 
 /**
  * This class contains custom validation rules.

@@ -3,6 +3,8 @@
  */
 package org.xtext.msl;
 
+import org.xtext.msl.MSLStandaloneSetupGenerated;
+
 /**
  * Initialization support for running Xtext languages without Equinox extension registry.
  */

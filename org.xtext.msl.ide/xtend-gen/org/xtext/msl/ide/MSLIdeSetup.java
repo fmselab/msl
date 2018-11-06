@@ -3,12 +3,12 @@
  */
 package org.xtext.msl.ide;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.eclipse.xtext.util.Modules2;
 import org.xtext.msl.MSLRuntimeModule;
 import org.xtext.msl.MSLStandaloneSetup;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
+import org.xtext.msl.ide.MSLIdeModule;
 
 /**
  * Initialization support for running Xtext languages as language servers.
