@@ -1,0 +1,36 @@
+import java.util.Random
+val Random random = new Random()
+
+
+rule "Initialize heating states"
+when
+    System started
+then
+    Heating?.members.forEach(heating|
+        postUpdate(heating, if (Math::random > 0.8) ON else OFF)
+    )
+    postUpdate(GF_Temperature_Setpoint, 22)
+    postUpdate(FF_Temperature_Setpoint, 22)
+end
+
+rule "Initialize contact states"
+when
+    System started
+then
+    Windows?.members.forEach(window|
+        postUpdate(window, if (Math::random > 0.5) OPEN else CLOSED)
+    )
+end
+
+
+rule "Set random room temperatures"
+when
+    System started or
+    Time cron "0 0/5 * * * ?"
+then
+    Temperature?.members.forEach(temperature|
+        postUpdate(temperature, 20.0 + (25.0 - (Math::random * 50.0).intValue) / 10.0)
+    )
+end
+
+
