@@ -27,7 +27,7 @@ GroupDef:
 	grp=[AbstractGroup|PATTERN_ID] ('[' mult=MULTIPLICITY ']')?
 ;
 
-AttValue: nameAtt=STRING + '='+ valAtt=STRING;
+AttValue: nameAtt=INSTANCE_ID '=' valAtt=INSTANCE_ID;
 
 AbstractGroup:
 	'group' name=PATTERN_ID '{'

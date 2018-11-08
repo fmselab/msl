@@ -213,10 +213,19 @@ public class MSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *     AttValue returns AttValue
 	 *
 	 * Constraint:
-	 *     (nameAtt=STRING+ valAtt=STRING)
+	 *     (nameAtt=INSTANCE_ID valAtt=INSTANCE_ID)
 	 */
 	protected void sequence_AttValue(ISerializationContext context, AttValue semanticObject) {
-		genericSequencer.createSequence(context, semanticObject);
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, MSLPackage.Literals.ATT_VALUE__NAME_ATT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MSLPackage.Literals.ATT_VALUE__NAME_ATT));
+			if (transientValues.isValueTransient(semanticObject, MSLPackage.Literals.ATT_VALUE__VAL_ATT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MSLPackage.Literals.ATT_VALUE__VAL_ATT));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getAttValueAccess().getNameAttINSTANCE_IDTerminalRuleCall_0_0(), semanticObject.getNameAtt());
+		feeder.accept(grammarAccess.getAttValueAccess().getValAttINSTANCE_IDTerminalRuleCall_2_0(), semanticObject.getValAtt());
+		feeder.finish();
 	}
 	
 	

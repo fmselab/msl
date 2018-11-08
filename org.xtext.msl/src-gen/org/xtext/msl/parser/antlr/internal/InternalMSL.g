@@ -455,9 +455,9 @@ ruleAttValue returns [EObject current=null]
 	(
 		(
 			(
-				lv_nameAtt_0_0=RULE_STRING
+				lv_nameAtt_0_0=RULE_INSTANCE_ID
 				{
-					newLeafNode(lv_nameAtt_0_0, grammarAccess.getAttValueAccess().getNameAttSTRINGTerminalRuleCall_0_0());
+					newLeafNode(lv_nameAtt_0_0, grammarAccess.getAttValueAccess().getNameAttINSTANCE_IDTerminalRuleCall_0_0());
 				}
 				{
 					if ($current==null) {
@@ -467,21 +467,19 @@ ruleAttValue returns [EObject current=null]
 						$current,
 						"nameAtt",
 						lv_nameAtt_0_0,
-						"org.eclipse.xtext.common.Terminals.STRING");
+						"org.xtext.msl.MSL.INSTANCE_ID");
 				}
 			)
-		)+
-		(
-			otherlv_1='='
-			{
-				newLeafNode(otherlv_1, grammarAccess.getAttValueAccess().getEqualsSignKeyword_1());
-			}
-		)+
+		)
+		otherlv_1='='
+		{
+			newLeafNode(otherlv_1, grammarAccess.getAttValueAccess().getEqualsSignKeyword_1());
+		}
 		(
 			(
-				lv_valAtt_2_0=RULE_STRING
+				lv_valAtt_2_0=RULE_INSTANCE_ID
 				{
-					newLeafNode(lv_valAtt_2_0, grammarAccess.getAttValueAccess().getValAttSTRINGTerminalRuleCall_2_0());
+					newLeafNode(lv_valAtt_2_0, grammarAccess.getAttValueAccess().getValAttINSTANCE_IDTerminalRuleCall_2_0());
 				}
 				{
 					if ($current==null) {
@@ -491,7 +489,7 @@ ruleAttValue returns [EObject current=null]
 						$current,
 						"valAtt",
 						lv_valAtt_2_0,
-						"org.eclipse.xtext.common.Terminals.STRING");
+						"org.xtext.msl.MSL.INSTANCE_ID");
 				}
 			)
 		)
