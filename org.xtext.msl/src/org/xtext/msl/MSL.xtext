@@ -27,9 +27,11 @@ GroupDef:
 	grp=[AbstractGroup|PATTERN_ID] ('[' mult=MULTIPLICITY ']')?
 ;
 
+AttValue: nameAtt=STRING + '='+ valAtt=STRING;
+
 AbstractGroup:
 	'group' name=PATTERN_ID '{'
-	('managedSyS' manSys=[AbstractSystem|PATTERN_ID])?
+	('managedSyS' manSys=[AbstractSystem|PATTERN_ID] ('[' attValues+=AttValue (',' attValues+=AttValue)* ']')?)?
 	('managedGrp' manGrp+=GroupDef (',' manGrp+=GroupDef)*)?
 	'components' components+=AbstractComponent (',' components+=AbstractComponent)*
 	'}';
@@ -86,7 +88,7 @@ terminal PATTERN_ID:
 	('A'..'Z') ('a'..'z' | 'A'..'Z' | '_')+;
 
 terminal INSTANCE_ID:
-	('a'..'z') ('a'..'z' | '0'..'9' | '_')+;
+	('a'..'z') ('a'..'z' | 'A'..'Z' | '0'..'9' | '_')+;
 
 terminal FQN_PATTERN_ID:
 	PATTERN_ID ("." PATTERN_ID)+;

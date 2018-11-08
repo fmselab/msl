@@ -391,6 +391,7 @@ public class AsmGenerator extends Generator {
 			ComponentName startInt = i.getStart();
 			String initComp = startInt.getComponent().getName();
 			ConcreteGroup startConcreteGroup = (ConcreteGroup) startInt.getComponent().eContainer();
+			assert startConcreteGroup != null: startInt.getComponent();
 			String startGroupName = startConcreteGroup.getName();
 			ComponentName endInt = i.getEnd();
 			ConcreteGroup endConcreteGroup = (ConcreteGroup) endInt.getComponent().eContainer();

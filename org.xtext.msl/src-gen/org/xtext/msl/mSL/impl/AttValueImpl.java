@@ -10,71 +10,71 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
-import org.xtext.msl.mSL.ComponentInstance;
+import org.xtext.msl.mSL.AttValue;
 import org.xtext.msl.mSL.MSLPackage;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Component Instance</b></em>'.
+ * An implementation of the model object '<em><b>Att Value</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.xtext.msl.mSL.impl.ComponentInstanceImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.xtext.msl.mSL.impl.ComponentInstanceImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.xtext.msl.mSL.impl.AttValueImpl#getNameAtt <em>Name Att</em>}</li>
+ *   <li>{@link org.xtext.msl.mSL.impl.AttValueImpl#getValAtt <em>Val Att</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implements ComponentInstance
+public class AttValueImpl extends MinimalEObjectImpl.Container implements AttValue
 {
   /**
-   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The default value of the '{@link #getNameAtt() <em>Name Att</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getNameAtt()
    * @generated
    * @ordered
    */
-  protected static final String NAME_EDEFAULT = null;
+  protected static final String NAME_ATT_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getNameAtt() <em>Name Att</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getNameAtt()
    * @generated
    * @ordered
    */
-  protected String name = NAME_EDEFAULT;
+  protected String nameAtt = NAME_ATT_EDEFAULT;
 
   /**
-   * The default value of the '{@link #getType() <em>Type</em>}' attribute.
+   * The default value of the '{@link #getValAtt() <em>Val Att</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getType()
+   * @see #getValAtt()
    * @generated
    * @ordered
    */
-  protected static final String TYPE_EDEFAULT = null;
+  protected static final String VAL_ATT_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getType() <em>Type</em>}' attribute.
+   * The cached value of the '{@link #getValAtt() <em>Val Att</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getType()
+   * @see #getValAtt()
    * @generated
    * @ordered
    */
-  protected String type = TYPE_EDEFAULT;
+  protected String valAtt = VAL_ATT_EDEFAULT;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  protected ComponentInstanceImpl()
+  protected AttValueImpl()
   {
     super();
   }
@@ -87,7 +87,7 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
   @Override
   protected EClass eStaticClass()
   {
-    return MSLPackage.Literals.COMPONENT_INSTANCE;
+    return MSLPackage.Literals.ATT_VALUE;
   }
 
   /**
@@ -95,9 +95,9 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getName()
+  public String getNameAtt()
   {
-    return name;
+    return nameAtt;
   }
 
   /**
@@ -105,12 +105,12 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setName(String newName)
+  public void setNameAtt(String newNameAtt)
   {
-    String oldName = name;
-    name = newName;
+    String oldNameAtt = nameAtt;
+    nameAtt = newNameAtt;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MSLPackage.COMPONENT_INSTANCE__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, MSLPackage.ATT_VALUE__NAME_ATT, oldNameAtt, nameAtt));
   }
 
   /**
@@ -118,9 +118,9 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public String getType()
+  public String getValAtt()
   {
-    return type;
+    return valAtt;
   }
 
   /**
@@ -128,12 +128,12 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setType(String newType)
+  public void setValAtt(String newValAtt)
   {
-    String oldType = type;
-    type = newType;
+    String oldValAtt = valAtt;
+    valAtt = newValAtt;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MSLPackage.COMPONENT_INSTANCE__TYPE, oldType, type));
+      eNotify(new ENotificationImpl(this, Notification.SET, MSLPackage.ATT_VALUE__VAL_ATT, oldValAtt, valAtt));
   }
 
   /**
@@ -146,10 +146,10 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
   {
     switch (featureID)
     {
-      case MSLPackage.COMPONENT_INSTANCE__NAME:
-        return getName();
-      case MSLPackage.COMPONENT_INSTANCE__TYPE:
-        return getType();
+      case MSLPackage.ATT_VALUE__NAME_ATT:
+        return getNameAtt();
+      case MSLPackage.ATT_VALUE__VAL_ATT:
+        return getValAtt();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -164,11 +164,11 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
   {
     switch (featureID)
     {
-      case MSLPackage.COMPONENT_INSTANCE__NAME:
-        setName((String)newValue);
+      case MSLPackage.ATT_VALUE__NAME_ATT:
+        setNameAtt((String)newValue);
         return;
-      case MSLPackage.COMPONENT_INSTANCE__TYPE:
-        setType((String)newValue);
+      case MSLPackage.ATT_VALUE__VAL_ATT:
+        setValAtt((String)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -184,11 +184,11 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
   {
     switch (featureID)
     {
-      case MSLPackage.COMPONENT_INSTANCE__NAME:
-        setName(NAME_EDEFAULT);
+      case MSLPackage.ATT_VALUE__NAME_ATT:
+        setNameAtt(NAME_ATT_EDEFAULT);
         return;
-      case MSLPackage.COMPONENT_INSTANCE__TYPE:
-        setType(TYPE_EDEFAULT);
+      case MSLPackage.ATT_VALUE__VAL_ATT:
+        setValAtt(VAL_ATT_EDEFAULT);
         return;
     }
     super.eUnset(featureID);
@@ -204,10 +204,10 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
   {
     switch (featureID)
     {
-      case MSLPackage.COMPONENT_INSTANCE__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case MSLPackage.COMPONENT_INSTANCE__TYPE:
-        return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+      case MSLPackage.ATT_VALUE__NAME_ATT:
+        return NAME_ATT_EDEFAULT == null ? nameAtt != null : !NAME_ATT_EDEFAULT.equals(nameAtt);
+      case MSLPackage.ATT_VALUE__VAL_ATT:
+        return VAL_ATT_EDEFAULT == null ? valAtt != null : !VAL_ATT_EDEFAULT.equals(valAtt);
     }
     return super.eIsSet(featureID);
   }
@@ -223,12 +223,12 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
-    result.append(", type: ");
-    result.append(type);
+    result.append(" (nameAtt: ");
+    result.append(nameAtt);
+    result.append(", valAtt: ");
+    result.append(valAtt);
     result.append(')');
     return result.toString();
   }
 
-} //ComponentInstanceImpl
+} //AttValueImpl
