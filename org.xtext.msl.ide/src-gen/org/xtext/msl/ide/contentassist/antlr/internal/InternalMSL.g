@@ -1109,16 +1109,9 @@ rule__AttValue__Group__0__Impl
 	}
 :
 (
-	(
-		{ before(grammarAccess.getAttValueAccess().getNameAttAssignment_0()); }
-		(rule__AttValue__NameAttAssignment_0)
-		{ after(grammarAccess.getAttValueAccess().getNameAttAssignment_0()); }
-	)
-	(
-		{ before(grammarAccess.getAttValueAccess().getNameAttAssignment_0()); }
-		(rule__AttValue__NameAttAssignment_0)*
-		{ after(grammarAccess.getAttValueAccess().getNameAttAssignment_0()); }
-	)
+	{ before(grammarAccess.getAttValueAccess().getNameAttAssignment_0()); }
+	(rule__AttValue__NameAttAssignment_0)
+	{ after(grammarAccess.getAttValueAccess().getNameAttAssignment_0()); }
 )
 ;
 finally {
@@ -1143,16 +1136,9 @@ rule__AttValue__Group__1__Impl
 	}
 :
 (
-	(
-		{ before(grammarAccess.getAttValueAccess().getEqualsSignKeyword_1()); }
-		('=')
-		{ after(grammarAccess.getAttValueAccess().getEqualsSignKeyword_1()); }
-	)
-	(
-		{ before(grammarAccess.getAttValueAccess().getEqualsSignKeyword_1()); }
-		('=')*
-		{ after(grammarAccess.getAttValueAccess().getEqualsSignKeyword_1()); }
-	)
+	{ before(grammarAccess.getAttValueAccess().getEqualsSignKeyword_1()); }
+	'='
+	{ after(grammarAccess.getAttValueAccess().getEqualsSignKeyword_1()); }
 )
 ;
 finally {
@@ -4122,9 +4108,9 @@ rule__AttValue__NameAttAssignment_0
 	}
 :
 	(
-		{ before(grammarAccess.getAttValueAccess().getNameAttSTRINGTerminalRuleCall_0_0()); }
-		RULE_STRING
-		{ after(grammarAccess.getAttValueAccess().getNameAttSTRINGTerminalRuleCall_0_0()); }
+		{ before(grammarAccess.getAttValueAccess().getNameAttINSTANCE_IDTerminalRuleCall_0_0()); }
+		RULE_INSTANCE_ID
+		{ after(grammarAccess.getAttValueAccess().getNameAttINSTANCE_IDTerminalRuleCall_0_0()); }
 	)
 ;
 finally {
@@ -4137,9 +4123,9 @@ rule__AttValue__ValAttAssignment_2
 	}
 :
 	(
-		{ before(grammarAccess.getAttValueAccess().getValAttSTRINGTerminalRuleCall_2_0()); }
-		RULE_STRING
-		{ after(grammarAccess.getAttValueAccess().getValAttSTRINGTerminalRuleCall_2_0()); }
+		{ before(grammarAccess.getAttValueAccess().getValAttINSTANCE_IDTerminalRuleCall_2_0()); }
+		RULE_INSTANCE_ID
+		{ after(grammarAccess.getAttValueAccess().getValAttINSTANCE_IDTerminalRuleCall_2_0()); }
 	)
 ;
 finally {

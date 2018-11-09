@@ -244,32 +244,32 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.AttValue");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cNameAttAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cNameAttSTRINGTerminalRuleCall_0_0 = (RuleCall)cNameAttAssignment_0.eContents().get(0);
+		private final RuleCall cNameAttINSTANCE_IDTerminalRuleCall_0_0 = (RuleCall)cNameAttAssignment_0.eContents().get(0);
 		private final Keyword cEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cValAttAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cValAttSTRINGTerminalRuleCall_2_0 = (RuleCall)cValAttAssignment_2.eContents().get(0);
+		private final RuleCall cValAttINSTANCE_IDTerminalRuleCall_2_0 = (RuleCall)cValAttAssignment_2.eContents().get(0);
 		
 		//AttValue:
-		//	nameAtt=STRING+ '='+ valAtt=STRING;
+		//	nameAtt=INSTANCE_ID '=' valAtt=INSTANCE_ID;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//nameAtt=STRING+ '='+ valAtt=STRING
+		//nameAtt=INSTANCE_ID '=' valAtt=INSTANCE_ID
 		public Group getGroup() { return cGroup; }
 		
-		//nameAtt=STRING+
+		//nameAtt=INSTANCE_ID
 		public Assignment getNameAttAssignment_0() { return cNameAttAssignment_0; }
 		
-		//STRING
-		public RuleCall getNameAttSTRINGTerminalRuleCall_0_0() { return cNameAttSTRINGTerminalRuleCall_0_0; }
+		//INSTANCE_ID
+		public RuleCall getNameAttINSTANCE_IDTerminalRuleCall_0_0() { return cNameAttINSTANCE_IDTerminalRuleCall_0_0; }
 		
-		//'='+
+		//'='
 		public Keyword getEqualsSignKeyword_1() { return cEqualsSignKeyword_1; }
 		
-		//valAtt=STRING
+		//valAtt=INSTANCE_ID
 		public Assignment getValAttAssignment_2() { return cValAttAssignment_2; }
 		
-		//STRING
-		public RuleCall getValAttSTRINGTerminalRuleCall_2_0() { return cValAttSTRINGTerminalRuleCall_2_0; }
+		//INSTANCE_ID
+		public RuleCall getValAttINSTANCE_IDTerminalRuleCall_2_0() { return cValAttINSTANCE_IDTerminalRuleCall_2_0; }
 	}
 	public class AbstractGroupElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.AbstractGroup");
@@ -1223,7 +1223,7 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 	}
 	
 	//AttValue:
-	//	nameAtt=STRING+ '='+ valAtt=STRING;
+	//	nameAtt=INSTANCE_ID '=' valAtt=INSTANCE_ID;
 	public AttValueElements getAttValueAccess() {
 		return pAttValue;
 	}
