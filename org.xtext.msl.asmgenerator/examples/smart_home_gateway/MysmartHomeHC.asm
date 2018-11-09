@@ -1,5 +1,3 @@
-asm MySmartHomeHC
-
 import StandardLibrary
 
 signature:
@@ -24,6 +22,11 @@ signature:
 	derived orSelectorfromMainHCEtoIntHCE: MainHCMgA -> Powerset(IntHCMgA)
 	controlled fromIntHCEtoMainHCE: IntHCMgA -> MainHCMgA
 	//MySmartHomeHC
+	static hs_gf: HeatingMdA
+	static hs_ff: HeatingMdA
+	static ghc: MainHCMgA
+	static ggf: IntHCMgA
+	static gff: IntHCMgA
 
 definitions:
 	function startMainHCM($b in MainHCMgA) =
@@ -139,20 +142,31 @@ default init s0:
 	function sgnMainHCEIntHCE($a in MainHCMgA, $b in IntHCMgA) = false
 	function fromIntHCMtoMainHCM($a in IntHCMgA) =
 		switch($a)
+			case ggf: ghc
+			case gff: ghc
 		endswitch
 
 	function fromMainHCMtoIntHCM($a in MainHCMgA) =
 		switch($a)
+			case ghc: {ggf, gff}
 		endswitch
 
 	function fromMainHCEtoIntHCE($a in MainHCMgA) =
 		switch($a)
+			case ghc: {ggf, gff}
 		endswitch
 
 	function fromIntHCEtoMainHCE($a in IntHCMgA) =
 		switch($a)
+			case ggf: ghc
+			case gff: ghc
 		endswitch
 
+	function heatingManagedByIntHC($x in IntHCMgA) =
+		switch($x)
+			case ggf: hs_gf
+			case gff: hs_ff
+		endswitch
 
 	agent IntHCMgA: r_IntHC[]
 	agent HeatingMdA: r_Heating[]

@@ -204,6 +204,15 @@
 			</activeWhen>
 		</handler>
 	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="msl"
+			id="org.xtext.msl.MSL.contenttype"
+			name="MSL File"
+			priority="normal">
+		</content-type>
+	</extension>
 	<!-- adding resource factories -->
 	<extension
 		point="org.eclipse.emf.ecore.extension_parser">
@@ -239,6 +248,15 @@
 			point="org.eclipse.core.resources.markers">
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
 		<persistent value="true"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="org.xtext.msl.MSL"
+			class="org.xtext.msl.ui.MSLExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="org.xtext.msl.MSL.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="org.xtext.msl.ui.keyword_MSL"/>
+		</page>
 	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
@@ -388,12 +406,18 @@
 			class="org.xtext.msl.ui.MSLExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="msl">
 		</viewer>
+		<contentTypeBinding
+			contentTypeId="org.xtext.msl.MSL.contenttype"
+			contentViewerId="org.xtext.msl.MSL.compare.contentViewers" />
 	</extension>
 	<extension point="org.eclipse.compare.contentMergeViewers">
 		<viewer id="org.xtext.msl.MSL.compare.contentMergeViewers"
 			class="org.xtext.msl.ui.MSLExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
 			extensions="msl" label="MSL Compare">
 		</viewer>
+		<contentTypeBinding
+			contentTypeId="org.xtext.msl.MSL.contenttype"
+			contentMergeViewerId="org.xtext.msl.MSL.compare.contentMergeViewers" />
 	</extension>
 	<extension point="org.eclipse.ui.editors.documentProviders">
 		<provider id="org.xtext.msl.MSL.editors.documentProviders"
