@@ -4,7 +4,7 @@ Bundle-Name: ASM generator
 Bundle-SymbolicName: org.xtext.msl.asmgenerator;singleton:=true
 Bundle-Version: 1.0.2
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Bundle-Vendor: fmse.di.unimi.it
+Bundle-Vendor: foselab.unibg.it
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.emf.common,
  org.xtext.msl,

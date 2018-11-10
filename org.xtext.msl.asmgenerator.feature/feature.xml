@@ -3,7 +3,7 @@
       id="org.xtext.msl.asmgenerator.feature"
       label="ASM generator"
       version="1.0.2"
-      provider-name="fmse.di.unimi.it">
+      provider-name="foselab.unibg.it">
 
    <license url="">
       Eclipse Public License

@@ -12,6 +12,6 @@ Require-Bundle: org.eclipse.ui,
  org.xtext.msl
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
-Bundle-Vendor: fmse.di.unimi.it
+Bundle-Vendor: foselab.unibg.it
 Bundle-ClassPath: .
 Import-Package: org.eclipse.debug.ui.console

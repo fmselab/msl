@@ -29,7 +29,6 @@ abstract public class Generator {
 	protected List<AbstractInteraction> absInteractions;
 	protected Map<String, String> nameBinding;
 	protected PrintWriter pw;
-	
 
 	public Generator(Specification spec, PrintWriter pw) {
 		this.spec = spec;
