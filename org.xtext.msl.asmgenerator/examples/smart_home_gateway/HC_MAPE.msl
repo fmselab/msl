@@ -36,13 +36,14 @@ configuration MySmartHomeHC instanceOf HC_MAPE {
 
     //ground floor group
 	ggf: HC_MAPE.IntHC {
-		managedSyS hs_gf //(HeatingGF,status),(WindowsGF,status),(WindowsGF,command ON/OFF)
+		managedSyS hs_gf (heatingGF,status),(windowsGF,status),(windowsGF,commandON_OFF)//(HeatingGF,status),(WindowsGF,status),(WindowsGF,command ON/OFF)
 		components m_GF:M, e_GF:E
 	}
 
     //first floor group
     gff: HC_MAPE.IntHC {
-		managedSyS hs_ff //(HeatingFF,status),(WindowsFF,status),(WindowsFF,command ON/OFF)  
+		managedSyS hs_ff (heatingFF,status),(windowsFF,status),(windowsFF,commandON_OFF)//(HeatingFF,status),(WindowsFF,status),(WindowsFF,command ON/OFF)  
+		
 		components m_FF:M, e_FF:E
 	}
 

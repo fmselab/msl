@@ -58,3 +58,33 @@
 [2018-09-29 13:40:26] Performing Preference /instance/org.eclipse.ui.workbench/pref_console_font = 1|Monaco|24.0|0|COCOA|1|Monaco;
 [2018-09-29 13:40:26] Performing Preference /instance/org.eclipse.ui.workbench/svn_comment_font = 1|Monaco|24.0|0|COCOA|1|Monaco;
 [2018-09-29 13:40:26] 
+[2018-11-10 10:48:26] Executing startup tasks
+[2018-11-10 10:48:26] Java(TM) SE Runtime Environment 1.8.0_162-b12
+[2018-11-10 10:48:26] Product self.product.version
+[2018-11-10 10:48:26] Workspace /Users/parcaini/Desktop/github/fmselab/runtime-EclipseXtext
+[2018-11-10 10:48:26] Bundle org.eclipse.oomph.setup 1.9.0.v20180529-0916, build=3551, branch=5a7202105cdec0e9bc9553799ba330ea58714ce5
+[2018-11-10 10:48:26] Bundle org.eclipse.oomph.setup.core 1.9.0.v20180529-0916, build=3551, branch=5a7202105cdec0e9bc9553799ba330ea58714ce5
+[2018-11-10 10:48:26] Bundle org.eclipse.oomph.setup.p2 1.9.0.v20180529-0916, build=3551, branch=5a7202105cdec0e9bc9553799ba330ea58714ce5
+[2018-11-10 10:48:26] Performing Preference /instance/org.asmeta.asmee/asmee.editor.runtuntilempty = true
+[2018-11-10 10:48:26] Performing Preference /instance/org.asmeta.asmee/asmee.editor.runtuntiltrivial = false
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/ColorsAndFontsPreferencePage.expandedCategories = Torg.eclipse.ui.workbenchMisc
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/ColorsAndFontsPreferencePage.selectedElement = Forg.eclipse.jface.textfont
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.compare.contentmergeviewer.TextMergeViewer = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.debug.ui.consoleFont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.debug.ui.DetailPaneFont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.debug.ui.MemoryViewTableFont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.egit.ui.CommitMessageEditorFont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.egit.ui.CommitMessageFont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.egit.ui.DiffHeadlineFont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.jdt.internal.ui.compare.JavaMergeViewer = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.jdt.internal.ui.compare.PropertiesFileMergeViewer = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.jdt.ui.editors.textfont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.jdt.ui.PropertiesFileEditor.textfont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.jface.textfont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.mylyn.wikitext.ui.presentation.textFont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.pde.internal.ui.compare.ManifestContentMergeViewer = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.pde.internal.ui.compare.PluginContentMergeViewer = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/org.eclipse.xtend.ui.editors.textfont = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/pref_console_font = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] Performing Preference /instance/org.eclipse.ui.workbench/svn_comment_font = 1|Monaco|24.0|0|COCOA|1|Monaco;
+[2018-11-10 10:48:26] 
