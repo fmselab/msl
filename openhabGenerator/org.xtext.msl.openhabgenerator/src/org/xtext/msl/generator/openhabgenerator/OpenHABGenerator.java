@@ -17,10 +17,19 @@ public class OpenHABGenerator extends Generator {
 		this(Loader.loadSpec(path), pw);
 	}
 
+	public OpenHABGenerator(String path) {
+		this(path, new PrintWriter(System.out, true));
+	}
+	
 	@Override
 	public void generateCode() {
 		// TODO Auto-generated method stub
-		
+		pw.println("\t//" + pattern.getName());
+		//TO COMPLETE
 	}
 	
+	public static void main(String[] args) {
+		OpenHABGenerator g = new OpenHABGenerator("examples/SimpleMAPE.msl");
+		g.generate();
+	}
 }
