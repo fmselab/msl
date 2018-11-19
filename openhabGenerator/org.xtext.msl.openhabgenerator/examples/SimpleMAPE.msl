@@ -2,6 +2,7 @@ abstract pattern SimpleMAPE {
 	system Sys
 
 	group Main {
+		managedSyS Sys
 		components M, A, P, E
 	}
 
@@ -19,5 +20,6 @@ configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
     hs: ComfortableHeatingMAPE.Heater
     
 	ch: ComfortableHeatingMAPE.MainCH {
+	    managedSyS hs
 		components m_ch:M, a_ch:A, p_ch:P, e_ch:E
 	}
