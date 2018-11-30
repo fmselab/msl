@@ -1,0 +1,55 @@
+var Number counter_ch
+
+rule "StartLoop_ComfortableHeating"
+when
+	System started
+then
+	counter_ch = 0
+	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (ch), counter_ch = " + counter_ch)
+	start_m_ch.sendCommand(ON)
+	start_a_ch.sendCommand(OFF)
+	start_p_ch.sendCommand(OFF)
+	start_e_ch.sendCommand(OFF)
+end
+
+rule "Monitor_m_ch"
+when
+	Item start_m_ch received command ON
+then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeating.rules", "Monitor for group (ch) active, counter_ch = " + counter_ch)
+	sendCommand(start_m_ch, OFF)
+	sendCommand(start_a_ch, ON)
+end
+
+rule "Analyze_a_ch"
+when
+	Item start_a_ch received command ON
+then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeating.rules", "Analyze for group (ch) active, counter_ch = " + counter_ch)
+	sendCommand(start_a_ch, OFF)
+	sendCommand(start_p_ch, ON)
+end
+
+rule "Plan_p_ch"
+when
+	Item start_p_ch received command ON
+then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeating.rules", "Plan for group (ch) active, counter_ch = " + counter_ch)
+	sendCommand(start_p_ch, OFF)
+	sendCommand(start_e_ch, ON)
+end
+
+rule "Exec_e_ch"
+when
+	Item start_e_ch received command ON
+then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeating.rules", "Exec active for group (ch), counter_ch = " + counter_ch)
+	sendCommand(start_e_ch, OFF)
+	sendCommand(start_m_ch, ON)
+	counter_ch = 0
+end
+
