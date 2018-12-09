@@ -435,7 +435,6 @@ public class OpenHABGenerator extends Generator {
 		//Required argument: path of the msl specification
 		//Optional argument: number of executions; 0 or a negative number runs indefinitely; default number is the static final field exec_default
 		//TODO: optional argument to switch logMode ON or OFF
-		//TODO: aggregate MAPEloop support
 		/* you'll find some specifications in examples/:
 		 * SimpleMAPE.msl : A single MAPEloop without other dependencies
 		 * SimpleMAPE_MissingComp.msl : A MAPEloop without Analyze and Plan 
