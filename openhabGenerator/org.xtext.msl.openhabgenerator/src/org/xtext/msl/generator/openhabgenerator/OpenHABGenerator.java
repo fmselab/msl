@@ -193,6 +193,8 @@ public class OpenHABGenerator extends Generator {
 			}
 			if(exec_number > 0)
 				pw.println("var Number exec_counter\n");
+			else
+				pw.println();
 		}
 		
 		if(writeLog && exec_number > 0) {
