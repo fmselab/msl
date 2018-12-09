@@ -23,3 +23,4 @@ configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
 	    managedSyS hs
 		components m_ch:M, a_ch:A, p_ch:P, e_ch:E
 	}
+}

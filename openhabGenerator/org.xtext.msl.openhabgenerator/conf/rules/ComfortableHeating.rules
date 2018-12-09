@@ -1,15 +1,41 @@
 var Number counter_ch
+var Number counter_h0
+var Number counter_h1
+var Number exec_counter
+
+rule "Execution stop countdown"
+when
+	Item start_m_ch received command ON
+then
+	if(exec_counter > 0) {
+		exec_counter = exec_counter-1
+		logInfo("ComfortableHeating.rules", "Execution counter reduced by one. exec_counter = " + exec_counter)
+	}
+	if(exec_counter <= 0) {
+		logInfo("ComfortableHeating.rules", "10 executions have elapsed. Loops will end then stop.")
+	}
+end
 
 rule "StartLoop_ComfortableHeating"
 when
 	System started
 then
+	logInfo("ComfortableHeating.rules", "Loops will run for " + 10 + " iterations.")
 	counter_ch = 0
 	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (ch), counter_ch = " + counter_ch)
-	start_m_ch.sendCommand(ON)
+	counter_h0 = 0
+	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (h0), counter_h0 = " + counter_h0)
+	counter_h1 = 0
+	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (h1), counter_h1 = " + counter_h1)
+	exec_counter = 10
+	start_m_ch.sendCommand(OFF)
 	start_a_ch.sendCommand(OFF)
 	start_p_ch.sendCommand(OFF)
 	start_e_ch.sendCommand(OFF)
+	start_m_h0.sendCommand(ON)
+	start_e_h0.sendCommand(OFF)
+	start_m_h1.sendCommand(ON)
+	start_e_h1.sendCommand(OFF)
 end
 
 rule "Monitor_m_ch"
@@ -42,14 +68,73 @@ then
 	sendCommand(start_e_ch, ON)
 end
 
+rule "Exec_e_h0"
+when
+	Item start_e_h0 received command ON
+then
+	counter_h0 = counter_h0 + 1
+	logInfo("ComfortableHeating.rules", "Exec active for group (h0), counter_h0 = " + counter_h0)
+	counter_h0 = 0
+	sendCommand(start_e_h0, OFF)
+	if(exec_counter > 0) {
+		sendCommand(start_m_h0, ON)
+	}
+end
+
+rule "Exec_e_h1"
+when
+	Item start_e_h1 received command ON
+then
+	counter_h1 = counter_h1 + 1
+	logInfo("ComfortableHeating.rules", "Exec active for group (h1), counter_h1 = " + counter_h1)
+	counter_h1 = 0
+	sendCommand(start_e_h1, OFF)
+	if(exec_counter > 0) {
+		sendCommand(start_m_h1, ON)
+	}
+end
+
+rule "Monitor_m_h0"
+when
+	Item start_m_h0 received command ON
+then
+	counter_h0 = counter_h0 + 1
+	logInfo("ComfortableHeating.rules", "Monitor for group (h0) active, counter_h0 = " + counter_h0)
+	sendCommand(start_m_h0, OFF)
+	sendCommand(h0_to_ch, ON)
+end
+
+rule "Monitor_m_h1"
+when
+	Item start_m_h1 received command ON
+then
+	counter_h1 = counter_h1 + 1
+	logInfo("ComfortableHeating.rules", "Monitor for group (h1) active, counter_h1 = " + counter_h1)
+	sendCommand(start_m_h1, OFF)
+	sendCommand(h1_to_ch, ON)
+end
+
+rule "Aggregator_m_h0_m_h1_m_ch"
+when
+	Item h0h1_to_ch received update ON
+then
+	counter_h0 = counter_h0 + 1
+	counter_h1 = counter_h1 + 1
+	logInfo("ComfortableHeating.rules", "Aggregating output from m_h0, m_h1, to m_ch" + ", counter_h0 = " + counter_h0 + ", counter_h1 = " + counter_h1)
+	sendCommand(h0_to_ch, OFF)
+	sendCommand(h1_to_ch, OFF)
+	sendCommand(start_m_ch, ON)
+end
+
 rule "Exec_e_ch"
 when
 	Item start_e_ch received command ON
 then
 	counter_ch = counter_ch + 1
-	logInfo("ComfortableHeating.rules", "Exec active for group (ch), counter_ch = " + counter_ch)
-	sendCommand(start_e_ch, OFF)
-	sendCommand(start_m_ch, ON)
+	logInfo("ComfortableHeating.rules", "Exec_e_ch for group (ch) active, counter_ch = " + counter_ch)
 	counter_ch = 0
+	sendCommand(start_e_ch, OFF)
+	sendCommand(start_e_h0, ON)
+	sendCommand(start_e_h1, ON)
 end
 

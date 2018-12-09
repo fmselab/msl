@@ -13,18 +13,19 @@ abstract pattern SimpleMAPE {
 
 concrete pattern ComfortableHeatingMAPE concretizationOf SimpleMAPE {
 	system Heater : SimpleMAPE.Sys
-    group CHGroundFloor : Simple.Main
-    group CHFirstFloor : Simple.Main
+    group MainCH: Simple.Main
 }
 
 configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
-    hs: ComfortableHeatingMAPE.Heater
+    hs0: ComfortableHeatingMAPE.Heater
+    hs1: ComfortableHeatingMAPE.Heater
     
-	ch0: ComfortableHeatingMAPE.CHGroundFloor {
-	    managedSyS hs
+	ch0: ComfortableHeatingMAPE.MainCH {
+	    managedSyS hs0
 		components m_ch0:M, a_ch0:A, p_ch0:P, e_ch0:E
 	}
-	ch1: ComfortableHeatingMAPE.CHFirstFloor {
-	    managedSyS hs
+	ch1: ComfortableHeatingMAPE.MainCH {
+	    managedSyS hs1
 		components m_ch1:M, a_ch1:A, p_ch1:P, e_ch1:E
 	}
+}

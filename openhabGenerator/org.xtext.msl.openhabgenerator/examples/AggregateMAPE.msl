@@ -42,9 +42,9 @@ configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
 	}
 
 
-	ch.m_ch -> ch.a_ch
-	ch.a_ch -> ch.p_ch
-	ch.p_ch -> ch.e_ch
+	//ch.m_ch -> ch.a_ch
+	//ch.a_ch -> ch.p_ch
+	//ch.p_ch -> ch.e_ch
 	h0.m_h0 -> ch.m_ch
 	h1.m_h1 -> ch.m_ch
 	ch.e_ch -> h0.e_h0
