@@ -91,7 +91,8 @@ definitions:
 
 	rule r_Heater =
 		if isDef(setHeatingStatus(self)) then
-			setHeatingStatus(self) := undef //signal reset
+			//setHeatingStatus(self) := undef //signal reset
+			skip
 		endif
 
 	rule r_CleanUp_MainCHE =
