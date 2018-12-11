@@ -13,7 +13,7 @@ abstract pattern SimpleMAPE {
 
 concrete pattern ComfortableHeatingMAPE concretizationOf SimpleMAPE {
 	system Heater : SimpleMAPE.Sys
-    group MainCH: Simple.Main
+    group MainCH: SimpleMAPE.Main
 }
 
 configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
