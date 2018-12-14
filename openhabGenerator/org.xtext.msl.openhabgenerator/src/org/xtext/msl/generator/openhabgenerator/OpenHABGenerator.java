@@ -149,7 +149,6 @@ public class OpenHABGenerator extends Generator {
 				destination_parent.mkdirs();
 				pw = new PrintWriter(destination);
 			}
-			System.out.println("Writing in: " + destination.getAbsolutePath());
 		}
 		catch(Exception e) {
 			System.out.println("error");
@@ -200,7 +199,6 @@ public class OpenHABGenerator extends Generator {
 				destination_parent.mkdirs();
 				pw = new PrintWriter(destination);
 			}
-			System.out.println("Writing in: " + destination.getAbsolutePath());
 		}
 		catch(Exception e) {
 			System.out.println("error");
@@ -211,10 +209,20 @@ public class OpenHABGenerator extends Generator {
 				pw.println("var Number counter_"+cG.getName());
 			}
 			if(exec_number > 0)
-				pw.println("var Number exec_counter\n");
-			else
-				pw.println();
+				pw.println("var Number exec_counter");
 		}
+		
+		List<String> adaptReqs = new ArrayList<String>();
+		for (ConcreteGroup cG : concreteGroups) {
+			for(ComponentInstance cI : cG.getComponents()) {
+				if(cI.getType().equals("A")) {
+					String aR = "adaptation_required_" + cI.getName();
+					adaptReqs.add(aR);
+					pw.println("var boolean " + aR);
+				}
+			}
+		}
+		pw.println();
 		
 		if(writeLog && exec_number > 0) {
 			pw.println("rule \"Execution stop countdown\"");
@@ -254,6 +262,9 @@ public class OpenHABGenerator extends Generator {
 					pw.println("\tstart_" + cI.getName() + ".sendCommand(OFF)");
 			}
 		}
+		for(String aR : adaptReqs) {
+			pw.println("\t" + aR + " = true");
+		}
 		pw.println("end\n");
 		//generates one rule for each of the implicit intra-group concrete interactions by resolving them from the abstract interactions specified in the abstract pattern
 		for(ConcreteGroup cG : concreteGroups) {
@@ -281,7 +292,69 @@ public class OpenHABGenerator extends Generator {
 					pw.println("\tlogInfo(\"" + configuration.getName() + ".rules\", \""+ ruleName +" for group (" + cG.getName() + ") active, counter_" + cG.getName() +  " = \" + counter_"+ cG.getName() +")");
 				}
 				pw.println("\tsendCommand(start_" + start + ", OFF)");
-				pw.println("\tsendCommand(start_" + end + ", ON)");
+				if(aI.getStart().getType().getName().equals("A")) {
+					pw.println("\tif(((Math::random * 100.0).intValue + 1) <= 50 ){");
+					pw.println("\t\tadaptation_required_" + start + " = true");
+					pw.println("\t}");
+					pw.println("\telse {");
+					pw.println("\t\tadaptation_required_" + start + " = false");
+					pw.println("\t}");
+					pw.println("\tif(adaptation_required_"+ start + "){");
+					if(writeLog)
+						pw.println("\t\tlogInfo(\"" + configuration.getName() + ".rules\", \"" + "Adaptation required for " + start + ", proceeding with loop.\")");
+					pw.println("\t\tsendCommand(start_" + end + ", ON)");
+					pw.println("\t}");
+					pw.println("\telse{");
+					if(writeLog) {
+						pw.println("\t\tlogInfo(\"" + configuration.getName() + ".rules\", \"" + "Adaptation not required for " + start + ", resetting loop.\")");
+						pw.println("\t\tcounter_" + cG.getName() + " = 0");
+					}
+					//determines whether the loop is simple or more complex
+					if(configuration.getConcreteInteractions().size()>1) {
+						if(writeLog && exec_number>0) {
+							pw.println("\t\tif(exec_counter > 0) {");
+						}
+						boolean endSimpleMAPE = true;
+						for(ComponentInstance cI2 : cG.getComponents()) {
+							if(interactWithSameEnd.get(cI2)!=null) {
+								endSimpleMAPE = false;
+								for(Interaction I : interactWithSameEnd.get(cI2)) {
+									if(writeLog && exec_number>0) {
+										pw.print("\t");
+									}
+									pw.println("\t\tsendCommand(start_" + I.getStart().getComponent().getName() + ", ON)");
+								}
+							}
+						}
+						if(endSimpleMAPE) {
+							for(ComponentInstance cI2 : cG.getComponents()) {
+								if(cI2.getType().equals("M")) {
+									if(writeLog && exec_number>0) {
+										pw.println("\t\tif(exec_counter > 0) {");
+										pw.print("\t");
+									}
+									pw.println("\t\tsendCommand(start_" + cI2.getName() + ", ON)");
+								}
+							}
+						}
+					}
+					else {
+						for(ComponentInstance cI2 : cG.getComponents()) {
+							if(cI2.getType().equals("M")) {
+								if(writeLog && exec_number>0) {
+									pw.println("\t\tif(exec_counter > 0) {");
+									pw.print("\t");
+								}
+								pw.println("\t\tsendCommand(start_" + cI2.getName() + ", ON)");
+							}
+						}
+					}
+					if(writeLog && exec_number > 0)
+						pw.println("\t\t}");
+					pw.println("\t}");
+				}
+				else
+					pw.println("\tsendCommand(start_" + end + ", ON)");
 				pw.println("end\n");
 			}
 			//generates the implicit loopback rule if the group has a managed system, otherwise there should be an explicit interaction pointing to another MAPEloop
