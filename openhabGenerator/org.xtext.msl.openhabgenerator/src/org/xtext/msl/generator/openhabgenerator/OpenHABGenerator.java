@@ -18,6 +18,7 @@ public class OpenHABGenerator extends Generator {
 	
 	private int exec_number;
 	private static final int exec_default = 10;
+	private static final boolean writeLog_default = true;
 	
 	private Map<ComponentInstance, AbstractComponent> concrToAbsComponents; //Map that links a ComponentInstance with the corresponding AbstractComponent
 	private Map<Interaction, AbstractInteraction> concrToAbsInteractions; //Map that links an Interaction with the corresponding AbstractInteraction
@@ -137,8 +138,18 @@ public class OpenHABGenerator extends Generator {
 	}
 	
 	private void generateItems() {
-		try {
-			pw = new PrintWriter(new File("conf/items/"+configuration.getName()+".items"));
+		
+		
+		try {//TODO: sistemare con il plugin UI
+			File destination = new File("conf " + configuration.getName() +"/items/"+configuration.getName()+".items");
+			if(destination.exists())
+				pw = new PrintWriter(destination);
+			else {
+				File destination_parent = new File(destination.getParent());
+				destination_parent.mkdirs();
+				pw = new PrintWriter(destination);
+			}
+			System.out.println("Writing in: " + destination.getAbsolutePath());
 		}
 		catch(Exception e) {
 			System.out.println("error");
@@ -181,7 +192,15 @@ public class OpenHABGenerator extends Generator {
 	}
 	private void generateRules() {
 		try {
-			pw = new PrintWriter(new File("conf/rules/"+configuration.getName()+".rules"));
+			File destination = new File("conf " + configuration.getName() +"/rules/"+configuration.getName()+".rules");
+			if(destination.exists())
+				pw = new PrintWriter(destination);
+			else {
+				File destination_parent = new File(destination.getParent());
+				destination_parent.mkdirs();
+				pw = new PrintWriter(destination);
+			}
+			System.out.println("Writing in: " + destination.getAbsolutePath());
 		}
 		catch(Exception e) {
 			System.out.println("error");
@@ -432,9 +451,9 @@ public class OpenHABGenerator extends Generator {
 	
 	public static void main(String[] args) {
 		
-		//Required argument: path of the msl specification
-		//Optional argument: number of executions; 0 or a negative number runs indefinitely; default number is the static final field exec_default
-		//TODO: optional argument to switch logMode ON or OFF
+		//Required argument: String path of the msl specification
+		//Optional argument: int number of executions; 0 or a negative number runs indefinitely; default number is the static final field exec_default
+		//Optional argument: boolean logMode; true if log is required, false otherwise. Default: true.
 		/* you'll find some specifications in examples/:
 		 * SimpleMAPE.msl : A single MAPEloop without other dependencies
 		 * SimpleMAPE_MissingComp.msl : A MAPEloop without Analyze and Plan 
@@ -444,6 +463,8 @@ public class OpenHABGenerator extends Generator {
 		//output files go in conf/items and conf/rules; naming conventions are the same as those found in the OpenHAB folder
 		//output logs from OpenHAB are found in the OpenHAB folder under userdata/logs/openhab.log
 		int exec = exec_default;
+		boolean logMode = writeLog_default;
+		
 		if(args.length > 1) {
 			try {
 				exec = Integer.parseInt(args[1]);
@@ -453,7 +474,17 @@ public class OpenHABGenerator extends Generator {
 			}
 		}
 		
-		OpenHABGenerator g = new OpenHABGenerator(args[0], exec); //implicitly, logMode is true
+		if(args.length > 2) {
+			try {
+				logMode = Boolean.parseBoolean(args[2]);
+			}
+			catch (Exception e) {
+				logMode = writeLog_default;
+			}
+		}
+		
+		
+		OpenHABGenerator g = new OpenHABGenerator(args[0], logMode ,exec); //implicitly, logMode is true
 		g.generate();
 	}
 }
