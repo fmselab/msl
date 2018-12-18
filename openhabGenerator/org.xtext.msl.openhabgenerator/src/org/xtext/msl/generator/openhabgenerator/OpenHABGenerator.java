@@ -48,6 +48,7 @@ public class OpenHABGenerator extends Generator {
 
 	public OpenHABGenerator(String path, PrintWriter pw) {
 		this(Loader.loadSpec(path), pw, false, 0);
+		this.path = path;
 	}
 
 	public OpenHABGenerator(String path, PrintWriter pw, boolean logMode, int exec) { // logMode invece di debugMode
@@ -160,12 +161,12 @@ public class OpenHABGenerator extends Generator {
 	}
 
 	private void generateItems() {
-
+		String destName = null;
 		try {// TODO: sistemare con il plugin UI
 				// File destination = new File("conf" + configuration.getName()
 				// +"/items/"+configuration.getName()+".items");
 
-			String destName = Paths.get(path).getParent().toAbsolutePath() + "/conf" + configuration.getName()
+			destName = Paths.get(path).getParent().toAbsolutePath() + "/conf" + configuration.getName()
 					+ "/items/" + configuration.getName() + ".items";
 			File destination = new File(destName);
 			if (destination.exists())
@@ -176,7 +177,7 @@ public class OpenHABGenerator extends Generator {
 				pw = new PrintWriter(destination);
 			}
 		} catch (Exception e) {
-			System.out.println("error");
+			System.out.println("error in creating item " + destName);
 		}
 		// for each group in the concrete pattern, generates an OpenHAB group and a
 		// switch for each of the components in this group
@@ -219,11 +220,12 @@ public class OpenHABGenerator extends Generator {
 	}
 
 	private void generateRules() {
+		String destName = null;
 		try {
 			// File destination = new File("conf" + configuration.getName() + "/rules/" +
 			// configuration.getName() + ".rules");
 
-			String destName = Paths.get(path).getParent().toAbsolutePath() + "/conf" + configuration.getName()
+			destName = Paths.get(path).getParent().toAbsolutePath() + "/conf" + configuration.getName()
 					+ "/rules/" + configuration.getName() + ".rules";
 			File destination = new File(destName);
 			if (destination.exists())
@@ -234,7 +236,7 @@ public class OpenHABGenerator extends Generator {
 				pw = new PrintWriter(destination);
 			}
 		} catch (Exception e) {
-			System.out.println("error");
+			System.out.println("error in creating rules file " + destName);
 		}
 		// if logging is required, generates a counter for each group
 		if (writeLog) {
