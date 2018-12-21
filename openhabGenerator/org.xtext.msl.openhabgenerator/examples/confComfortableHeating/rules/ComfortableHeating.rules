@@ -1,91 +1,259 @@
-var Number counter_ch
-var Number exec_counter
-var boolean adaptation_required_a_ch
-
-rule "Execution stop countdown"
-when
-	Item start_m_ch received command ON
-then
-	if(exec_counter > 0) {
-		exec_counter = exec_counter-1
-		logInfo("ComfortableHeating.rules", "Execution counter reduced by one. exec_counter = " + exec_counter)
-	}
-	if(exec_counter <= 0) {
-		logInfo("ComfortableHeating.rules", "10 executions have elapsed. Loops will end then stop.")
-	}
-end
+var boolean adaptation_required_a_ch0
+var boolean adaptation_required_a_ch1
+var boolean adaptation_required_a_ch2
 
 rule "StartLoop_ComfortableHeating"
 when
 	System started
 then
-	logInfo("ComfortableHeating.rules", "Loops will run for " + 10 + " iterations.")
-	counter_ch = 0
-	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (ch), counter_ch = " + counter_ch)
-	exec_counter = 10
-	start_m_ch.sendCommand(ON)
-	start_a_ch.sendCommand(OFF)
-	start_p_ch.sendCommand(OFF)
-	start_e_ch.sendCommand(OFF)
-	adaptation_required_a_ch = true
+	start_m_ch0.sendCommand(ON)
+	start_a_ch0.sendCommand(OFF)
+	start_p_ch0.sendCommand(OFF)
+	start_e_ch0.sendCommand(OFF)
+	start_m_ch1.sendCommand(ON)
+	start_a_ch1.sendCommand(OFF)
+	start_p_ch1.sendCommand(OFF)
+	start_e_ch1.sendCommand(OFF)
+	start_m_ch2.sendCommand(ON)
+	start_a_ch2.sendCommand(OFF)
+	start_p_ch2.sendCommand(OFF)
+	start_e_ch2.sendCommand(OFF)
+	adaptation_required_a_ch0 = true
+	adaptation_required_a_ch1 = true
+	adaptation_required_a_ch2 = true
 end
 
-rule "Monitor_m_ch"
+rule "Monitor_m_ch0"
 when
-	Item start_m_ch received command ON
+	Item start_m_ch0 received command ON
 then
-	counter_ch = counter_ch + 1
-	logInfo("ComfortableHeating.rules", "Monitor for group (ch) active, counter_ch = " + counter_ch)
-	sendCommand(start_m_ch, OFF)
-	sendCommand(start_a_ch, ON)
+	sendCommand(start_m_ch0, OFF)
+	sendCommand(start_a_ch0, ON)
 end
 
-rule "Analyze_a_ch"
+rule "Analyze_a_ch0"
 when
-	Item start_a_ch received command ON
+	Item start_a_ch0 received command ON
 then
-	counter_ch = counter_ch + 1
-	logInfo("ComfortableHeating.rules", "Analyze for group (ch) active, counter_ch = " + counter_ch)
-	sendCommand(start_a_ch, OFF)
+	sendCommand(start_a_ch0, OFF)
 	if(((Math::random * 100.0).intValue + 1) <= 50 ){
-		adaptation_required_a_ch = true
+		adaptation_required_a_ch0 = true
 	}
 	else {
-		adaptation_required_a_ch = false
+		adaptation_required_a_ch0 = false
 	}
-	if(adaptation_required_a_ch){
-		logInfo("ComfortableHeating.rules", "Adaptation required for a_ch, proceeding with loop.")
-		sendCommand(start_p_ch, ON)
+	if(adaptation_required_a_ch0){
+		sendCommand(start_p_ch0, ON)
 	}
 	else{
-		logInfo("ComfortableHeating.rules", "Adaptation not required for a_ch, resetting loop.")
-		counter_ch = 0
-		if(exec_counter > 0) {
-			sendCommand(start_m_ch, ON)
-		}
+		sendCommand(start_m_ch1, ON)
+		sendCommand(start_m_ch2, ON)
 	}
 end
 
-rule "Plan_p_ch"
+rule "Plan_p_ch0"
 when
-	Item start_p_ch received command ON
+	Item start_p_ch0 received command ON
 then
-	counter_ch = counter_ch + 1
-	logInfo("ComfortableHeating.rules", "Plan for group (ch) active, counter_ch = " + counter_ch)
-	sendCommand(start_p_ch, OFF)
-	sendCommand(start_e_ch, ON)
+	sendCommand(start_p_ch0, OFF)
+	sendCommand(start_e_ch0, ON)
 end
 
-rule "Exec_e_ch"
+rule "Exec_e_ch0"
 when
-	Item start_e_ch received command ON
+	Item start_e_ch0 received command ON
 then
-	counter_ch = counter_ch + 1
-	logInfo("ComfortableHeating.rules", "Exec active for group (ch), counter_ch = " + counter_ch)
-	counter_ch = 0
-	sendCommand(start_e_ch, OFF)
-	if(exec_counter > 0) {
-		sendCommand(start_m_ch, ON)
+	sendCommand(start_e_ch0, OFF)
+	sendCommand(start_m_ch0, ON)
+end
+
+rule "Monitor_m_ch1"
+when
+	Item start_m_ch1 received command ON
+then
+	sendCommand(start_m_ch1, OFF)
+	sendCommand(start_a_ch1, ON)
+end
+
+rule "Analyze_a_ch1"
+when
+	Item start_a_ch1 received command ON
+then
+	sendCommand(start_a_ch1, OFF)
+	if(((Math::random * 100.0).intValue + 1) <= 50 ){
+		adaptation_required_a_ch1 = true
 	}
+	else {
+		adaptation_required_a_ch1 = false
+	}
+	if(adaptation_required_a_ch1){
+		sendCommand(start_p_ch1, ON)
+	}
+	else{
+		sendCommand(start_m_ch0, ON)
+		sendCommand(start_m_ch2, ON)
+	}
+end
+
+rule "Plan_p_ch1"
+when
+	Item start_p_ch1 received command ON
+then
+	sendCommand(start_p_ch1, OFF)
+	sendCommand(start_e_ch1, ON)
+end
+
+rule "Exec_e_ch1"
+when
+	Item start_e_ch1 received command ON
+then
+	sendCommand(start_e_ch1, OFF)
+	sendCommand(start_m_ch1, ON)
+end
+
+rule "Monitor_m_ch2"
+when
+	Item start_m_ch2 received command ON
+then
+	sendCommand(start_m_ch2, OFF)
+	sendCommand(start_a_ch2, ON)
+end
+
+rule "Analyze_a_ch2"
+when
+	Item start_a_ch2 received command ON
+then
+	sendCommand(start_a_ch2, OFF)
+	if(((Math::random * 100.0).intValue + 1) <= 50 ){
+		adaptation_required_a_ch2 = true
+	}
+	else {
+		adaptation_required_a_ch2 = false
+	}
+	if(adaptation_required_a_ch2){
+		sendCommand(start_p_ch2, ON)
+	}
+	else{
+		sendCommand(start_m_ch0, ON)
+		sendCommand(start_m_ch1, ON)
+	}
+end
+
+rule "Plan_p_ch2"
+when
+	Item start_p_ch2 received command ON
+then
+	sendCommand(start_p_ch2, OFF)
+	sendCommand(start_e_ch2, ON)
+end
+
+rule "Exec_e_ch2"
+when
+	Item start_e_ch2 received command ON
+then
+	sendCommand(start_e_ch2, OFF)
+	sendCommand(start_m_ch2, ON)
+end
+
+rule "Monitor_m_ch1"
+when
+	Item start_m_ch1 received command ON
+then
+	sendCommand(start_m_ch1, OFF)
+	sendCommand(ch1_to_ch0, ON)
+end
+
+rule "Monitor_m_ch2"
+when
+	Item start_m_ch2 received command ON
+then
+	sendCommand(start_m_ch2, OFF)
+	sendCommand(ch2_to_ch0, ON)
+end
+
+rule "Aggregator_m_ch1_m_ch2_m_ch0"
+when
+	Item ch1ch2_to_ch0 received update ON
+then
+	sendCommand(ch1_to_ch0, OFF)
+	sendCommand(ch2_to_ch0, OFF)
+	sendCommand(start_m_ch0, ON)
+end
+
+rule "Monitor_m_ch0"
+when
+	Item start_m_ch0 received command ON
+then
+	sendCommand(start_m_ch0, OFF)
+	sendCommand(start_m_ch1, ON)
+	sendCommand(start_m_ch2, ON)
+end
+
+rule "Monitor_m_ch0"
+when
+	Item start_m_ch0 received command ON
+then
+	sendCommand(start_m_ch0, OFF)
+	sendCommand(ch0_to_ch1, ON)
+end
+
+rule "Monitor_m_ch2"
+when
+	Item start_m_ch2 received command ON
+then
+	sendCommand(start_m_ch2, OFF)
+	sendCommand(ch2_to_ch1, ON)
+end
+
+rule "Aggregator_m_ch0_m_ch2_m_ch1"
+when
+	Item ch0ch2_to_ch1 received update ON
+then
+	sendCommand(ch0_to_ch1, OFF)
+	sendCommand(ch2_to_ch1, OFF)
+	sendCommand(start_m_ch1, ON)
+end
+
+rule "Monitor_m_ch1"
+when
+	Item start_m_ch1 received command ON
+then
+	sendCommand(start_m_ch1, OFF)
+	sendCommand(start_m_ch0, ON)
+	sendCommand(start_m_ch2, ON)
+end
+
+rule "Monitor_m_ch0"
+when
+	Item start_m_ch0 received command ON
+then
+	sendCommand(start_m_ch0, OFF)
+	sendCommand(ch0_to_ch2, ON)
+end
+
+rule "Monitor_m_ch1"
+when
+	Item start_m_ch1 received command ON
+then
+	sendCommand(start_m_ch1, OFF)
+	sendCommand(ch1_to_ch2, ON)
+end
+
+rule "Aggregator_m_ch0_m_ch1_m_ch2"
+when
+	Item ch0ch1_to_ch2 received update ON
+then
+	sendCommand(ch0_to_ch2, OFF)
+	sendCommand(ch1_to_ch2, OFF)
+	sendCommand(start_m_ch2, ON)
+end
+
+rule "Monitor_m_ch2"
+when
+	Item start_m_ch2 received command ON
+then
+	sendCommand(start_m_ch2, OFF)
+	sendCommand(start_m_ch0, ON)
+	sendCommand(start_m_ch1, ON)
 end
 

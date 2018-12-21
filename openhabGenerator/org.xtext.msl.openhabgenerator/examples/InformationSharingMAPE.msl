@@ -1,0 +1,46 @@
+abstract pattern InformationSharingMAPE {
+	system Sys
+
+	group Interface {
+		managedSyS Sys
+		components M, A, P, E
+	}
+
+	interaction Interface.M -> Interface.A [1,1]
+	interaction Interface.A -> Interface.P [1,1]
+	interaction Interface.P -> Interface.E [1,1]
+	interaction Interface.M -> Interface.M [*-ALL,*-ALL]
+}
+
+concrete pattern ComfortableHeatingMAPE concretizationOf InformationSharingMAPE {
+	system Heater : InformationSharingMAPE.Sys
+    group InterfaceCH : InformationSharingMAPE.Interface
+}
+
+configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
+    hs0: ComfortableHeatingMAPE.Heater
+    hs1: ComfortableHeatingMAPE.Heater
+    hs2: ComfortableHeatingMAPE.Heater
+    
+	ch0: ComfortableHeatingMAPE.InterfaceCH {
+	    managedSyS hs0
+		components m_ch0:M, a_ch0:A, p_ch0:P, e_ch0:E
+	}
+	
+	ch1: ComfortableHeatingMAPE.InterfaceCH {
+	    managedSyS hs1
+		components m_ch1:M, a_ch1:A, p_ch1:P, e_ch1:E
+	}
+	
+	ch2: ComfortableHeatingMAPE.InterfaceCH {
+	    managedSyS hs2
+		components m_ch2:M, a_ch2:A, p_ch2:P, e_ch2:E
+	}
+	
+	ch0.m_ch0 -> ch1.m_ch1
+	ch0.m_ch0 -> ch2.m_ch2
+	ch1.m_ch1 -> ch0.m_ch0
+	ch1.m_ch1 -> ch2.m_ch2
+	ch2.m_ch2 -> ch0.m_ch0
+	ch2.m_ch2 -> ch1.m_ch1
+}

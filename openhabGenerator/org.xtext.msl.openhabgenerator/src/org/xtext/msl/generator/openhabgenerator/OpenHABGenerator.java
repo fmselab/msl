@@ -66,10 +66,52 @@ public class OpenHABGenerator extends Generator {
 
 	@Override
 	public void generateCode() {
-		PopulateMaps();
-		generateItems();
-		generateRules();
-		pw.close();
+		//PopulateMaps();
+		//generateItems();
+		//generateRules();
+		Prova();
+		//pw.close();
+	}
+	
+	private void Prova() {
+		int i = 0;
+		System.out.println("Group Bindings from pattern");
+		for(GroupBinding gB : pattern.getGroups()) {
+			i++;
+			System.out.println("Group Binding #" + i);
+			if(gB != null) {
+				System.out.println(gB.getName());
+				if(gB.getAbsGroup() != null) {
+					System.out.println(gB.getAbsGroup().getName());
+				}
+				else {
+					System.out.println("AbsGroup is null");
+				}
+			}
+			else {
+				System.out.println("gB is null");
+			}
+			System.out.println();
+		}
+		System.out.println("\nGroup Bindings from groups");
+		for(ConcreteGroup cG : concreteGroups) {
+			System.out.println(cG.getName());
+			for(GroupBinding gB : cG.getAbstractGroups()) {
+				if(gB != null) {
+					System.out.println(gB.getName());
+					if(gB.getAbsGroup() != null) {
+						System.out.println(gB.getAbsGroup().getName());
+					}
+					else {
+						System.out.println("AbsGroup is null");
+					}
+				}
+				else {
+					System.out.println("gB is null");
+				}
+				System.out.println();
+			}
+		}
 	}
 
 	private void PopulateMaps() {
@@ -115,7 +157,7 @@ public class OpenHABGenerator extends Generator {
 			}
 		}
 		// Populate concrToAbsComponents
-		if (concreteGroups.size() > 1) {
+		//if (concreteGroups.size() > 1) {
 			concrToAbsComponents = new HashMap<ComponentInstance, AbstractComponent>();
 			for (ConcreteGroup cG : concreteGroups) {
 				for (GroupBinding gB : cG.getAbstractGroups()) {
@@ -130,7 +172,7 @@ public class OpenHABGenerator extends Generator {
 					}
 				}
 			}
-		}
+		//}
 		// Populate concrToAbsInteractions
 		if (concrToAbsComponents != null) {
 			concrToAbsInteractions = new HashMap<Interaction, AbstractInteraction>();
