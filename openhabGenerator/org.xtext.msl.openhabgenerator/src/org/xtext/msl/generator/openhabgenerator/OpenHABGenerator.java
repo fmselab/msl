@@ -66,11 +66,11 @@ public class OpenHABGenerator extends Generator {
 
 	@Override
 	public void generateCode() {
-		//PopulateMaps();
-		//generateItems();
-		//generateRules();
-		Prova();
-		//pw.close();
+		PopulateMaps();
+		generateItems();
+		generateRules();
+		//Prova();
+		pw.close();
 	}
 	
 	private void Prova() {
@@ -205,6 +205,7 @@ public class OpenHABGenerator extends Generator {
 	private void generateItems() {
 		String destName = null;
 		try {// TODO: sistemare con il plugin UI
+			// TODO: controllo esecuzioni incrementale
 				// File destination = new File("conf" + configuration.getName()
 				// +"/items/"+configuration.getName()+".items");
 

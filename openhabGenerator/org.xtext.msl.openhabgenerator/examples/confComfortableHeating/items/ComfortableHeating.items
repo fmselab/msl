@@ -1,33 +1,19 @@
-Group ch0 "ch0"
+Group chm "chm"
 
-Switch start_m_ch0 "m_ch0" (ch0)
-Switch start_a_ch0 "a_ch0" (ch0)
-Switch start_p_ch0 "p_ch0" (ch0)
-Switch start_e_ch0 "e_ch0" (ch0)
+Switch start_a_chm "a_chm" (chm)
+Switch start_p_chm "p_chm" (chm)
 
-Group ch1 "ch1"
+Group hs0 "hs0"
 
-Switch start_m_ch1 "m_ch1" (ch1)
-Switch start_a_ch1 "a_ch1" (ch1)
-Switch start_p_ch1 "p_ch1" (ch1)
-Switch start_e_ch1 "e_ch1" (ch1)
+Switch start_m_hs0 "m_hs0" (hs0)
+Switch start_e_hs0 "e_hs0" (hs0)
 
-Group ch2 "ch2"
+Group hs1 "hs1"
 
-Switch start_m_ch2 "m_ch2" (ch2)
-Switch start_a_ch2 "a_ch2" (ch2)
-Switch start_p_ch2 "p_ch2" (ch2)
-Switch start_e_ch2 "e_ch2" (ch2)
+Switch start_m_hs1 "m_hs1" (hs1)
+Switch start_e_hs1 "e_hs1" (hs1)
 
-Group:Switch:AND(ON, OFF) ch1ch2_to_ch0 "ch1ch2_to_ch0"
+Group:Switch:AND(ON, OFF) hs0hs1_to_chm "hs0hs1_to_chm"
 
-Switch ch1_to_ch0 "ch1_to_ch0" (ch1ch2_to_ch0)
-Switch ch2_to_ch0 "ch2_to_ch0" (ch1ch2_to_ch0)
-Group:Switch:AND(ON, OFF) ch0ch2_to_ch1 "ch0ch2_to_ch1"
-
-Switch ch0_to_ch1 "ch0_to_ch1" (ch0ch2_to_ch1)
-Switch ch2_to_ch1 "ch2_to_ch1" (ch0ch2_to_ch1)
-Group:Switch:AND(ON, OFF) ch0ch1_to_ch2 "ch0ch1_to_ch2"
-
-Switch ch0_to_ch2 "ch0_to_ch2" (ch0ch1_to_ch2)
-Switch ch1_to_ch2 "ch1_to_ch2" (ch0ch1_to_ch2)
+Switch hs0_to_chm "hs0_to_chm" (hs0hs1_to_chm)
+Switch hs1_to_chm "hs1_to_chm" (hs0hs1_to_chm)
