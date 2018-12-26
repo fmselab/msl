@@ -5,3 +5,4 @@
 *.log
 .recommenders/caches/identified-project-coordinates.json
 .recommenders/caches/manual-mappings.json
+/.recommenders/
