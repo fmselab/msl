@@ -9,7 +9,7 @@ signature:
 	domain HeaterMdA subsetof Agent
 	domain MainCHMgA subsetof Agent
 	domain IntTempMgA subsetof Agent
-	
+
 	//domains added in refinement
 	enum domain HeatingStatus = {FAIRLY_HOT | VERY_HOT | OFF}
 	domain Temperature subsetof Integer
@@ -59,7 +59,7 @@ signature:
 
 definitions:
 	domain Temperature = {0..100}
-	
+
 	function avgTemp($a in MainCHMgA) =
 		idiv((roomTempSaved(h0) + roomTempSaved(h1)),2)
 
@@ -85,18 +85,17 @@ definitions:
 		sgnMainCHEIntTempE(ch, $b)
 
 	rule r_start($signal in Boolean) =
-		if $signal = false then 
-			$signal := true 
+		if $signal = false then
+			$signal := true
 		endif
 
 	rule r_Heater =
 		if isDef(setHeatingStatus(self)) then
-			//setHeatingStatus(self) := undef //signal reset
-			skip
+			setHeatingStatus(self) := undef //signal reset
 		endif
 
 	rule r_CleanUp_MainCHE =
-		skip 
+		skip
 
 	rule r_MainCHE =
 		par
@@ -150,7 +149,7 @@ definitions:
 		loopCompletedIT(self) := false // reset
 
 	//Saves the room temperature into the knowledge based on the
-	//registered value of the room temperature sensor 
+	//registered value of the room temperature sensor
 	rule r_SaveSensorsData_Heater =
 		roomTempSaved(self) := roomTemp(self)
 
@@ -203,7 +202,7 @@ definitions:
 		endif
 
 	INVAR roomTemp(h0) < 50 and roomTemp(h1) < 50
-	
+
 	LTLSPEC g(avgTemp(ch) < 18 implies f(setHeatingStatus(hs0) != OFF and setHeatingStatus(hs1) != OFF))
 	LTLSPEC g(setHeatingStatus(hs0) != OFF implies o(avgTemp(ch) < 18))
 	LTLSPEC g(setHeatingStatus(hs1) != OFF implies o(avgTemp(ch) < 18))
