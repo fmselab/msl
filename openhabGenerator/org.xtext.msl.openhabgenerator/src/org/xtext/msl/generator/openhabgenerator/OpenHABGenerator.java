@@ -19,7 +19,7 @@ public class OpenHABGenerator extends Generator {
 
 	private int exec_number;
 	private static final int exec_default = 10;
-	private static final boolean writeLog_default = true;
+	private static final boolean writeLog_default = false;
 
 	private Map<ComponentInstance, AbstractComponent> concrToAbsComponents; // Map that links a ComponentInstance with
 																			// the corresponding AbstractComponent

@@ -1,34 +1,9 @@
-var Number counter_chm
-var Number counter_hs0
-var Number counter_hs1
-var Number exec_counter
 var boolean adaptation_required_a_chm
-
-rule "Execution stop countdown"
-when
-	Item start_a_chm received command ON
-then
-	if(exec_counter > 0) {
-		exec_counter = exec_counter-1
-		logInfo("ComfortableHeating.rules", "Execution counter reduced by one. exec_counter = " + exec_counter)
-	}
-	if(exec_counter <= 0) {
-		logInfo("ComfortableHeating.rules", "10 executions have elapsed. Loops will end then stop.")
-	}
-end
 
 rule "StartLoop_ComfortableHeating"
 when
 	System started
 then
-	logInfo("ComfortableHeating.rules", "Loops will run for " + 10 + " iterations.")
-	counter_chm = 0
-	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (chm), counter_chm = " + counter_chm)
-	counter_hs0 = 0
-	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (hs0), counter_hs0 = " + counter_hs0)
-	counter_hs1 = 0
-	logInfo("ComfortableHeating.rules", "Starting MAPE loop for group (hs1), counter_hs1 = " + counter_hs1)
-	exec_counter = 10
 	start_a_chm.sendCommand(OFF)
 	start_p_chm.sendCommand(OFF)
 	start_m_hs0.sendCommand(ON)
@@ -42,8 +17,6 @@ rule "Analyze_a_chm"
 when
 	Item start_a_chm received command ON
 then
-	counter_chm = counter_chm + 1
-	logInfo("ComfortableHeating.rules", "Analyze for group (chm) active, counter_chm = " + counter_chm)
 	sendCommand(start_a_chm, OFF)
 	if(((Math::random * 100.0).intValue + 1) <= 50 ){
 		adaptation_required_a_chm = true
@@ -52,16 +25,11 @@ then
 		adaptation_required_a_chm = false
 	}
 	if(adaptation_required_a_chm){
-		logInfo("ComfortableHeating.rules", "Adaptation required for a_chm, proceeding with loop.")
 		sendCommand(start_p_chm, ON)
 	}
 	else{
-		logInfo("ComfortableHeating.rules", "Adaptation not required for a_chm, resetting loop.")
-		counter_chm = 0
-		if(exec_counter > 0) {
-			sendCommand(start_m_hs0, ON)
-			sendCommand(start_m_hs1, ON)
-		}
+		sendCommand(start_m_hs0, ON)
+		sendCommand(start_m_hs1, ON)
 	}
 end
 
@@ -69,34 +37,22 @@ rule "Exec_e_hs0"
 when
 	Item start_e_hs0 received command ON
 then
-	counter_hs0 = counter_hs0 + 1
-	logInfo("ComfortableHeating.rules", "Exec active for group (hs0), counter_hs0 = " + counter_hs0)
-	counter_hs0 = 0
 	sendCommand(start_e_hs0, OFF)
-	if(exec_counter > 0) {
-		sendCommand(start_m_hs0, ON)
-	}
+	sendCommand(start_m_hs0, ON)
 end
 
 rule "Exec_e_hs1"
 when
 	Item start_e_hs1 received command ON
 then
-	counter_hs1 = counter_hs1 + 1
-	logInfo("ComfortableHeating.rules", "Exec active for group (hs1), counter_hs1 = " + counter_hs1)
-	counter_hs1 = 0
 	sendCommand(start_e_hs1, OFF)
-	if(exec_counter > 0) {
-		sendCommand(start_m_hs1, ON)
-	}
+	sendCommand(start_m_hs1, ON)
 end
 
 rule "Monitor_m_hs0"
 when
 	Item start_m_hs0 received command ON
 then
-	counter_hs0 = counter_hs0 + 1
-	logInfo("ComfortableHeating.rules", "Monitor for group (hs0) active, counter_hs0 = " + counter_hs0)
 	sendCommand(start_m_hs0, OFF)
 	sendCommand(hs0_to_chm, ON)
 end
@@ -105,8 +61,6 @@ rule "Monitor_m_hs1"
 when
 	Item start_m_hs1 received command ON
 then
-	counter_hs1 = counter_hs1 + 1
-	logInfo("ComfortableHeating.rules", "Monitor for group (hs1) active, counter_hs1 = " + counter_hs1)
 	sendCommand(start_m_hs1, OFF)
 	sendCommand(hs1_to_chm, ON)
 end
@@ -115,9 +69,6 @@ rule "Aggregator_m_hs0_m_hs1_a_chm"
 when
 	Item hs0hs1_to_chm received update ON
 then
-	counter_hs0 = counter_hs0 + 1
-	counter_hs1 = counter_hs1 + 1
-	logInfo("ComfortableHeating.rules", "Aggregating output from m_hs0, m_hs1, to a_chm" + ", counter_hs0 = " + counter_hs0 + ", counter_hs1 = " + counter_hs1)
 	sendCommand(hs0_to_chm, OFF)
 	sendCommand(hs1_to_chm, OFF)
 	sendCommand(start_a_chm, ON)
@@ -127,9 +78,6 @@ rule "Plan_p_chm"
 when
 	Item start_p_chm received command ON
 then
-	counter_chm = counter_chm + 1
-	logInfo("ComfortableHeating.rules", "Plan_p_chm for group (chm) active, counter_chm = " + counter_chm)
-	counter_chm = 0
 	sendCommand(start_p_chm, OFF)
 	sendCommand(start_e_hs0, ON)
 	sendCommand(start_e_hs1, ON)
