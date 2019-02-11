@@ -28,7 +28,6 @@ import org.xtext.msl.generator.openhabgenerator.OpenHABGenerator;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class OpenHABGeneratorHandler extends AbstractHandler {
-	public static boolean WRITE_TO_FILE = false;
 
 	/**
 	 * the command has been executed, so extract extract the needed information from
@@ -68,9 +67,6 @@ public class OpenHABGeneratorHandler extends AbstractHandler {
 			String openhabText = sw.toString();
 			printOut.println(openhabText);
 			//System.err.println(path);
-			if(WRITE_TO_FILE) {
-				//TODO
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			Display d = Display.getDefault();

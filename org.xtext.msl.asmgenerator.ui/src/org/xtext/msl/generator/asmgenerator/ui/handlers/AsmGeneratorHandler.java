@@ -7,6 +7,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -31,7 +34,7 @@ import org.xtext.msl.generator.asmgenerator.AsmGenerator;
  * @see org.eclipse.core.commands.AbstractHandler
  */
 public class AsmGeneratorHandler extends AbstractHandler {
-	public static boolean WRITE_TO_FILE = false;
+	public static boolean WRITE_TO_FILE = true;
 
 	/**
 	 * the command has been executed, so extract extract the needed information from
@@ -71,24 +74,27 @@ public class AsmGeneratorHandler extends AbstractHandler {
 			String asmText = sw.toString();
 			printOut.println(asmText);
 			//System.err.println(path);
-			if(WRITE_TO_FILE) {
-				if (path.startsWith("/")) {
-					path = path.substring(1);
-				}
-				//Path p = Paths.get(path);
-				//p = p.getFileName().getParent().resolve(asmGenerator.getPatternName() + ".asm");
-				//File f = p.toFile();
-				if(path.contains("/")) {
-					path = path.substring(0, path.lastIndexOf("/") + 1);
-				}
-				if(path.contains("\\")) {
-					path = path.substring(0, path.lastIndexOf("\\") + 1);
-				}
-				File f = new File(path + asmGenerator.getModelName() + ".asm");
-				BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-				bw.write(asmText);
-				bw.close();
+			
+			/*if (path.startsWith("/")) {
+				path = path.substring(1);
 			}
+			if(path.contains("/")) {
+				path = path.substring(0, path.lastIndexOf("/") + 1);
+			}
+			if(path.contains("\\")) {
+				path = path.substring(0, path.lastIndexOf("\\") + 1);
+			}*/
+			//Path destFolder = Paths.get(path).getParent().toAbsolutePath();
+			Path destFolder = Paths.get(Paths.get(path).getParent().toString() + "/asm/");
+			if(!Files.exists(destFolder)) {
+				Files.createDirectory(destFolder);
+			}
+
+			File f = new File(destFolder.toString() + "/" + asmGenerator.getModelName() + ".asm");
+			BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+			bw.write(asmText);
+			bw.flush();
+			bw.close();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Display d = Display.getDefault();
