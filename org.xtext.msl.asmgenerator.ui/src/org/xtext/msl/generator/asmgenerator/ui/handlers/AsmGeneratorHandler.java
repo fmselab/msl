@@ -65,6 +65,11 @@ public class AsmGeneratorHandler extends AbstractHandler {
 		PrintStream printOut = new PrintStream(out);
 		System.setOut(printOut);
 		// System.setErr(printOut);
+		
+		if (System.getProperty("os.name").contains("indows") && path.startsWith("/")) {
+			path = path.substring(1);
+		}
+		
 		try {
 			myConsole.clearConsole();
 			StringWriter sw = new StringWriter();
@@ -85,7 +90,9 @@ public class AsmGeneratorHandler extends AbstractHandler {
 				path = path.substring(0, path.lastIndexOf("\\") + 1);
 			}*/
 			//Path destFolder = Paths.get(path).getParent().toAbsolutePath();
-			Path destFolder = Paths.get(Paths.get(path).getParent().toString() + "/asm/");
+			Path path2 = Paths.get(path);
+			Path parent = path2.getParent();
+			Path destFolder = Paths.get(parent.toString() + "/asm/");
 			if(!Files.exists(destFolder)) {
 				Files.createDirectory(destFolder);
 			}

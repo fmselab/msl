@@ -58,6 +58,11 @@ public class OpenHABGeneratorHandler extends AbstractHandler {
 		PrintStream printOut = new PrintStream(out);
 		System.setOut(printOut);
 		// System.setErr(printOut);
+
+		if (System.getProperty("os.name").contains("indows") && path.startsWith("/")) {
+			path = path.substring(1);
+		}
+
 		try {
 			myConsole.clearConsole();
 			StringWriter sw = new StringWriter();
