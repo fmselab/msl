@@ -26,11 +26,11 @@ import org.xtext.msl.validation.AbstractMSLValidator;
  */
 @SuppressWarnings("all")
 public class MSLValidator extends AbstractMSLValidator {
-  public static final String MULTIPLE_CONCRETIZATION = "multipleConcretization";
+  public final static String MULTIPLE_CONCRETIZATION = "multipleConcretization";
   
-  public static final String NO_CONCRETIZATION = "noConcretization";
+  public final static String NO_CONCRETIZATION = "noConcretization";
   
-  public static final String NOT_MATCHED_INTERACTION = "notMatchedInteraction";
+  public final static String NOT_MATCHED_INTERACTION = "notMatchedInteraction";
   
   private int found;
   
