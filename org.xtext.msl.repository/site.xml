@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature url="features/org.xtext.msl.OpenHABgenerator.feature_1.0.6.jar" id="org.xtext.msl.OpenHABgenerator.feature" version="1.0.6">
+   <feature url="features/org.xtext.msl.OpenHABgenerator.feature_1.0.7.jar" id="org.xtext.msl.OpenHABgenerator.feature" version="1.0.7">
       <category name="MSL"/>
    </feature>
-   <feature url="features/org.xtext.msl.asmgenerator.feature_1.0.3.jar" id="org.xtext.msl.asmgenerator.feature" version="1.0.3">
+   <feature url="features/org.xtext.msl.asmgenerator.feature_1.0.4.jar" id="org.xtext.msl.asmgenerator.feature" version="1.0.4">
       <category name="MSL"/>
    </feature>
-   <feature url="features/org.xtext.msl.feature_1.0.3.jar" id="org.xtext.msl.feature" version="1.0.3">
+   <feature url="features/org.xtext.msl.feature_1.0.4.jar" id="org.xtext.msl.feature" version="1.0.4">
       <category name="MSL"/>
    </feature>
    <category-def name="MSL" label="MSL framework">
