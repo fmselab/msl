@@ -209,7 +209,7 @@ public class OpenHABGenerator extends Generator {
 				// File destination = new File("conf" + configuration.getName()
 				// +"/items/"+configuration.getName()+".items");
 
-			destName = Paths.get(path).getParent().toAbsolutePath() + "/conf" + configuration.getName()
+			destName = Paths.get(path).getParent().toAbsolutePath() + "/OpenHAB/conf" + configuration.getName()
 					+ "/items/" + configuration.getName() + ".items";
 			File destination = new File(destName);
 			if (destination.exists())
@@ -244,10 +244,11 @@ public class OpenHABGenerator extends Generator {
 									.concat(compToGroupConcrete.get(i.getStart().getComponent()).getName());
 						}
 						groupSwitchName = groupSwitchName.concat("_to_" + cG.getName());
-						// TODO extend later with "*-SOME" and "*-1"
-						if (low.equals("*-ALL")) {
+						// TODO extend later with "*-ONE" 
+						if (low.equals("*-ALL")) 
 							pw.print("AND");
-						}
+						if (low.equals("*-SOME"))
+							pw.print("OR");
 						pw.print("(ON, OFF) " + groupSwitchName + " \"" + groupSwitchName + "\"\n\n");
 						for (Interaction i : interactWithSameEnd.get(cI)) {
 							String switchName = compToGroupConcrete.get(i.getStart().getComponent()).getName() + "_to_"
@@ -268,7 +269,7 @@ public class OpenHABGenerator extends Generator {
 			// File destination = new File("conf" + configuration.getName() + "/rules/" +
 			// configuration.getName() + ".rules");
 
-			destName = Paths.get(path).getParent().toAbsolutePath() + "/conf" + configuration.getName()
+			destName = Paths.get(path).getParent().toAbsolutePath() + "/OpenHAB/conf" + configuration.getName()
 					+ "/rules/" + configuration.getName() + ".rules";
 			File destination = new File(destName);
 			if (destination.exists())

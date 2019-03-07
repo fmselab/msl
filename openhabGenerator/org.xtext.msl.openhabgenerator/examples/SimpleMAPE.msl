@@ -16,7 +16,7 @@ concrete pattern ComfortableHeatingMAPE concretizationOf SimpleMAPE {
     group MainCH : SimpleMAPE.Main
 }
 
-configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
+configuration ComfortableHeatingOne instanceOf ComfortableHeatingMAPE {
     hs: ComfortableHeatingMAPE.Heater
     
 	ch: ComfortableHeatingMAPE.MainCH {

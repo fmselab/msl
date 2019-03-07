@@ -10,7 +10,7 @@ abstract pattern AggregateMAPE {
 		components M, E
 	}
 
-	interaction Interface.M -> Main.M [*-ALL,1]
+	interaction Interface.M -> Main.M [*-SOME,1]
 	interaction Main.E -> Interface.E [1,*-ALL]
 	interaction Main.M -> Main.A [1,1]
 	interaction Main.A -> Main.P [1,1]
