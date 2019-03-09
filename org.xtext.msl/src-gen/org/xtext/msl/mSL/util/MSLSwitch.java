@@ -171,17 +171,17 @@ public class MSLSwitch<T> extends Switch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case MSLPackage.ATT_VALUE:
-      {
-        AttValue attValue = (AttValue)theEObject;
-        T result = caseAttValue(attValue);
-        if (result == null) result = defaultCase(theEObject);
-        return result;
-      }
       case MSLPackage.CONCRETE_GROUP:
       {
         ConcreteGroup concreteGroup = (ConcreteGroup)theEObject;
         T result = caseConcreteGroup(concreteGroup);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case MSLPackage.PARAM_VALUE:
+      {
+        ParamValue paramValue = (ParamValue)theEObject;
+        T result = caseParamValue(paramValue);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
@@ -435,22 +435,6 @@ public class MSLSwitch<T> extends Switch<T>
   }
 
   /**
-   * Returns the result of interpreting the object as an instance of '<em>Att Value</em>'.
-   * <!-- begin-user-doc -->
-   * This implementation returns null;
-   * returning a non-null result will terminate the switch.
-   * <!-- end-user-doc -->
-   * @param object the target of the switch.
-   * @return the result of interpreting the object as an instance of '<em>Att Value</em>'.
-   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-   * @generated
-   */
-  public T caseAttValue(AttValue object)
-  {
-    return null;
-  }
-
-  /**
    * Returns the result of interpreting the object as an instance of '<em>Concrete Group</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
@@ -462,6 +446,22 @@ public class MSLSwitch<T> extends Switch<T>
    * @generated
    */
   public T caseConcreteGroup(ConcreteGroup object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Param Value</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Param Value</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseParamValue(ParamValue object)
   {
     return null;
   }

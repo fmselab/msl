@@ -3,6 +3,8 @@
  */
 package org.xtext.msl.mSL;
 
+import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -16,6 +18,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.xtext.msl.mSL.ComponentInstance#getName <em>Name</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.ComponentInstance#getType <em>Type</em>}</li>
+ *   <li>{@link org.xtext.msl.mSL.ComponentInstance#getParamValues <em>Param Values</em>}</li>
  * </ul>
  *
  * @see org.xtext.msl.mSL.MSLPackage#getComponentInstance()
@@ -75,5 +78,21 @@ public interface ComponentInstance extends EObject
    * @generated
    */
   void setType(String value);
+
+  /**
+   * Returns the value of the '<em><b>Param Values</b></em>' containment reference list.
+   * The list contents are of type {@link org.xtext.msl.mSL.ParamValue}.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Param Values</em>' containment reference list isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Param Values</em>' containment reference list.
+   * @see org.xtext.msl.mSL.MSLPackage#getComponentInstance_ParamValues()
+   * @model containment="true"
+   * @generated
+   */
+  EList<ParamValue> getParamValues();
 
 } // ComponentInstance

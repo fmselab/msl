@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.xtext.msl.mSL.AttValue;
 import org.xtext.msl.mSL.ComponentInstance;
 import org.xtext.msl.mSL.ConcreteGroup;
 import org.xtext.msl.mSL.ConcreteSystem;
@@ -38,7 +37,6 @@ import org.xtext.msl.mSL.MSLPackage;
  *   <li>{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl#getAbstractGroups <em>Abstract Groups</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl#getManSys <em>Man Sys</em>}</li>
- *   <li>{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl#getAttValues <em>Att Values</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl#getManGrp <em>Man Grp</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl#getComponents <em>Components</em>}</li>
  * </ul>
@@ -78,24 +76,14 @@ public class ConcreteGroupImpl extends MinimalEObjectImpl.Container implements C
   protected EList<GroupBinding> abstractGroups;
 
   /**
-   * The cached value of the '{@link #getManSys() <em>Man Sys</em>}' reference.
+   * The cached value of the '{@link #getManSys() <em>Man Sys</em>}' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @see #getManSys()
    * @generated
    * @ordered
    */
-  protected ConcreteSystem manSys;
-
-  /**
-   * The cached value of the '{@link #getAttValues() <em>Att Values</em>}' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see #getAttValues()
-   * @generated
-   * @ordered
-   */
-  protected EList<AttValue> attValues;
+  protected EList<ConcreteSystem> manSys;
 
   /**
    * The cached value of the '{@link #getManGrp() <em>Man Grp</em>}' reference list.
@@ -180,56 +168,13 @@ public class ConcreteGroupImpl extends MinimalEObjectImpl.Container implements C
    * <!-- end-user-doc -->
    * @generated
    */
-  public ConcreteSystem getManSys()
+  public EList<ConcreteSystem> getManSys()
   {
-    if (manSys != null && manSys.eIsProxy())
+    if (manSys == null)
     {
-      InternalEObject oldManSys = (InternalEObject)manSys;
-      manSys = (ConcreteSystem)eResolveProxy(oldManSys);
-      if (manSys != oldManSys)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, MSLPackage.CONCRETE_GROUP__MAN_SYS, oldManSys, manSys));
-      }
+      manSys = new EObjectResolvingEList<ConcreteSystem>(ConcreteSystem.class, this, MSLPackage.CONCRETE_GROUP__MAN_SYS);
     }
     return manSys;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public ConcreteSystem basicGetManSys()
-  {
-    return manSys;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public void setManSys(ConcreteSystem newManSys)
-  {
-    ConcreteSystem oldManSys = manSys;
-    manSys = newManSys;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, MSLPackage.CONCRETE_GROUP__MAN_SYS, oldManSys, manSys));
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EList<AttValue> getAttValues()
-  {
-    if (attValues == null)
-    {
-      attValues = new EObjectContainmentEList<AttValue>(AttValue.class, this, MSLPackage.CONCRETE_GROUP__ATT_VALUES);
-    }
-    return attValues;
   }
 
   /**
@@ -270,8 +215,6 @@ public class ConcreteGroupImpl extends MinimalEObjectImpl.Container implements C
   {
     switch (featureID)
     {
-      case MSLPackage.CONCRETE_GROUP__ATT_VALUES:
-        return ((InternalEList<?>)getAttValues()).basicRemove(otherEnd, msgs);
       case MSLPackage.CONCRETE_GROUP__COMPONENTS:
         return ((InternalEList<?>)getComponents()).basicRemove(otherEnd, msgs);
     }
@@ -293,10 +236,7 @@ public class ConcreteGroupImpl extends MinimalEObjectImpl.Container implements C
       case MSLPackage.CONCRETE_GROUP__ABSTRACT_GROUPS:
         return getAbstractGroups();
       case MSLPackage.CONCRETE_GROUP__MAN_SYS:
-        if (resolve) return getManSys();
-        return basicGetManSys();
-      case MSLPackage.CONCRETE_GROUP__ATT_VALUES:
-        return getAttValues();
+        return getManSys();
       case MSLPackage.CONCRETE_GROUP__MAN_GRP:
         return getManGrp();
       case MSLPackage.CONCRETE_GROUP__COMPONENTS:
@@ -324,11 +264,8 @@ public class ConcreteGroupImpl extends MinimalEObjectImpl.Container implements C
         getAbstractGroups().addAll((Collection<? extends GroupBinding>)newValue);
         return;
       case MSLPackage.CONCRETE_GROUP__MAN_SYS:
-        setManSys((ConcreteSystem)newValue);
-        return;
-      case MSLPackage.CONCRETE_GROUP__ATT_VALUES:
-        getAttValues().clear();
-        getAttValues().addAll((Collection<? extends AttValue>)newValue);
+        getManSys().clear();
+        getManSys().addAll((Collection<? extends ConcreteSystem>)newValue);
         return;
       case MSLPackage.CONCRETE_GROUP__MAN_GRP:
         getManGrp().clear();
@@ -359,10 +296,7 @@ public class ConcreteGroupImpl extends MinimalEObjectImpl.Container implements C
         getAbstractGroups().clear();
         return;
       case MSLPackage.CONCRETE_GROUP__MAN_SYS:
-        setManSys((ConcreteSystem)null);
-        return;
-      case MSLPackage.CONCRETE_GROUP__ATT_VALUES:
-        getAttValues().clear();
+        getManSys().clear();
         return;
       case MSLPackage.CONCRETE_GROUP__MAN_GRP:
         getManGrp().clear();
@@ -389,9 +323,7 @@ public class ConcreteGroupImpl extends MinimalEObjectImpl.Container implements C
       case MSLPackage.CONCRETE_GROUP__ABSTRACT_GROUPS:
         return abstractGroups != null && !abstractGroups.isEmpty();
       case MSLPackage.CONCRETE_GROUP__MAN_SYS:
-        return manSys != null;
-      case MSLPackage.CONCRETE_GROUP__ATT_VALUES:
-        return attValues != null && !attValues.isEmpty();
+        return manSys != null && !manSys.isEmpty();
       case MSLPackage.CONCRETE_GROUP__MAN_GRP:
         return manGrp != null && !manGrp.isEmpty();
       case MSLPackage.CONCRETE_GROUP__COMPONENTS:

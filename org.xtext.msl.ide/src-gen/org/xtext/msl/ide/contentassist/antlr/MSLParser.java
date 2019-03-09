@@ -31,6 +31,7 @@ public class MSLParser extends AbstractContentAssistParser {
 		}
 		
 		private static void init(ImmutableMap.Builder<AbstractElement, String> builder, MSLGrammarAccess grammarAccess) {
+			builder.put(grammarAccess.getTimeUnitKindAccess().getAlternatives(), "rule__TimeUnitKind__Alternatives");
 			builder.put(grammarAccess.getSpecificationAccess().getGroup(), "rule__Specification__Group__0");
 			builder.put(grammarAccess.getImportAccess().getGroup(), "rule__Import__Group__0");
 			builder.put(grammarAccess.getAbstractPatternAccess().getGroup(), "rule__AbstractPattern__Group__0");
@@ -53,17 +54,17 @@ public class MSLParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getConcreteSystemAccess().getGroup(), "rule__ConcreteSystem__Group__0");
 			builder.put(grammarAccess.getConcreteSystemAccess().getGroup_2(), "rule__ConcreteSystem__Group_2__0");
 			builder.put(grammarAccess.getConcreteSystemAccess().getGroup_2_1(), "rule__ConcreteSystem__Group_2_1__0");
-			builder.put(grammarAccess.getAttValueAccess().getGroup(), "rule__AttValue__Group__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup(), "rule__ConcreteGroup__Group__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_2(), "rule__ConcreteGroup__Group_2__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_2_1(), "rule__ConcreteGroup__Group_2_1__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_4(), "rule__ConcreteGroup__Group_4__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_4_2(), "rule__ConcreteGroup__Group_4_2__0");
-			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_4_2_1(), "rule__ConcreteGroup__Group_4_2_1__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_5(), "rule__ConcreteGroup__Group_5__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_5_2(), "rule__ConcreteGroup__Group_5_2__0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getGroup_8(), "rule__ConcreteGroup__Group_8__0");
+			builder.put(grammarAccess.getParamValueAccess().getGroup(), "rule__ParamValue__Group__0");
 			builder.put(grammarAccess.getComponentInstanceAccess().getGroup(), "rule__ComponentInstance__Group__0");
+			builder.put(grammarAccess.getComponentInstanceAccess().getGroup_3(), "rule__ComponentInstance__Group_3__0");
 			builder.put(grammarAccess.getInteractionAccess().getGroup(), "rule__Interaction__Group__0");
 			builder.put(grammarAccess.getSpecificationAccess().getImportsAssignment_0(), "rule__Specification__ImportsAssignment_0");
 			builder.put(grammarAccess.getSpecificationAccess().getAbsPatternAssignment_1(), "rule__Specification__AbsPatternAssignment_1");
@@ -106,20 +107,22 @@ public class MSLParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getConcreteSystemAccess().getNameAssignment_0(), "rule__ConcreteSystem__NameAssignment_0");
 			builder.put(grammarAccess.getConcreteSystemAccess().getBindingsAssignment_2_0(), "rule__ConcreteSystem__BindingsAssignment_2_0");
 			builder.put(grammarAccess.getConcreteSystemAccess().getBindingsAssignment_2_1_1(), "rule__ConcreteSystem__BindingsAssignment_2_1_1");
-			builder.put(grammarAccess.getAttValueAccess().getNameAttAssignment_1(), "rule__AttValue__NameAttAssignment_1");
-			builder.put(grammarAccess.getAttValueAccess().getValAttAssignment_3(), "rule__AttValue__ValAttAssignment_3");
 			builder.put(grammarAccess.getConcreteGroupAccess().getNameAssignment_0(), "rule__ConcreteGroup__NameAssignment_0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getAbstractGroupsAssignment_2_0(), "rule__ConcreteGroup__AbstractGroupsAssignment_2_0");
 			builder.put(grammarAccess.getConcreteGroupAccess().getAbstractGroupsAssignment_2_1_1(), "rule__ConcreteGroup__AbstractGroupsAssignment_2_1_1");
 			builder.put(grammarAccess.getConcreteGroupAccess().getManSysAssignment_4_1(), "rule__ConcreteGroup__ManSysAssignment_4_1");
-			builder.put(grammarAccess.getConcreteGroupAccess().getAttValuesAssignment_4_2_0(), "rule__ConcreteGroup__AttValuesAssignment_4_2_0");
-			builder.put(grammarAccess.getConcreteGroupAccess().getAttValuesAssignment_4_2_1_1(), "rule__ConcreteGroup__AttValuesAssignment_4_2_1_1");
+			builder.put(grammarAccess.getConcreteGroupAccess().getManSysAssignment_4_2_1(), "rule__ConcreteGroup__ManSysAssignment_4_2_1");
 			builder.put(grammarAccess.getConcreteGroupAccess().getManGrpAssignment_5_1(), "rule__ConcreteGroup__ManGrpAssignment_5_1");
 			builder.put(grammarAccess.getConcreteGroupAccess().getManGrpAssignment_5_2_1(), "rule__ConcreteGroup__ManGrpAssignment_5_2_1");
 			builder.put(grammarAccess.getConcreteGroupAccess().getComponentsAssignment_7(), "rule__ConcreteGroup__ComponentsAssignment_7");
 			builder.put(grammarAccess.getConcreteGroupAccess().getComponentsAssignment_8_1(), "rule__ConcreteGroup__ComponentsAssignment_8_1");
+			builder.put(grammarAccess.getParamValueAccess().getNameParamAssignment_1(), "rule__ParamValue__NameParamAssignment_1");
+			builder.put(grammarAccess.getParamValueAccess().getValParamAssignment_3(), "rule__ParamValue__ValParamAssignment_3");
+			builder.put(grammarAccess.getParamValueAccess().getUnitAssignment_4(), "rule__ParamValue__UnitAssignment_4");
 			builder.put(grammarAccess.getComponentInstanceAccess().getNameAssignment_0(), "rule__ComponentInstance__NameAssignment_0");
 			builder.put(grammarAccess.getComponentInstanceAccess().getTypeAssignment_2(), "rule__ComponentInstance__TypeAssignment_2");
+			builder.put(grammarAccess.getComponentInstanceAccess().getParamValuesAssignment_3_0(), "rule__ComponentInstance__ParamValuesAssignment_3_0");
+			builder.put(grammarAccess.getComponentInstanceAccess().getParamValuesAssignment_3_1(), "rule__ComponentInstance__ParamValuesAssignment_3_1");
 			builder.put(grammarAccess.getInteractionAccess().getStartAssignment_0(), "rule__Interaction__StartAssignment_0");
 			builder.put(grammarAccess.getInteractionAccess().getEndAssignment_2(), "rule__Interaction__EndAssignment_2");
 			builder.put(grammarAccess.getComponentNameAccess().getComponentAssignment(), "rule__ComponentName__ComponentAssignment");

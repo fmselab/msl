@@ -13,6 +13,7 @@ import org.xtext.msl.mSL.ConcreteSystem;
 import org.xtext.msl.mSL.Configuration;
 import org.xtext.msl.mSL.GroupBinding;
 import org.xtext.msl.mSL.Interaction;
+import org.xtext.msl.mSL.ParamValue;
 import org.xtext.msl.mSL.Pattern;
 import org.xtext.msl.mSL.Specification;
 import org.xtext.msl.mSL.SystemBinding;
@@ -20,7 +21,7 @@ import org.xtext.msl.mSL.SystemBinding;
 public class Main {
 
 	public static void main(String[] args) {
-		Specification spec = Loader.loadSpec("examples/AggregateMAPE_ComfortableHeating.msl");
+		Specification spec = Loader.loadSpec("examples/Hierarchical_AQ_HC_MAPE.msl");
 		// System.out.println(SERIALIZER.serialize(spec));
 		AbstractPattern absPattern = spec.getAbsPattern();
 		assert absPattern != null;
@@ -82,14 +83,29 @@ public class Main {
 		for (ConcreteGroup cg : model.getConcreteGroups()) {
 			String name = cg.getName();
 			System.out.print("\t" + name + " ");
+			
+			System.out.print("\t\tcomponents ");
+	
+			for (ComponentInstance mg : cg.getComponents()) {
+				System.out.print(" " + mg.getName() + ":" + mg.getType());
+				EList<ParamValue> plist = mg.getParamValues();
+				if (plist != null) {
+					System.out.print("\t NFPs :");
+					for (ParamValue param: plist) 
+					   System.out.print("\t "+param.getNameParam()+"="+ param.getValParam() + param.getUnit());
+				 }	
+				}
+			
 			GroupBinding absGroup = cg.getAbstractGroups().get(0);
 			assert absGroup != null;
 			String absName = absGroup.getName();
 			assert absName != null;
 			System.out.println(absName);
-			ConcreteSystem ms = cg.getManSys();
+			EList<ConcreteSystem> ms = cg.getManSys();
 			if (ms != null) {
-				System.out.println("\t\tmanagedSys " + ms.getName());
+				for(ConcreteSystem msys : ms) {
+				System.out.println("\t\tmanagedSys " + msys.getName());
+				}
 			}
 			for (ConcreteGroup mg : cg.getManGrp()) {
 				System.out.println("\t\tmanagedGroup " + mg.getName());

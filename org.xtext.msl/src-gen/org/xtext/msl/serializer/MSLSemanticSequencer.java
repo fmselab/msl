@@ -20,7 +20,6 @@ import org.xtext.msl.mSL.AbstractGroup;
 import org.xtext.msl.mSL.AbstractInteraction;
 import org.xtext.msl.mSL.AbstractPattern;
 import org.xtext.msl.mSL.AbstractSystem;
-import org.xtext.msl.mSL.AttValue;
 import org.xtext.msl.mSL.ComponentInstance;
 import org.xtext.msl.mSL.ComponentName;
 import org.xtext.msl.mSL.ConcreteGroup;
@@ -31,6 +30,7 @@ import org.xtext.msl.mSL.GroupDef;
 import org.xtext.msl.mSL.Import;
 import org.xtext.msl.mSL.Interaction;
 import org.xtext.msl.mSL.MSLPackage;
+import org.xtext.msl.mSL.ParamValue;
 import org.xtext.msl.mSL.Pattern;
 import org.xtext.msl.mSL.Specification;
 import org.xtext.msl.mSL.SystemBinding;
@@ -68,9 +68,6 @@ public class MSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 			case MSLPackage.ABSTRACT_SYSTEM:
 				sequence_AbstractSystem(context, (AbstractSystem) semanticObject); 
 				return; 
-			case MSLPackage.ATT_VALUE:
-				sequence_AttValue(context, (AttValue) semanticObject); 
-				return; 
 			case MSLPackage.COMPONENT_INSTANCE:
 				sequence_ComponentInstance(context, (ComponentInstance) semanticObject); 
 				return; 
@@ -97,6 +94,9 @@ public class MSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 				return; 
 			case MSLPackage.INTERACTION:
 				sequence_Interaction(context, (Interaction) semanticObject); 
+				return; 
+			case MSLPackage.PARAM_VALUE:
+				sequence_ParamValue(context, (ParamValue) semanticObject); 
 				return; 
 			case MSLPackage.PATTERN:
 				sequence_Pattern(context, (Pattern) semanticObject); 
@@ -210,43 +210,13 @@ public class MSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	
 	/**
 	 * Contexts:
-	 *     AttValue returns AttValue
-	 *
-	 * Constraint:
-	 *     (nameAtt=INSTANCE_ID valAtt=INSTANCE_ID)
-	 */
-	protected void sequence_AttValue(ISerializationContext context, AttValue semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, MSLPackage.Literals.ATT_VALUE__NAME_ATT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MSLPackage.Literals.ATT_VALUE__NAME_ATT));
-			if (transientValues.isValueTransient(semanticObject, MSLPackage.Literals.ATT_VALUE__VAL_ATT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MSLPackage.Literals.ATT_VALUE__VAL_ATT));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getAttValueAccess().getNameAttINSTANCE_IDTerminalRuleCall_1_0(), semanticObject.getNameAtt());
-		feeder.accept(grammarAccess.getAttValueAccess().getValAttINSTANCE_IDTerminalRuleCall_3_0(), semanticObject.getValAtt());
-		feeder.finish();
-	}
-	
-	
-	/**
-	 * Contexts:
 	 *     ComponentInstance returns ComponentInstance
 	 *
 	 * Constraint:
-	 *     (name=INSTANCE_ID type=COMPONENT_TYPE)
+	 *     (name=INSTANCE_ID type=COMPONENT_TYPE (paramValues+=ParamValue paramValues+=ParamValue*)?)
 	 */
 	protected void sequence_ComponentInstance(ISerializationContext context, ComponentInstance semanticObject) {
-		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, MSLPackage.Literals.COMPONENT_INSTANCE__NAME) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MSLPackage.Literals.COMPONENT_INSTANCE__NAME));
-			if (transientValues.isValueTransient(semanticObject, MSLPackage.Literals.COMPONENT_INSTANCE__TYPE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, MSLPackage.Literals.COMPONENT_INSTANCE__TYPE));
-		}
-		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getComponentInstanceAccess().getNameINSTANCE_IDTerminalRuleCall_0_0(), semanticObject.getName());
-		feeder.accept(grammarAccess.getComponentInstanceAccess().getTypeCOMPONENT_TYPETerminalRuleCall_2_0(), semanticObject.getType());
-		feeder.finish();
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	
@@ -277,7 +247,7 @@ public class MSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 	 *         name=INSTANCE_ID 
 	 *         abstractGroups+=[GroupBinding|FQN_PATTERN_ID] 
 	 *         abstractGroups+=[GroupBinding|FQN_PATTERN_ID]* 
-	 *         (manSys=[ConcreteSystem|INSTANCE_ID] (attValues+=AttValue attValues+=AttValue*)?)? 
+	 *         (manSys+=[ConcreteSystem|INSTANCE_ID] manSys+=[ConcreteSystem|INSTANCE_ID]*)? 
 	 *         (manGrp+=[ConcreteGroup|INSTANCE_ID] manGrp+=[ConcreteGroup|INSTANCE_ID]*)? 
 	 *         components+=ComponentInstance 
 	 *         components+=ComponentInstance*
@@ -388,6 +358,18 @@ public class MSLSemanticSequencer extends AbstractDelegatingSemanticSequencer {
 		feeder.accept(grammarAccess.getInteractionAccess().getStartComponentNameParserRuleCall_0_0(), semanticObject.getStart());
 		feeder.accept(grammarAccess.getInteractionAccess().getEndComponentNameParserRuleCall_2_0(), semanticObject.getEnd());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * Contexts:
+	 *     ParamValue returns ParamValue
+	 *
+	 * Constraint:
+	 *     (nameParam=INSTANCE_ID valParam=DECIMAL unit=TimeUnitKind?)
+	 */
+	protected void sequence_ParamValue(ISerializationContext context, ParamValue semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

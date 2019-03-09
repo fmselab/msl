@@ -677,5 +677,6 @@ public class OpenHABGenerator extends Generator {
 
 		OpenHABGenerator g = new OpenHABGenerator(args[0], logMode, exec); // implicitly, logMode is true
 		g.generate();
+		System.out.println("Done");
 	}
 }

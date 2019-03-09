@@ -84,25 +84,27 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="bindings" unique="false"
         upperBound="-1" eType="#//SystemBinding"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AttValue">
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameAtt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valAtt" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConcreteGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="abstractGroups" unique="false"
         upperBound="-1" eType="#//GroupBinding"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="manSys" eType="#//ConcreteSystem"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="attValues" upperBound="-1"
-        eType="#//AttValue" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manSys" unique="false"
+        upperBound="-1" eType="#//ConcreteSystem"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="manGrp" unique="false"
         upperBound="-1" eType="#//ConcreteGroup"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
         eType="#//ComponentInstance" containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ParamValue">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="nameParam" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="valParam" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="unit" eType="#//TimeUnitKind"/>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComponentInstance">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="type" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="paramValues" upperBound="-1"
+        eType="#//ParamValue" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Interaction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="start" eType="#//ComponentName"
@@ -112,5 +114,14 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ComponentName">
     <eStructuralFeatures xsi:type="ecore:EReference" name="component" eType="#//ComponentInstance"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EEnum" name="TimeUnitKind">
+    <eLiterals name="SECOND" literal="s"/>
+    <eLiterals name="MSECOND" value="1" literal="ms"/>
+    <eLiterals name="USECOND" value="2" literal="us"/>
+    <eLiterals name="NSECOND" value="3" literal="ns"/>
+    <eLiterals name="MINUTE" value="4" literal="min"/>
+    <eLiterals name="HOUR" value="5" literal="hrs"/>
+    <eLiterals name="DAY" value="6" literal="dys"/>
   </eClassifiers>
 </ecore:EPackage>

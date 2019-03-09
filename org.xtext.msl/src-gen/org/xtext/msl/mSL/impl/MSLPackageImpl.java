@@ -5,6 +5,7 @@ package org.xtext.msl.mSL.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -16,7 +17,6 @@ import org.xtext.msl.mSL.AbstractGroup;
 import org.xtext.msl.mSL.AbstractInteraction;
 import org.xtext.msl.mSL.AbstractPattern;
 import org.xtext.msl.mSL.AbstractSystem;
-import org.xtext.msl.mSL.AttValue;
 import org.xtext.msl.mSL.ComponentInstance;
 import org.xtext.msl.mSL.ComponentName;
 import org.xtext.msl.mSL.ConcreteGroup;
@@ -28,9 +28,11 @@ import org.xtext.msl.mSL.Import;
 import org.xtext.msl.mSL.Interaction;
 import org.xtext.msl.mSL.MSLFactory;
 import org.xtext.msl.mSL.MSLPackage;
+import org.xtext.msl.mSL.ParamValue;
 import org.xtext.msl.mSL.Pattern;
 import org.xtext.msl.mSL.Specification;
 import org.xtext.msl.mSL.SystemBinding;
+import org.xtext.msl.mSL.TimeUnitKind;
 
 /**
  * <!-- begin-user-doc -->
@@ -143,14 +145,14 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass attValueEClass = null;
+  private EClass concreteGroupEClass = null;
 
   /**
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    */
-  private EClass concreteGroupEClass = null;
+  private EClass paramValueEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -172,6 +174,13 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
    * @generated
    */
   private EClass componentNameEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EEnum timeUnitKindEEnum = null;
 
   /**
    * Creates an instance of the model <b>Package</b>, registered with
@@ -751,36 +760,6 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EClass getAttValue()
-  {
-    return attValueEClass;
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getAttValue_NameAtt()
-  {
-    return (EAttribute)attValueEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EAttribute getAttValue_ValAtt()
-  {
-    return (EAttribute)attValueEClass.getEStructuralFeatures().get(1);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EClass getConcreteGroup()
   {
     return concreteGroupEClass;
@@ -821,7 +800,7 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getConcreteGroup_AttValues()
+  public EReference getConcreteGroup_ManGrp()
   {
     return (EReference)concreteGroupEClass.getEStructuralFeatures().get(3);
   }
@@ -831,7 +810,7 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getConcreteGroup_ManGrp()
+  public EReference getConcreteGroup_Components()
   {
     return (EReference)concreteGroupEClass.getEStructuralFeatures().get(4);
   }
@@ -841,9 +820,39 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public EReference getConcreteGroup_Components()
+  public EClass getParamValue()
   {
-    return (EReference)concreteGroupEClass.getEStructuralFeatures().get(5);
+    return paramValueEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getParamValue_NameParam()
+  {
+    return (EAttribute)paramValueEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getParamValue_ValParam()
+  {
+    return (EAttribute)paramValueEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getParamValue_Unit()
+  {
+    return (EAttribute)paramValueEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -874,6 +883,16 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
   public EAttribute getComponentInstance_Type()
   {
     return (EAttribute)componentInstanceEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getComponentInstance_ParamValues()
+  {
+    return (EReference)componentInstanceEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -924,6 +943,16 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
   public EReference getComponentName_Component()
   {
     return (EReference)componentNameEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EEnum getTimeUnitKind()
+  {
+    return timeUnitKindEEnum;
   }
 
   /**
@@ -1021,21 +1050,22 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
     createEAttribute(concreteSystemEClass, CONCRETE_SYSTEM__NAME);
     createEReference(concreteSystemEClass, CONCRETE_SYSTEM__BINDINGS);
 
-    attValueEClass = createEClass(ATT_VALUE);
-    createEAttribute(attValueEClass, ATT_VALUE__NAME_ATT);
-    createEAttribute(attValueEClass, ATT_VALUE__VAL_ATT);
-
     concreteGroupEClass = createEClass(CONCRETE_GROUP);
     createEAttribute(concreteGroupEClass, CONCRETE_GROUP__NAME);
     createEReference(concreteGroupEClass, CONCRETE_GROUP__ABSTRACT_GROUPS);
     createEReference(concreteGroupEClass, CONCRETE_GROUP__MAN_SYS);
-    createEReference(concreteGroupEClass, CONCRETE_GROUP__ATT_VALUES);
     createEReference(concreteGroupEClass, CONCRETE_GROUP__MAN_GRP);
     createEReference(concreteGroupEClass, CONCRETE_GROUP__COMPONENTS);
+
+    paramValueEClass = createEClass(PARAM_VALUE);
+    createEAttribute(paramValueEClass, PARAM_VALUE__NAME_PARAM);
+    createEAttribute(paramValueEClass, PARAM_VALUE__VAL_PARAM);
+    createEAttribute(paramValueEClass, PARAM_VALUE__UNIT);
 
     componentInstanceEClass = createEClass(COMPONENT_INSTANCE);
     createEAttribute(componentInstanceEClass, COMPONENT_INSTANCE__NAME);
     createEAttribute(componentInstanceEClass, COMPONENT_INSTANCE__TYPE);
+    createEReference(componentInstanceEClass, COMPONENT_INSTANCE__PARAM_VALUES);
 
     interactionEClass = createEClass(INTERACTION);
     createEReference(interactionEClass, INTERACTION__START);
@@ -1043,6 +1073,9 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
 
     componentNameEClass = createEClass(COMPONENT_NAME);
     createEReference(componentNameEClass, COMPONENT_NAME__COMPONENT);
+
+    // Create enums
+    timeUnitKindEEnum = createEEnum(TIME_UNIT_KIND);
   }
 
   /**
@@ -1141,21 +1174,22 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
     initEAttribute(getConcreteSystem_Name(), ecorePackage.getEString(), "name", null, 0, 1, ConcreteSystem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getConcreteSystem_Bindings(), this.getSystemBinding(), null, "bindings", null, 0, -1, ConcreteSystem.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-    initEClass(attValueEClass, AttValue.class, "AttValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getAttValue_NameAtt(), ecorePackage.getEString(), "nameAtt", null, 0, 1, AttValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getAttValue_ValAtt(), ecorePackage.getEString(), "valAtt", null, 0, 1, AttValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
     initEClass(concreteGroupEClass, ConcreteGroup.class, "ConcreteGroup", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getConcreteGroup_Name(), ecorePackage.getEString(), "name", null, 0, 1, ConcreteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getConcreteGroup_AbstractGroups(), this.getGroupBinding(), null, "abstractGroups", null, 0, -1, ConcreteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getConcreteGroup_ManSys(), this.getConcreteSystem(), null, "manSys", null, 0, 1, ConcreteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getConcreteGroup_AttValues(), this.getAttValue(), null, "attValues", null, 0, -1, ConcreteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getConcreteGroup_ManSys(), this.getConcreteSystem(), null, "manSys", null, 0, -1, ConcreteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getConcreteGroup_ManGrp(), this.getConcreteGroup(), null, "manGrp", null, 0, -1, ConcreteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getConcreteGroup_Components(), this.getComponentInstance(), null, "components", null, 0, -1, ConcreteGroup.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(paramValueEClass, ParamValue.class, "ParamValue", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getParamValue_NameParam(), ecorePackage.getEString(), "nameParam", null, 0, 1, ParamValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getParamValue_ValParam(), ecorePackage.getEString(), "valParam", null, 0, 1, ParamValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getParamValue_Unit(), this.getTimeUnitKind(), "unit", null, 0, 1, ParamValue.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(componentInstanceEClass, ComponentInstance.class, "ComponentInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getComponentInstance_Name(), ecorePackage.getEString(), "name", null, 0, 1, ComponentInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getComponentInstance_Type(), ecorePackage.getEString(), "type", null, 0, 1, ComponentInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getComponentInstance_ParamValues(), this.getParamValue(), null, "paramValues", null, 0, -1, ComponentInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(interactionEClass, Interaction.class, "Interaction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getInteraction_Start(), this.getComponentName(), null, "start", null, 0, 1, Interaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -1163,6 +1197,16 @@ public class MSLPackageImpl extends EPackageImpl implements MSLPackage
 
     initEClass(componentNameEClass, ComponentName.class, "ComponentName", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getComponentName_Component(), this.getComponentInstance(), null, "component", null, 0, 1, ComponentName.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    // Initialize enums and add enum literals
+    initEEnum(timeUnitKindEEnum, TimeUnitKind.class, "TimeUnitKind");
+    addEEnumLiteral(timeUnitKindEEnum, TimeUnitKind.SECOND);
+    addEEnumLiteral(timeUnitKindEEnum, TimeUnitKind.MSECOND);
+    addEEnumLiteral(timeUnitKindEEnum, TimeUnitKind.USECOND);
+    addEEnumLiteral(timeUnitKindEEnum, TimeUnitKind.NSECOND);
+    addEEnumLiteral(timeUnitKindEEnum, TimeUnitKind.MINUTE);
+    addEEnumLiteral(timeUnitKindEEnum, TimeUnitKind.HOUR);
+    addEEnumLiteral(timeUnitKindEEnum, TimeUnitKind.DAY);
 
     // Create resource
     createResource(eNS_URI);

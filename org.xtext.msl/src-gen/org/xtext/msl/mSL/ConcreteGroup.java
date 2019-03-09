@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link org.xtext.msl.mSL.ConcreteGroup#getName <em>Name</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.ConcreteGroup#getAbstractGroups <em>Abstract Groups</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.ConcreteGroup#getManSys <em>Man Sys</em>}</li>
- *   <li>{@link org.xtext.msl.mSL.ConcreteGroup#getAttValues <em>Att Values</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.ConcreteGroup#getManGrp <em>Man Grp</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.ConcreteGroup#getComponents <em>Components</em>}</li>
  * </ul>
@@ -73,46 +72,20 @@ public interface ConcreteGroup extends EObject
   EList<GroupBinding> getAbstractGroups();
 
   /**
-   * Returns the value of the '<em><b>Man Sys</b></em>' reference.
+   * Returns the value of the '<em><b>Man Sys</b></em>' reference list.
+   * The list contents are of type {@link org.xtext.msl.mSL.ConcreteSystem}.
    * <!-- begin-user-doc -->
    * <p>
-   * If the meaning of the '<em>Man Sys</em>' reference isn't clear,
+   * If the meaning of the '<em>Man Sys</em>' reference list isn't clear,
    * there really should be more of a description here...
    * </p>
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Man Sys</em>' reference.
-   * @see #setManSys(ConcreteSystem)
+   * @return the value of the '<em>Man Sys</em>' reference list.
    * @see org.xtext.msl.mSL.MSLPackage#getConcreteGroup_ManSys()
    * @model
    * @generated
    */
-  ConcreteSystem getManSys();
-
-  /**
-   * Sets the value of the '{@link org.xtext.msl.mSL.ConcreteGroup#getManSys <em>Man Sys</em>}' reference.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Man Sys</em>' reference.
-   * @see #getManSys()
-   * @generated
-   */
-  void setManSys(ConcreteSystem value);
-
-  /**
-   * Returns the value of the '<em><b>Att Values</b></em>' containment reference list.
-   * The list contents are of type {@link org.xtext.msl.mSL.AttValue}.
-   * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Att Values</em>' containment reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
-   * <!-- end-user-doc -->
-   * @return the value of the '<em>Att Values</em>' containment reference list.
-   * @see org.xtext.msl.mSL.MSLPackage#getConcreteGroup_AttValues()
-   * @model containment="true"
-   * @generated
-   */
-  EList<AttValue> getAttValues();
+  EList<ConcreteSystem> getManSys();
 
   /**
    * Returns the value of the '<em><b>Man Grp</b></em>' reference list.

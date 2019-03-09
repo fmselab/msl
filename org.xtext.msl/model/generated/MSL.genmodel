@@ -6,6 +6,15 @@
     copyrightFields="false" runtimeVersion="2.14">
   <genPackages prefix="MSL" basePackage="org.xtext.msl" disposableProviderFactory="true"
       fileExtensions="msl" ecorePackage="MSL.ecore#/">
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="MSL.ecore#//TimeUnitKind">
+      <genEnumLiterals ecoreEnumLiteral="MSL.ecore#//TimeUnitKind/SECOND"/>
+      <genEnumLiterals ecoreEnumLiteral="MSL.ecore#//TimeUnitKind/MSECOND"/>
+      <genEnumLiterals ecoreEnumLiteral="MSL.ecore#//TimeUnitKind/USECOND"/>
+      <genEnumLiterals ecoreEnumLiteral="MSL.ecore#//TimeUnitKind/NSECOND"/>
+      <genEnumLiterals ecoreEnumLiteral="MSL.ecore#//TimeUnitKind/MINUTE"/>
+      <genEnumLiterals ecoreEnumLiteral="MSL.ecore#//TimeUnitKind/HOUR"/>
+      <genEnumLiterals ecoreEnumLiteral="MSL.ecore#//TimeUnitKind/DAY"/>
+    </genEnums>
     <genClasses ecoreClass="MSL.ecore#//Specification">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MSL.ecore#//Specification/imports"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MSL.ecore#//Specification/absPattern"/>
@@ -71,21 +80,22 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//ConcreteSystem/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MSL.ecore#//ConcreteSystem/bindings"/>
     </genClasses>
-    <genClasses ecoreClass="MSL.ecore#//AttValue">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//AttValue/nameAtt"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//AttValue/valAtt"/>
-    </genClasses>
     <genClasses ecoreClass="MSL.ecore#//ConcreteGroup">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//ConcreteGroup/name"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MSL.ecore#//ConcreteGroup/abstractGroups"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MSL.ecore#//ConcreteGroup/manSys"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MSL.ecore#//ConcreteGroup/attValues"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference MSL.ecore#//ConcreteGroup/manGrp"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MSL.ecore#//ConcreteGroup/components"/>
+    </genClasses>
+    <genClasses ecoreClass="MSL.ecore#//ParamValue">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//ParamValue/nameParam"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//ParamValue/valParam"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//ParamValue/unit"/>
     </genClasses>
     <genClasses ecoreClass="MSL.ecore#//ComponentInstance">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//ComponentInstance/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute MSL.ecore#//ComponentInstance/type"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MSL.ecore#//ComponentInstance/paramValues"/>
     </genClasses>
     <genClasses ecoreClass="MSL.ecore#//Interaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference MSL.ecore#//Interaction/start"/>

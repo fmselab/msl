@@ -74,7 +74,7 @@ abstract public class Generator {
 			// System.err.println(g.getAbsGroup().getName() + "-> " + g.getName());
 			assert !nameBinding.containsKey(g.getAbsGroup().getName());
 			nameBinding.put(g.getAbsGroup().getName(), g.getName());
-		}
+					}
 		/*
 		 * for(Binding b: pattern.getConcrete()) { Abstract abs = b.getAbs(); assert
 		 * !nameBinding.containsKey(abs); String name = b.getName();

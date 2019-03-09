@@ -5,6 +5,7 @@ package org.xtext.msl.mSL;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -657,43 +658,6 @@ public interface MSLPackage extends EPackage
   int CONCRETE_SYSTEM_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link org.xtext.msl.mSL.impl.AttValueImpl <em>Att Value</em>}' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @see org.xtext.msl.mSL.impl.AttValueImpl
-   * @see org.xtext.msl.mSL.impl.MSLPackageImpl#getAttValue()
-   * @generated
-   */
-  int ATT_VALUE = 14;
-
-  /**
-   * The feature id for the '<em><b>Name Att</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ATT_VALUE__NAME_ATT = 0;
-
-  /**
-   * The feature id for the '<em><b>Val Att</b></em>' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ATT_VALUE__VAL_ATT = 1;
-
-  /**
-   * The number of structural features of the '<em>Att Value</em>' class.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int ATT_VALUE_FEATURE_COUNT = 2;
-
-  /**
    * The meta object id for the '{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl <em>Concrete Group</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -701,7 +665,7 @@ public interface MSLPackage extends EPackage
    * @see org.xtext.msl.mSL.impl.MSLPackageImpl#getConcreteGroup()
    * @generated
    */
-  int CONCRETE_GROUP = 15;
+  int CONCRETE_GROUP = 14;
 
   /**
    * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -722,7 +686,7 @@ public interface MSLPackage extends EPackage
   int CONCRETE_GROUP__ABSTRACT_GROUPS = 1;
 
   /**
-   * The feature id for the '<em><b>Man Sys</b></em>' reference.
+   * The feature id for the '<em><b>Man Sys</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
@@ -731,22 +695,13 @@ public interface MSLPackage extends EPackage
   int CONCRETE_GROUP__MAN_SYS = 2;
 
   /**
-   * The feature id for the '<em><b>Att Values</b></em>' containment reference list.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   * @ordered
-   */
-  int CONCRETE_GROUP__ATT_VALUES = 3;
-
-  /**
    * The feature id for the '<em><b>Man Grp</b></em>' reference list.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int CONCRETE_GROUP__MAN_GRP = 4;
+  int CONCRETE_GROUP__MAN_GRP = 3;
 
   /**
    * The feature id for the '<em><b>Components</b></em>' containment reference list.
@@ -755,7 +710,7 @@ public interface MSLPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONCRETE_GROUP__COMPONENTS = 5;
+  int CONCRETE_GROUP__COMPONENTS = 4;
 
   /**
    * The number of structural features of the '<em>Concrete Group</em>' class.
@@ -764,7 +719,53 @@ public interface MSLPackage extends EPackage
    * @generated
    * @ordered
    */
-  int CONCRETE_GROUP_FEATURE_COUNT = 6;
+  int CONCRETE_GROUP_FEATURE_COUNT = 5;
+
+  /**
+   * The meta object id for the '{@link org.xtext.msl.mSL.impl.ParamValueImpl <em>Param Value</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.xtext.msl.mSL.impl.ParamValueImpl
+   * @see org.xtext.msl.mSL.impl.MSLPackageImpl#getParamValue()
+   * @generated
+   */
+  int PARAM_VALUE = 15;
+
+  /**
+   * The feature id for the '<em><b>Name Param</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAM_VALUE__NAME_PARAM = 0;
+
+  /**
+   * The feature id for the '<em><b>Val Param</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAM_VALUE__VAL_PARAM = 1;
+
+  /**
+   * The feature id for the '<em><b>Unit</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAM_VALUE__UNIT = 2;
+
+  /**
+   * The number of structural features of the '<em>Param Value</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int PARAM_VALUE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link org.xtext.msl.mSL.impl.ComponentInstanceImpl <em>Component Instance</em>}' class.
@@ -795,13 +796,22 @@ public interface MSLPackage extends EPackage
   int COMPONENT_INSTANCE__TYPE = 1;
 
   /**
+   * The feature id for the '<em><b>Param Values</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int COMPONENT_INSTANCE__PARAM_VALUES = 2;
+
+  /**
    * The number of structural features of the '<em>Component Instance</em>' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int COMPONENT_INSTANCE_FEATURE_COUNT = 2;
+  int COMPONENT_INSTANCE_FEATURE_COUNT = 3;
 
   /**
    * The meta object id for the '{@link org.xtext.msl.mSL.impl.InteractionImpl <em>Interaction</em>}' class.
@@ -867,6 +877,16 @@ public interface MSLPackage extends EPackage
    * @ordered
    */
   int COMPONENT_NAME_FEATURE_COUNT = 1;
+
+  /**
+   * The meta object id for the '{@link org.xtext.msl.mSL.TimeUnitKind <em>Time Unit Kind</em>}' enum.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see org.xtext.msl.mSL.TimeUnitKind
+   * @see org.xtext.msl.mSL.impl.MSLPackageImpl#getTimeUnitKind()
+   * @generated
+   */
+  int TIME_UNIT_KIND = 19;
 
 
   /**
@@ -1417,38 +1437,6 @@ public interface MSLPackage extends EPackage
   EReference getConcreteSystem_Bindings();
 
   /**
-   * Returns the meta object for class '{@link org.xtext.msl.mSL.AttValue <em>Att Value</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for class '<em>Att Value</em>'.
-   * @see org.xtext.msl.mSL.AttValue
-   * @generated
-   */
-  EClass getAttValue();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.xtext.msl.mSL.AttValue#getNameAtt <em>Name Att</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Name Att</em>'.
-   * @see org.xtext.msl.mSL.AttValue#getNameAtt()
-   * @see #getAttValue()
-   * @generated
-   */
-  EAttribute getAttValue_NameAtt();
-
-  /**
-   * Returns the meta object for the attribute '{@link org.xtext.msl.mSL.AttValue#getValAtt <em>Val Att</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the attribute '<em>Val Att</em>'.
-   * @see org.xtext.msl.mSL.AttValue#getValAtt()
-   * @see #getAttValue()
-   * @generated
-   */
-  EAttribute getAttValue_ValAtt();
-
-  /**
    * Returns the meta object for class '{@link org.xtext.msl.mSL.ConcreteGroup <em>Concrete Group</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1481,26 +1469,15 @@ public interface MSLPackage extends EPackage
   EReference getConcreteGroup_AbstractGroups();
 
   /**
-   * Returns the meta object for the reference '{@link org.xtext.msl.mSL.ConcreteGroup#getManSys <em>Man Sys</em>}'.
+   * Returns the meta object for the reference list '{@link org.xtext.msl.mSL.ConcreteGroup#getManSys <em>Man Sys</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the meta object for the reference '<em>Man Sys</em>'.
+   * @return the meta object for the reference list '<em>Man Sys</em>'.
    * @see org.xtext.msl.mSL.ConcreteGroup#getManSys()
    * @see #getConcreteGroup()
    * @generated
    */
   EReference getConcreteGroup_ManSys();
-
-  /**
-   * Returns the meta object for the containment reference list '{@link org.xtext.msl.mSL.ConcreteGroup#getAttValues <em>Att Values</em>}'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return the meta object for the containment reference list '<em>Att Values</em>'.
-   * @see org.xtext.msl.mSL.ConcreteGroup#getAttValues()
-   * @see #getConcreteGroup()
-   * @generated
-   */
-  EReference getConcreteGroup_AttValues();
 
   /**
    * Returns the meta object for the reference list '{@link org.xtext.msl.mSL.ConcreteGroup#getManGrp <em>Man Grp</em>}'.
@@ -1523,6 +1500,49 @@ public interface MSLPackage extends EPackage
    * @generated
    */
   EReference getConcreteGroup_Components();
+
+  /**
+   * Returns the meta object for class '{@link org.xtext.msl.mSL.ParamValue <em>Param Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Param Value</em>'.
+   * @see org.xtext.msl.mSL.ParamValue
+   * @generated
+   */
+  EClass getParamValue();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.xtext.msl.mSL.ParamValue#getNameParam <em>Name Param</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Name Param</em>'.
+   * @see org.xtext.msl.mSL.ParamValue#getNameParam()
+   * @see #getParamValue()
+   * @generated
+   */
+  EAttribute getParamValue_NameParam();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.xtext.msl.mSL.ParamValue#getValParam <em>Val Param</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Val Param</em>'.
+   * @see org.xtext.msl.mSL.ParamValue#getValParam()
+   * @see #getParamValue()
+   * @generated
+   */
+  EAttribute getParamValue_ValParam();
+
+  /**
+   * Returns the meta object for the attribute '{@link org.xtext.msl.mSL.ParamValue#getUnit <em>Unit</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Unit</em>'.
+   * @see org.xtext.msl.mSL.ParamValue#getUnit()
+   * @see #getParamValue()
+   * @generated
+   */
+  EAttribute getParamValue_Unit();
 
   /**
    * Returns the meta object for class '{@link org.xtext.msl.mSL.ComponentInstance <em>Component Instance</em>}'.
@@ -1555,6 +1575,17 @@ public interface MSLPackage extends EPackage
    * @generated
    */
   EAttribute getComponentInstance_Type();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link org.xtext.msl.mSL.ComponentInstance#getParamValues <em>Param Values</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Param Values</em>'.
+   * @see org.xtext.msl.mSL.ComponentInstance#getParamValues()
+   * @see #getComponentInstance()
+   * @generated
+   */
+  EReference getComponentInstance_ParamValues();
 
   /**
    * Returns the meta object for class '{@link org.xtext.msl.mSL.Interaction <em>Interaction</em>}'.
@@ -1608,6 +1639,16 @@ public interface MSLPackage extends EPackage
    * @generated
    */
   EReference getComponentName_Component();
+
+  /**
+   * Returns the meta object for enum '{@link org.xtext.msl.mSL.TimeUnitKind <em>Time Unit Kind</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for enum '<em>Time Unit Kind</em>'.
+   * @see org.xtext.msl.mSL.TimeUnitKind
+   * @generated
+   */
+  EEnum getTimeUnitKind();
 
   /**
    * Returns the factory that creates the instances of the model.
@@ -2069,32 +2110,6 @@ public interface MSLPackage extends EPackage
     EReference CONCRETE_SYSTEM__BINDINGS = eINSTANCE.getConcreteSystem_Bindings();
 
     /**
-     * The meta object literal for the '{@link org.xtext.msl.mSL.impl.AttValueImpl <em>Att Value</em>}' class.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @see org.xtext.msl.mSL.impl.AttValueImpl
-     * @see org.xtext.msl.mSL.impl.MSLPackageImpl#getAttValue()
-     * @generated
-     */
-    EClass ATT_VALUE = eINSTANCE.getAttValue();
-
-    /**
-     * The meta object literal for the '<em><b>Name Att</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ATT_VALUE__NAME_ATT = eINSTANCE.getAttValue_NameAtt();
-
-    /**
-     * The meta object literal for the '<em><b>Val Att</b></em>' attribute feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EAttribute ATT_VALUE__VAL_ATT = eINSTANCE.getAttValue_ValAtt();
-
-    /**
      * The meta object literal for the '{@link org.xtext.msl.mSL.impl.ConcreteGroupImpl <em>Concrete Group</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2121,20 +2136,12 @@ public interface MSLPackage extends EPackage
     EReference CONCRETE_GROUP__ABSTRACT_GROUPS = eINSTANCE.getConcreteGroup_AbstractGroups();
 
     /**
-     * The meta object literal for the '<em><b>Man Sys</b></em>' reference feature.
+     * The meta object literal for the '<em><b>Man Sys</b></em>' reference list feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
      * @generated
      */
     EReference CONCRETE_GROUP__MAN_SYS = eINSTANCE.getConcreteGroup_ManSys();
-
-    /**
-     * The meta object literal for the '<em><b>Att Values</b></em>' containment reference list feature.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    EReference CONCRETE_GROUP__ATT_VALUES = eINSTANCE.getConcreteGroup_AttValues();
 
     /**
      * The meta object literal for the '<em><b>Man Grp</b></em>' reference list feature.
@@ -2151,6 +2158,40 @@ public interface MSLPackage extends EPackage
      * @generated
      */
     EReference CONCRETE_GROUP__COMPONENTS = eINSTANCE.getConcreteGroup_Components();
+
+    /**
+     * The meta object literal for the '{@link org.xtext.msl.mSL.impl.ParamValueImpl <em>Param Value</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.xtext.msl.mSL.impl.ParamValueImpl
+     * @see org.xtext.msl.mSL.impl.MSLPackageImpl#getParamValue()
+     * @generated
+     */
+    EClass PARAM_VALUE = eINSTANCE.getParamValue();
+
+    /**
+     * The meta object literal for the '<em><b>Name Param</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAM_VALUE__NAME_PARAM = eINSTANCE.getParamValue_NameParam();
+
+    /**
+     * The meta object literal for the '<em><b>Val Param</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAM_VALUE__VAL_PARAM = eINSTANCE.getParamValue_ValParam();
+
+    /**
+     * The meta object literal for the '<em><b>Unit</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute PARAM_VALUE__UNIT = eINSTANCE.getParamValue_Unit();
 
     /**
      * The meta object literal for the '{@link org.xtext.msl.mSL.impl.ComponentInstanceImpl <em>Component Instance</em>}' class.
@@ -2177,6 +2218,14 @@ public interface MSLPackage extends EPackage
      * @generated
      */
     EAttribute COMPONENT_INSTANCE__TYPE = eINSTANCE.getComponentInstance_Type();
+
+    /**
+     * The meta object literal for the '<em><b>Param Values</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference COMPONENT_INSTANCE__PARAM_VALUES = eINSTANCE.getComponentInstance_ParamValues();
 
     /**
      * The meta object literal for the '{@link org.xtext.msl.mSL.impl.InteractionImpl <em>Interaction</em>}' class.
@@ -2221,6 +2270,16 @@ public interface MSLPackage extends EPackage
      * @generated
      */
     EReference COMPONENT_NAME__COMPONENT = eINSTANCE.getComponentName_Component();
+
+    /**
+     * The meta object literal for the '{@link org.xtext.msl.mSL.TimeUnitKind <em>Time Unit Kind</em>}' enum.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see org.xtext.msl.mSL.TimeUnitKind
+     * @see org.xtext.msl.mSL.impl.MSLPackageImpl#getTimeUnitKind()
+     * @generated
+     */
+    EEnum TIME_UNIT_KIND = eINSTANCE.getTimeUnitKind();
 
   }
 

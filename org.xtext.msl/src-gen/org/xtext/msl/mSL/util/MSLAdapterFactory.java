@@ -146,14 +146,14 @@ public class MSLAdapterFactory extends AdapterFactoryImpl
         return createConcreteSystemAdapter();
       }
       @Override
-      public Adapter caseAttValue(AttValue object)
-      {
-        return createAttValueAdapter();
-      }
-      @Override
       public Adapter caseConcreteGroup(ConcreteGroup object)
       {
         return createConcreteGroupAdapter();
+      }
+      @Override
+      public Adapter caseParamValue(ParamValue object)
+      {
+        return createParamValueAdapter();
       }
       @Override
       public Adapter caseComponentInstance(ComponentInstance object)
@@ -403,21 +403,6 @@ public class MSLAdapterFactory extends AdapterFactoryImpl
   }
 
   /**
-   * Creates a new adapter for an object of class '{@link org.xtext.msl.mSL.AttValue <em>Att Value</em>}'.
-   * <!-- begin-user-doc -->
-   * This default implementation returns null so that we can easily ignore cases;
-   * it's useful to ignore a case when inheritance will catch all the cases anyway.
-   * <!-- end-user-doc -->
-   * @return the new adapter.
-   * @see org.xtext.msl.mSL.AttValue
-   * @generated
-   */
-  public Adapter createAttValueAdapter()
-  {
-    return null;
-  }
-
-  /**
    * Creates a new adapter for an object of class '{@link org.xtext.msl.mSL.ConcreteGroup <em>Concrete Group</em>}'.
    * <!-- begin-user-doc -->
    * This default implementation returns null so that we can easily ignore cases;
@@ -428,6 +413,21 @@ public class MSLAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createConcreteGroupAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link org.xtext.msl.mSL.ParamValue <em>Param Value</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see org.xtext.msl.mSL.ParamValue
+   * @generated
+   */
+  public Adapter createParamValueAdapter()
   {
     return null;
   }

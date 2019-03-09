@@ -150,15 +150,6 @@ public interface MSLFactory extends EFactory
   ConcreteSystem createConcreteSystem();
 
   /**
-   * Returns a new object of class '<em>Att Value</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Att Value</em>'.
-   * @generated
-   */
-  AttValue createAttValue();
-
-  /**
    * Returns a new object of class '<em>Concrete Group</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -166,6 +157,15 @@ public interface MSLFactory extends EFactory
    * @generated
    */
   ConcreteGroup createConcreteGroup();
+
+  /**
+   * Returns a new object of class '<em>Param Value</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Param Value</em>'.
+   * @generated
+   */
+  ParamValue createParamValue();
 
   /**
    * Returns a new object of class '<em>Component Instance</em>'.

@@ -3,15 +3,25 @@
  */
 package org.xtext.msl.mSL.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 import org.xtext.msl.mSL.ComponentInstance;
 import org.xtext.msl.mSL.MSLPackage;
+import org.xtext.msl.mSL.ParamValue;
 
 /**
  * <!-- begin-user-doc -->
@@ -23,6 +33,7 @@ import org.xtext.msl.mSL.MSLPackage;
  * <ul>
  *   <li>{@link org.xtext.msl.mSL.impl.ComponentInstanceImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.xtext.msl.mSL.impl.ComponentInstanceImpl#getType <em>Type</em>}</li>
+ *   <li>{@link org.xtext.msl.mSL.impl.ComponentInstanceImpl#getParamValues <em>Param Values</em>}</li>
  * </ul>
  *
  * @generated
@@ -68,6 +79,16 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
    * @ordered
    */
   protected String type = TYPE_EDEFAULT;
+
+  /**
+   * The cached value of the '{@link #getParamValues() <em>Param Values</em>}' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #getParamValues()
+   * @generated
+   * @ordered
+   */
+  protected EList<ParamValue> paramValues;
 
   /**
    * <!-- begin-user-doc -->
@@ -141,6 +162,36 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  public EList<ParamValue> getParamValues()
+  {
+    if (paramValues == null)
+    {
+      paramValues = new EObjectContainmentEList<ParamValue>(ParamValue.class, this, MSLPackage.COMPONENT_INSTANCE__PARAM_VALUES);
+    }
+    return paramValues;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case MSLPackage.COMPONENT_INSTANCE__PARAM_VALUES:
+        return ((InternalEList<?>)getParamValues()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
@@ -150,6 +201,8 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
         return getName();
       case MSLPackage.COMPONENT_INSTANCE__TYPE:
         return getType();
+      case MSLPackage.COMPONENT_INSTANCE__PARAM_VALUES:
+        return getParamValues();
     }
     return super.eGet(featureID, resolve, coreType);
   }
@@ -159,6 +212,7 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
    * <!-- end-user-doc -->
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
@@ -169,6 +223,10 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
         return;
       case MSLPackage.COMPONENT_INSTANCE__TYPE:
         setType((String)newValue);
+        return;
+      case MSLPackage.COMPONENT_INSTANCE__PARAM_VALUES:
+        getParamValues().clear();
+        getParamValues().addAll((Collection<? extends ParamValue>)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -190,6 +248,9 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
       case MSLPackage.COMPONENT_INSTANCE__TYPE:
         setType(TYPE_EDEFAULT);
         return;
+      case MSLPackage.COMPONENT_INSTANCE__PARAM_VALUES:
+        getParamValues().clear();
+        return;
     }
     super.eUnset(featureID);
   }
@@ -208,6 +269,8 @@ public class ComponentInstanceImpl extends MinimalEObjectImpl.Container implemen
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
       case MSLPackage.COMPONENT_INSTANCE__TYPE:
         return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
+      case MSLPackage.COMPONENT_INSTANCE__PARAM_VALUES:
+        return paramValues != null && !paramValues.isEmpty();
     }
     return super.eIsSet(featureID);
   }

@@ -6,8 +6,11 @@ package org.xtext.msl.services;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import java.util.List;
+import org.eclipse.xtext.Alternatives;
 import org.eclipse.xtext.Assignment;
 import org.eclipse.xtext.CrossReference;
+import org.eclipse.xtext.EnumLiteralDeclaration;
+import org.eclipse.xtext.EnumRule;
 import org.eclipse.xtext.Grammar;
 import org.eclipse.xtext.GrammarUtil;
 import org.eclipse.xtext.Group;
@@ -16,6 +19,7 @@ import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.RuleCall;
 import org.eclipse.xtext.TerminalRule;
 import org.eclipse.xtext.common.services.TerminalsGrammarAccess;
+import org.eclipse.xtext.service.AbstractElementFinder.AbstractEnumRuleElementFinder;
 import org.eclipse.xtext.service.AbstractElementFinder.AbstractGrammarElementFinder;
 import org.eclipse.xtext.service.GrammarProvider;
 
@@ -751,45 +755,6 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		//FQN_PATTERN_ID
 		public RuleCall getBindingsSystemBindingFQN_PATTERN_IDTerminalRuleCall_2_1_1_0_1() { return cBindingsSystemBindingFQN_PATTERN_IDTerminalRuleCall_2_1_1_0_1; }
 	}
-	public class AttValueElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.AttValue");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
-		private final Assignment cNameAttAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final RuleCall cNameAttINSTANCE_IDTerminalRuleCall_1_0 = (RuleCall)cNameAttAssignment_1.eContents().get(0);
-		private final Keyword cCommaKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		private final Assignment cValAttAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final RuleCall cValAttINSTANCE_IDTerminalRuleCall_3_0 = (RuleCall)cValAttAssignment_3.eContents().get(0);
-		private final Keyword cRightParenthesisKeyword_4 = (Keyword)cGroup.eContents().get(4);
-		
-		//AttValue:
-		//	"(" nameAtt=INSTANCE_ID ',' valAtt=INSTANCE_ID ")";
-		@Override public ParserRule getRule() { return rule; }
-		
-		//"(" nameAtt=INSTANCE_ID ',' valAtt=INSTANCE_ID ")"
-		public Group getGroup() { return cGroup; }
-		
-		//"("
-		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
-		
-		//nameAtt=INSTANCE_ID
-		public Assignment getNameAttAssignment_1() { return cNameAttAssignment_1; }
-		
-		//INSTANCE_ID
-		public RuleCall getNameAttINSTANCE_IDTerminalRuleCall_1_0() { return cNameAttINSTANCE_IDTerminalRuleCall_1_0; }
-		
-		//','
-		public Keyword getCommaKeyword_2() { return cCommaKeyword_2; }
-		
-		//valAtt=INSTANCE_ID
-		public Assignment getValAttAssignment_3() { return cValAttAssignment_3; }
-		
-		//INSTANCE_ID
-		public RuleCall getValAttINSTANCE_IDTerminalRuleCall_3_0() { return cValAttINSTANCE_IDTerminalRuleCall_3_0; }
-		
-		//")"
-		public Keyword getRightParenthesisKeyword_4() { return cRightParenthesisKeyword_4; }
-	}
 	public class ConcreteGroupElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.ConcreteGroup");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -812,12 +777,10 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		private final CrossReference cManSysConcreteSystemCrossReference_4_1_0 = (CrossReference)cManSysAssignment_4_1.eContents().get(0);
 		private final RuleCall cManSysConcreteSystemINSTANCE_IDTerminalRuleCall_4_1_0_1 = (RuleCall)cManSysConcreteSystemCrossReference_4_1_0.eContents().get(1);
 		private final Group cGroup_4_2 = (Group)cGroup_4.eContents().get(2);
-		private final Assignment cAttValuesAssignment_4_2_0 = (Assignment)cGroup_4_2.eContents().get(0);
-		private final RuleCall cAttValuesAttValueParserRuleCall_4_2_0_0 = (RuleCall)cAttValuesAssignment_4_2_0.eContents().get(0);
-		private final Group cGroup_4_2_1 = (Group)cGroup_4_2.eContents().get(1);
-		private final Keyword cCommaKeyword_4_2_1_0 = (Keyword)cGroup_4_2_1.eContents().get(0);
-		private final Assignment cAttValuesAssignment_4_2_1_1 = (Assignment)cGroup_4_2_1.eContents().get(1);
-		private final RuleCall cAttValuesAttValueParserRuleCall_4_2_1_1_0 = (RuleCall)cAttValuesAssignment_4_2_1_1.eContents().get(0);
+		private final Keyword cCommaKeyword_4_2_0 = (Keyword)cGroup_4_2.eContents().get(0);
+		private final Assignment cManSysAssignment_4_2_1 = (Assignment)cGroup_4_2.eContents().get(1);
+		private final CrossReference cManSysConcreteSystemCrossReference_4_2_1_0 = (CrossReference)cManSysAssignment_4_2_1.eContents().get(0);
+		private final RuleCall cManSysConcreteSystemINSTANCE_IDTerminalRuleCall_4_2_1_0_1 = (RuleCall)cManSysConcreteSystemCrossReference_4_2_1_0.eContents().get(1);
 		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
 		private final Keyword cManagedGrpKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
 		private final Assignment cManGrpAssignment_5_1 = (Assignment)cGroup_5.eContents().get(1);
@@ -837,18 +800,19 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		private final RuleCall cComponentsComponentInstanceParserRuleCall_8_1_0 = (RuleCall)cComponentsAssignment_8_1.eContents().get(0);
 		private final Keyword cRightCurlyBracketKeyword_9 = (Keyword)cGroup.eContents().get(9);
 		
+		////AttValue: "(" nameAtt=INSTANCE_ID ',' valAtt=INSTANCE_ID ")";
 		//ConcreteGroup:
 		//	name=INSTANCE_ID ':' (abstractGroups+=[GroupBinding|FQN_PATTERN_ID] (','
-		//	abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{' ('managedSyS' manSys=[ConcreteSystem|INSTANCE_ID]
-		//	(attValues+=AttValue (',' attValues+=AttValue)*)?)? ('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (','
+		//	abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{' ('managedSyS' manSys+=[ConcreteSystem|INSTANCE_ID] (','
+		//	manSys+=[ConcreteSystem|INSTANCE_ID])*)? ('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (','
 		//	manGrp+=[ConcreteGroup|INSTANCE_ID])*)?
 		//	'components' components+=ComponentInstance (',' components+=ComponentInstance)*
 		//	'}';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//name=INSTANCE_ID ':' (abstractGroups+=[GroupBinding|FQN_PATTERN_ID] (','
-		//abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{' ('managedSyS' manSys=[ConcreteSystem|INSTANCE_ID]
-		//(attValues+=AttValue (',' attValues+=AttValue)*)?)? ('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (','
+		//abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{' ('managedSyS' manSys+=[ConcreteSystem|INSTANCE_ID] (','
+		//manSys+=[ConcreteSystem|INSTANCE_ID])*)? ('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (','
 		//manGrp+=[ConcreteGroup|INSTANCE_ID])*)? 'components' components+=ComponentInstance (','
 		//components+=ComponentInstance)* '}'
 		public Group getGroup() { return cGroup; }
@@ -892,13 +856,13 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		//'{'
 		public Keyword getLeftCurlyBracketKeyword_3() { return cLeftCurlyBracketKeyword_3; }
 		
-		//('managedSyS' manSys=[ConcreteSystem|INSTANCE_ID] (attValues+=AttValue (',' attValues+=AttValue)*)?)?
+		//('managedSyS' manSys+=[ConcreteSystem|INSTANCE_ID] (',' manSys+=[ConcreteSystem|INSTANCE_ID])*)?
 		public Group getGroup_4() { return cGroup_4; }
 		
 		//'managedSyS'
 		public Keyword getManagedSySKeyword_4_0() { return cManagedSySKeyword_4_0; }
 		
-		//manSys=[ConcreteSystem|INSTANCE_ID]
+		//manSys+=[ConcreteSystem|INSTANCE_ID]
 		public Assignment getManSysAssignment_4_1() { return cManSysAssignment_4_1; }
 		
 		//[ConcreteSystem|INSTANCE_ID]
@@ -907,26 +871,20 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		//INSTANCE_ID
 		public RuleCall getManSysConcreteSystemINSTANCE_IDTerminalRuleCall_4_1_0_1() { return cManSysConcreteSystemINSTANCE_IDTerminalRuleCall_4_1_0_1; }
 		
-		//(attValues+=AttValue (',' attValues+=AttValue)*)?
+		//(',' manSys+=[ConcreteSystem|INSTANCE_ID])*
 		public Group getGroup_4_2() { return cGroup_4_2; }
 		
-		//attValues+=AttValue
-		public Assignment getAttValuesAssignment_4_2_0() { return cAttValuesAssignment_4_2_0; }
-		
-		//AttValue
-		public RuleCall getAttValuesAttValueParserRuleCall_4_2_0_0() { return cAttValuesAttValueParserRuleCall_4_2_0_0; }
-		
-		//(',' attValues+=AttValue)*
-		public Group getGroup_4_2_1() { return cGroup_4_2_1; }
-		
 		//','
-		public Keyword getCommaKeyword_4_2_1_0() { return cCommaKeyword_4_2_1_0; }
+		public Keyword getCommaKeyword_4_2_0() { return cCommaKeyword_4_2_0; }
 		
-		//attValues+=AttValue
-		public Assignment getAttValuesAssignment_4_2_1_1() { return cAttValuesAssignment_4_2_1_1; }
+		//manSys+=[ConcreteSystem|INSTANCE_ID]
+		public Assignment getManSysAssignment_4_2_1() { return cManSysAssignment_4_2_1; }
 		
-		//AttValue
-		public RuleCall getAttValuesAttValueParserRuleCall_4_2_1_1_0() { return cAttValuesAttValueParserRuleCall_4_2_1_1_0; }
+		//[ConcreteSystem|INSTANCE_ID]
+		public CrossReference getManSysConcreteSystemCrossReference_4_2_1_0() { return cManSysConcreteSystemCrossReference_4_2_1_0; }
+		
+		//INSTANCE_ID
+		public RuleCall getManSysConcreteSystemINSTANCE_IDTerminalRuleCall_4_2_1_0_1() { return cManSysConcreteSystemINSTANCE_IDTerminalRuleCall_4_2_1_0_1; }
 		
 		//('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (',' manGrp+=[ConcreteGroup|INSTANCE_ID])*)?
 		public Group getGroup_5() { return cGroup_5; }
@@ -982,6 +940,54 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		//'}'
 		public Keyword getRightCurlyBracketKeyword_9() { return cRightCurlyBracketKeyword_9; }
 	}
+	public class ParamValueElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.ParamValue");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cLeftSquareBracketKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cNameParamAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cNameParamINSTANCE_IDTerminalRuleCall_1_0 = (RuleCall)cNameParamAssignment_1.eContents().get(0);
+		private final Keyword cEqualsSignKeyword_2 = (Keyword)cGroup.eContents().get(2);
+		private final Assignment cValParamAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cValParamDECIMALTerminalRuleCall_3_0 = (RuleCall)cValParamAssignment_3.eContents().get(0);
+		private final Assignment cUnitAssignment_4 = (Assignment)cGroup.eContents().get(4);
+		private final RuleCall cUnitTimeUnitKindEnumRuleCall_4_0 = (RuleCall)cUnitAssignment_4.eContents().get(0);
+		private final Keyword cRightSquareBracketKeyword_5 = (Keyword)cGroup.eContents().get(5);
+		
+		////To allow real type NFPs annotations at component instance level 
+		//ParamValue:
+		//	"[" nameParam=INSTANCE_ID '=' valParam=DECIMAL unit=TimeUnitKind? "]";
+		@Override public ParserRule getRule() { return rule; }
+		
+		//"[" nameParam=INSTANCE_ID '=' valParam=DECIMAL unit=TimeUnitKind? "]"
+		public Group getGroup() { return cGroup; }
+		
+		//"["
+		public Keyword getLeftSquareBracketKeyword_0() { return cLeftSquareBracketKeyword_0; }
+		
+		//nameParam=INSTANCE_ID
+		public Assignment getNameParamAssignment_1() { return cNameParamAssignment_1; }
+		
+		//INSTANCE_ID
+		public RuleCall getNameParamINSTANCE_IDTerminalRuleCall_1_0() { return cNameParamINSTANCE_IDTerminalRuleCall_1_0; }
+		
+		//'='
+		public Keyword getEqualsSignKeyword_2() { return cEqualsSignKeyword_2; }
+		
+		//valParam=DECIMAL
+		public Assignment getValParamAssignment_3() { return cValParamAssignment_3; }
+		
+		//DECIMAL
+		public RuleCall getValParamDECIMALTerminalRuleCall_3_0() { return cValParamDECIMALTerminalRuleCall_3_0; }
+		
+		//unit=TimeUnitKind?
+		public Assignment getUnitAssignment_4() { return cUnitAssignment_4; }
+		
+		//TimeUnitKind
+		public RuleCall getUnitTimeUnitKindEnumRuleCall_4_0() { return cUnitTimeUnitKindEnumRuleCall_4_0; }
+		
+		//"]"
+		public Keyword getRightSquareBracketKeyword_5() { return cRightSquareBracketKeyword_5; }
+	}
 	public class ComponentInstanceElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.ComponentInstance");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -990,12 +996,17 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		private final Keyword cColonKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final Assignment cTypeAssignment_2 = (Assignment)cGroup.eContents().get(2);
 		private final RuleCall cTypeCOMPONENT_TYPETerminalRuleCall_2_0 = (RuleCall)cTypeAssignment_2.eContents().get(0);
+		private final Group cGroup_3 = (Group)cGroup.eContents().get(3);
+		private final Assignment cParamValuesAssignment_3_0 = (Assignment)cGroup_3.eContents().get(0);
+		private final RuleCall cParamValuesParamValueParserRuleCall_3_0_0 = (RuleCall)cParamValuesAssignment_3_0.eContents().get(0);
+		private final Assignment cParamValuesAssignment_3_1 = (Assignment)cGroup_3.eContents().get(1);
+		private final RuleCall cParamValuesParamValueParserRuleCall_3_1_0 = (RuleCall)cParamValuesAssignment_3_1.eContents().get(0);
 		
 		//ComponentInstance:
-		//	name=INSTANCE_ID ':' type=COMPONENT_TYPE;
+		//	name=INSTANCE_ID ':' type=COMPONENT_TYPE (paramValues+=ParamValue paramValues+=ParamValue*)?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//name=INSTANCE_ID ':' type=COMPONENT_TYPE
+		//name=INSTANCE_ID ':' type=COMPONENT_TYPE (paramValues+=ParamValue paramValues+=ParamValue*)?
 		public Group getGroup() { return cGroup; }
 		
 		//name=INSTANCE_ID
@@ -1012,6 +1023,21 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		
 		//COMPONENT_TYPE
 		public RuleCall getTypeCOMPONENT_TYPETerminalRuleCall_2_0() { return cTypeCOMPONENT_TYPETerminalRuleCall_2_0; }
+		
+		//(paramValues+=ParamValue paramValues+=ParamValue*)?
+		public Group getGroup_3() { return cGroup_3; }
+		
+		//paramValues+=ParamValue
+		public Assignment getParamValuesAssignment_3_0() { return cParamValuesAssignment_3_0; }
+		
+		//ParamValue
+		public RuleCall getParamValuesParamValueParserRuleCall_3_0_0() { return cParamValuesParamValueParserRuleCall_3_0_0; }
+		
+		//paramValues+=ParamValue*
+		public Assignment getParamValuesAssignment_3_1() { return cParamValuesAssignment_3_1; }
+		
+		//ParamValue
+		public RuleCall getParamValuesParamValueParserRuleCall_3_1_0() { return cParamValuesParamValueParserRuleCall_3_1_0; }
 	}
 	public class InteractionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.Interaction");
@@ -1064,6 +1090,79 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		public RuleCall getComponentComponentInstanceFQN_INSTANCE_IDTerminalRuleCall_0_1() { return cComponentComponentInstanceFQN_INSTANCE_IDTerminalRuleCall_0_1; }
 	}
 	
+	public class TimeUnitKindElements extends AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.TimeUnitKind");
+		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
+		private final EnumLiteralDeclaration cSECONDEnumLiteralDeclaration_0 = (EnumLiteralDeclaration)cAlternatives.eContents().get(0);
+		private final Keyword cSECONDSKeyword_0_0 = (Keyword)cSECONDEnumLiteralDeclaration_0.eContents().get(0);
+		private final EnumLiteralDeclaration cMSECONDEnumLiteralDeclaration_1 = (EnumLiteralDeclaration)cAlternatives.eContents().get(1);
+		private final Keyword cMSECONDMsKeyword_1_0 = (Keyword)cMSECONDEnumLiteralDeclaration_1.eContents().get(0);
+		private final EnumLiteralDeclaration cUSECONDEnumLiteralDeclaration_2 = (EnumLiteralDeclaration)cAlternatives.eContents().get(2);
+		private final Keyword cUSECONDUsKeyword_2_0 = (Keyword)cUSECONDEnumLiteralDeclaration_2.eContents().get(0);
+		private final EnumLiteralDeclaration cNSECONDEnumLiteralDeclaration_3 = (EnumLiteralDeclaration)cAlternatives.eContents().get(3);
+		private final Keyword cNSECONDNsKeyword_3_0 = (Keyword)cNSECONDEnumLiteralDeclaration_3.eContents().get(0);
+		private final EnumLiteralDeclaration cMINUTEEnumLiteralDeclaration_4 = (EnumLiteralDeclaration)cAlternatives.eContents().get(4);
+		private final Keyword cMINUTEMinKeyword_4_0 = (Keyword)cMINUTEEnumLiteralDeclaration_4.eContents().get(0);
+		private final EnumLiteralDeclaration cHOUREnumLiteralDeclaration_5 = (EnumLiteralDeclaration)cAlternatives.eContents().get(5);
+		private final Keyword cHOURHrsKeyword_5_0 = (Keyword)cHOUREnumLiteralDeclaration_5.eContents().get(0);
+		private final EnumLiteralDeclaration cDAYEnumLiteralDeclaration_6 = (EnumLiteralDeclaration)cAlternatives.eContents().get(6);
+		private final Keyword cDAYDysKeyword_6_0 = (Keyword)cDAYEnumLiteralDeclaration_6.eContents().get(0);
+		
+		//enum TimeUnitKind:
+		//	SECOND='s' |
+		//	MSECOND='ms' |
+		//	USECOND='us' |
+		//	NSECOND='ns' |
+		//	MINUTE='min' |
+		//	HOUR='hrs' |
+		//	DAY='dys';
+		public EnumRule getRule() { return rule; }
+		
+		//SECOND='s' | MSECOND='ms' | USECOND='us' | NSECOND='ns' | MINUTE='min' | HOUR='hrs' | DAY='dys'
+		public Alternatives getAlternatives() { return cAlternatives; }
+		
+		//SECOND='s'
+		public EnumLiteralDeclaration getSECONDEnumLiteralDeclaration_0() { return cSECONDEnumLiteralDeclaration_0; }
+		
+		//'s'
+		public Keyword getSECONDSKeyword_0_0() { return cSECONDSKeyword_0_0; }
+		
+		//MSECOND='ms'
+		public EnumLiteralDeclaration getMSECONDEnumLiteralDeclaration_1() { return cMSECONDEnumLiteralDeclaration_1; }
+		
+		//'ms'
+		public Keyword getMSECONDMsKeyword_1_0() { return cMSECONDMsKeyword_1_0; }
+		
+		//USECOND='us'
+		public EnumLiteralDeclaration getUSECONDEnumLiteralDeclaration_2() { return cUSECONDEnumLiteralDeclaration_2; }
+		
+		//'us'
+		public Keyword getUSECONDUsKeyword_2_0() { return cUSECONDUsKeyword_2_0; }
+		
+		//NSECOND='ns'
+		public EnumLiteralDeclaration getNSECONDEnumLiteralDeclaration_3() { return cNSECONDEnumLiteralDeclaration_3; }
+		
+		//'ns'
+		public Keyword getNSECONDNsKeyword_3_0() { return cNSECONDNsKeyword_3_0; }
+		
+		//MINUTE='min'
+		public EnumLiteralDeclaration getMINUTEEnumLiteralDeclaration_4() { return cMINUTEEnumLiteralDeclaration_4; }
+		
+		//'min'
+		public Keyword getMINUTEMinKeyword_4_0() { return cMINUTEMinKeyword_4_0; }
+		
+		//HOUR='hrs'
+		public EnumLiteralDeclaration getHOUREnumLiteralDeclaration_5() { return cHOUREnumLiteralDeclaration_5; }
+		
+		//'hrs'
+		public Keyword getHOURHrsKeyword_5_0() { return cHOURHrsKeyword_5_0; }
+		
+		//DAY='dys'
+		public EnumLiteralDeclaration getDAYEnumLiteralDeclaration_6() { return cDAYEnumLiteralDeclaration_6; }
+		
+		//'dys'
+		public Keyword getDAYDysKeyword_6_0() { return cDAYDysKeyword_6_0; }
+	}
 	
 	private final SpecificationElements pSpecification;
 	private final ImportElements pImport;
@@ -1079,8 +1178,8 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 	private final PatternElements pPattern;
 	private final ConfigurationElements pConfiguration;
 	private final ConcreteSystemElements pConcreteSystem;
-	private final AttValueElements pAttValue;
 	private final ConcreteGroupElements pConcreteGroup;
+	private final ParamValueElements pParamValue;
 	private final ComponentInstanceElements pComponentInstance;
 	private final InteractionElements pInteraction;
 	private final ComponentNameElements pComponentName;
@@ -1091,6 +1190,8 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 	private final TerminalRule tFQN_PATTERN_ID;
 	private final TerminalRule tFQN_INSTANCE_ID;
 	private final TerminalRule tFQN_COMPONENT;
+	private final TerminalRule tDECIMAL;
+	private final TimeUnitKindElements eTimeUnitKind;
 	
 	private final Grammar grammar;
 	
@@ -1115,8 +1216,8 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		this.pPattern = new PatternElements();
 		this.pConfiguration = new ConfigurationElements();
 		this.pConcreteSystem = new ConcreteSystemElements();
-		this.pAttValue = new AttValueElements();
 		this.pConcreteGroup = new ConcreteGroupElements();
+		this.pParamValue = new ParamValueElements();
 		this.pComponentInstance = new ComponentInstanceElements();
 		this.pInteraction = new InteractionElements();
 		this.pComponentName = new ComponentNameElements();
@@ -1127,6 +1228,8 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		this.tFQN_PATTERN_ID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.FQN_PATTERN_ID");
 		this.tFQN_INSTANCE_ID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.FQN_INSTANCE_ID");
 		this.tFQN_COMPONENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.FQN_COMPONENT");
+		this.tDECIMAL = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.xtext.msl.MSL.DECIMAL");
+		this.eTimeUnitKind = new TimeUnitKindElements();
 	}
 	
 	protected Grammar internalFindGrammar(GrammarProvider grammarProvider) {
@@ -1314,20 +1417,11 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		return getConcreteSystemAccess().getRule();
 	}
 	
-	//AttValue:
-	//	"(" nameAtt=INSTANCE_ID ',' valAtt=INSTANCE_ID ")";
-	public AttValueElements getAttValueAccess() {
-		return pAttValue;
-	}
-	
-	public ParserRule getAttValueRule() {
-		return getAttValueAccess().getRule();
-	}
-	
+	////AttValue: "(" nameAtt=INSTANCE_ID ',' valAtt=INSTANCE_ID ")";
 	//ConcreteGroup:
 	//	name=INSTANCE_ID ':' (abstractGroups+=[GroupBinding|FQN_PATTERN_ID] (','
-	//	abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{' ('managedSyS' manSys=[ConcreteSystem|INSTANCE_ID]
-	//	(attValues+=AttValue (',' attValues+=AttValue)*)?)? ('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (','
+	//	abstractGroups+=[GroupBinding|FQN_PATTERN_ID])*) '{' ('managedSyS' manSys+=[ConcreteSystem|INSTANCE_ID] (','
+	//	manSys+=[ConcreteSystem|INSTANCE_ID])*)? ('managedGrp' manGrp+=[ConcreteGroup|INSTANCE_ID] (','
 	//	manGrp+=[ConcreteGroup|INSTANCE_ID])*)?
 	//	'components' components+=ComponentInstance (',' components+=ComponentInstance)*
 	//	'}';
@@ -1339,8 +1433,19 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 		return getConcreteGroupAccess().getRule();
 	}
 	
+	////To allow real type NFPs annotations at component instance level 
+	//ParamValue:
+	//	"[" nameParam=INSTANCE_ID '=' valParam=DECIMAL unit=TimeUnitKind? "]";
+	public ParamValueElements getParamValueAccess() {
+		return pParamValue;
+	}
+	
+	public ParserRule getParamValueRule() {
+		return getParamValueAccess().getRule();
+	}
+	
 	//ComponentInstance:
-	//	name=INSTANCE_ID ':' type=COMPONENT_TYPE;
+	//	name=INSTANCE_ID ':' type=COMPONENT_TYPE (paramValues+=ParamValue paramValues+=ParamValue*)?;
 	public ComponentInstanceElements getComponentInstanceAccess() {
 		return pComponentInstance;
 	}
@@ -1409,6 +1514,28 @@ public class MSLGrammarAccess extends AbstractGrammarElementFinder {
 	//	PATTERN_ID "." COMPONENT_TYPE;
 	public TerminalRule getFQN_COMPONENTRule() {
 		return tFQN_COMPONENT;
+	}
+	
+	//terminal DECIMAL:
+	//	INT '.' INT;
+	public TerminalRule getDECIMALRule() {
+		return tDECIMAL;
+	}
+	
+	//enum TimeUnitKind:
+	//	SECOND='s' |
+	//	MSECOND='ms' |
+	//	USECOND='us' |
+	//	NSECOND='ns' |
+	//	MINUTE='min' |
+	//	HOUR='hrs' |
+	//	DAY='dys';
+	public TimeUnitKindElements getTimeUnitKindAccess() {
+		return eTimeUnitKind;
+	}
+	
+	public EnumRule getTimeUnitKindRule() {
+		return getTimeUnitKindAccess().getRule();
 	}
 	
 	//terminal ID:

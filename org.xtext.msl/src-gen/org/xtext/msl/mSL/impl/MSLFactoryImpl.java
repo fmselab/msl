@@ -4,6 +4,7 @@
 package org.xtext.msl.mSL.impl;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EDataType;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 
@@ -79,13 +80,47 @@ public class MSLFactoryImpl extends EFactoryImpl implements MSLFactory
       case MSLPackage.PATTERN: return createPattern();
       case MSLPackage.CONFIGURATION: return createConfiguration();
       case MSLPackage.CONCRETE_SYSTEM: return createConcreteSystem();
-      case MSLPackage.ATT_VALUE: return createAttValue();
       case MSLPackage.CONCRETE_GROUP: return createConcreteGroup();
+      case MSLPackage.PARAM_VALUE: return createParamValue();
       case MSLPackage.COMPONENT_INSTANCE: return createComponentInstance();
       case MSLPackage.INTERACTION: return createInteraction();
       case MSLPackage.COMPONENT_NAME: return createComponentName();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Object createFromString(EDataType eDataType, String initialValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      case MSLPackage.TIME_UNIT_KIND:
+        return createTimeUnitKindFromString(eDataType, initialValue);
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+    }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public String convertToString(EDataType eDataType, Object instanceValue)
+  {
+    switch (eDataType.getClassifierID())
+    {
+      case MSLPackage.TIME_UNIT_KIND:
+        return convertTimeUnitKindToString(eDataType, instanceValue);
+      default:
+        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
     }
   }
 
@@ -248,10 +283,10 @@ public class MSLFactoryImpl extends EFactoryImpl implements MSLFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public AttValue createAttValue()
+  public ConcreteGroup createConcreteGroup()
   {
-    AttValueImpl attValue = new AttValueImpl();
-    return attValue;
+    ConcreteGroupImpl concreteGroup = new ConcreteGroupImpl();
+    return concreteGroup;
   }
 
   /**
@@ -259,10 +294,10 @@ public class MSLFactoryImpl extends EFactoryImpl implements MSLFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public ConcreteGroup createConcreteGroup()
+  public ParamValue createParamValue()
   {
-    ConcreteGroupImpl concreteGroup = new ConcreteGroupImpl();
-    return concreteGroup;
+    ParamValueImpl paramValue = new ParamValueImpl();
+    return paramValue;
   }
 
   /**
@@ -296,6 +331,28 @@ public class MSLFactoryImpl extends EFactoryImpl implements MSLFactory
   {
     ComponentNameImpl componentName = new ComponentNameImpl();
     return componentName;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public TimeUnitKind createTimeUnitKindFromString(EDataType eDataType, String initialValue)
+  {
+    TimeUnitKind result = TimeUnitKind.get(initialValue);
+    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+    return result;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public String convertTimeUnitKindToString(EDataType eDataType, Object instanceValue)
+  {
+    return instanceValue == null ? null : instanceValue.toString();
   }
 
   /**
