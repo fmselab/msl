@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class AsmGenerator extends Generator {
 	private Map<String, String> agentPrograms;
 	// private List<AbstractSystem> managedSys;
 	private Map<String, String[]> managingToManagedToFunc;
-	private Map<String, Map<String, String>> managingFuncManagingInstToManagedInst;
+	private Map<String, Map<String, ArrayList<String>>> managingFuncManagingInstToManagedInst;
 	private Set<String[]> signalFunctions;
 	private Map<String, String> functionDomain = new HashMap<>();
 	private Set<String[]> absIntFuncs;
@@ -127,8 +128,9 @@ public class AsmGenerator extends Generator {
 				String systemAgent = agentNames.get(systemName);
 				assert systemAgent != null : systemName + "\n" + agentNames;
 				String funcName = systemName.toLowerCase() + "ManagedBy" + groupName;
-				pw.println("\tcontrolled " + funcName + ": " + groupAgent + " -> " + systemAgent);
+				pw.println("\tcontrolled " + funcName + ": " + groupAgent + " -> Powerset(" + systemAgent + ")");
 				managingToManagedToFunc.put(groupAgent, new String[] { systemAgent, funcName });
+				//System.out.println(groupAgent + "\t" + systemAgent + "\t" + funcName);
 				functionDomain.put(funcName, groupAgent);
 			}
 			LinkedHashSet<String> rules = new LinkedHashSet<>();
@@ -154,7 +156,7 @@ public class AsmGenerator extends Generator {
 			programRules.put(ruleProgram, rules);
 			agentPrograms.put(groupAgent, ruleProgram);
 		}
-
+		//System.out.println("ks " + managingToManagedToFunc.keySet());
 		signalFunctions = new LinkedHashSet<String[]>();
 		absIntFuncs = new LinkedHashSet<String[]>();
 		compIntFuncToDomValues = new HashMap<>();
@@ -287,8 +289,7 @@ public class AsmGenerator extends Generator {
 					}
 					
 					String funcBody = "(" + quantifier + " $a in " + funcName2 + "($b) with " + signal[0] + "($a, $b))";
-					
-					
+
 					if (!derivedFunctions.containsKey(derFuncNameInDef)) {
 						derivedFunctions.put(derFuncNameInDef, funcBody);
 						pw.println("\tderived " + derFuncName + ": " + endGroupAgent + " -> Boolean");
@@ -368,7 +369,7 @@ public class AsmGenerator extends Generator {
 			String abstGroupAgent = agentNames.get(concreteGroupName);
 			assert abstGroupAgent != null : abstractGroup.getName() + "\n" + agentNames;
 			pw.println("\tstatic " + groupName + ": " + abstGroupAgent);
-			ConcreteSystem ms = cg.getManSys();
+			/*ConcreteSystem ms = cg.getManSys();
 			if (ms != null) {
 				AbstractSystem absSyst = ms.getBindings().get(0).getAbsSys();
 				assert absSyst != null;
@@ -379,7 +380,29 @@ public class AsmGenerator extends Generator {
 					managingFuncManagingInstToManagedInst.put(a[1], new LinkedHashMap<>());
 				}
 				managingFuncManagingInstToManagedInst.get(a[1]).put(groupName, ms.getName());
+			}*/
+			List<ConcreteSystem> mss = cg.getManSys();
+			if (mss != null) {
+				String[] a = managingToManagedToFunc.get(abstGroupAgent);
+				if(a != null) {
+					//System.out.println("a " + Arrays.toString(a));
+					if (!managingFuncManagingInstToManagedInst.containsKey(a[1])) {
+						managingFuncManagingInstToManagedInst.put(a[1], new LinkedHashMap<>());
+					}
+					Map<String, ArrayList<String>> map = managingFuncManagingInstToManagedInst.get(a[1]);
+					ArrayList<String> list = new ArrayList<String>();
+					if (!map.containsKey(groupName)) {
+						map.put(groupName, list);
+					}
+					for(ConcreteSystem ms: mss) {
+						//System.out.println("bindings: " + ms.getBindings());
+						AbstractSystem absSyst = ms.getBindings().get(0).getAbsSys();
+						assert absSyst != null;
+						list.add(ms.getName());
+					}
+				}
 			}
+			
 			for (ComponentInstance c : cg.getComponents()) {
 				componentTypes.put(c.getName(), c.getType());
 				// System.out.println(c.getName()+ " "+c.getType());
@@ -550,9 +573,12 @@ public class AsmGenerator extends Generator {
 
 		for (String m : managingFuncManagingInstToManagedInst.keySet()) {
 			pw.println("\tfunction " + m + "($x in " + functionDomain.get(m) + ") =\n\t\tswitch($x)");
-			Map<String, String> concrGrpToConcrSys = managingFuncManagingInstToManagedInst.get(m);
+			Map<String, ArrayList<String>> concrGrpToConcrSys = managingFuncManagingInstToManagedInst.get(m);
 			for (String cg : concrGrpToConcrSys.keySet()) {
-				pw.println("\t\t\tcase " + cg + ": " + concrGrpToConcrSys.get(cg));
+				ArrayList<String> list = concrGrpToConcrSys.get(cg);
+				String listStr = list.toString();
+				listStr = listStr.replaceAll("\\[", "{").replaceAll("\\]", "}");
+				pw.println("\t\t\tcase " + cg + ": " + listStr);
 			}
 			pw.println("\t\tendswitch");
 		}
@@ -568,8 +594,8 @@ public class AsmGenerator extends Generator {
 	}
 
 	public static void main(String[] args) {
-		//AsmGenerator g = new AsmGenerator("examples/AggregateMAPE_ComfortableHeating.msl");
-		AsmGenerator g = new AsmGenerator(args[0]);
+		AsmGenerator g = new AsmGenerator("examples/AggregateMAPE_ComfortableHeating.msl");
+		//AsmGenerator g = new AsmGenerator(args[0]);
 		g.generate();
 	}
 }
