@@ -29,7 +29,8 @@ GroupDef:
 
 AbstractGroup:
 	'group' name=PATTERN_ID '{'
-	('managedSyS' manSys=[AbstractSystem|PATTERN_ID])?
+	//('managedSyS' manSys=[AbstractSystem|PATTERN_ID])?
+	('managedSyS' manSys+=[AbstractSystem|PATTERN_ID] (',' manSys+=[AbstractSystem|PATTERN_ID])*)?
 	('managedGrp' manGrp+=GroupDef (',' manGrp+=GroupDef)*)?
 	'components' components+=AbstractComponent (',' components+=AbstractComponent)*
 	'}';

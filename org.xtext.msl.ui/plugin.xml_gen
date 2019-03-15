@@ -249,15 +249,6 @@
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
-	<extension point="org.eclipse.ui.preferencePages">
-		<page
-			category="org.xtext.msl.MSL"
-			class="org.xtext.msl.ui.MSLExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
-			id="org.xtext.msl.MSL.validator.preferencePage"
-			name="Errors/Warnings">
-			<keywordReference id="org.xtext.msl.ui.keyword_MSL"/>
-		</page>
-	</extension>
 	<extension point="org.eclipse.xtext.builder.participant">
 		<participant
 			class="org.xtext.msl.ui.MSLExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"

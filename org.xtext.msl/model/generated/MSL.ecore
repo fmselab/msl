@@ -35,7 +35,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AbstractGroup">
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="manSys" eType="#//AbstractSystem"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="manSys" unique="false"
+        upperBound="-1" eType="#//AbstractSystem"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="manGrp" upperBound="-1"
         eType="#//GroupDef" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="components" upperBound="-1"
