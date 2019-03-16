@@ -39,7 +39,7 @@ abstract pattern HierarchicalControlMAPE {
 //Concrete pattern for the combined adaptation concern AQ_HC
 concrete pattern Hierarchical_AQ_HC_MAPE concretizationOf HierarchicalControlMAPE {
 	system SysH: HierarchicalControlMAPE.SysOne //Heating sub-system
-	system SysA: HierarchicalControlMAPE.SysOne //Air sub-system
+	system SysA: HierarchicalControlMAPE.SysTwo //Air sub-system //PA Change by Paolo (before it was SysOne)
 	group MainHC: HierarchicalControlMAPE.Intermediate
     group IntHC: HierarchicalControlMAPE.InterfaceOne
 	group MainAQ: HierarchicalControlMAPE.InterfaceTwo

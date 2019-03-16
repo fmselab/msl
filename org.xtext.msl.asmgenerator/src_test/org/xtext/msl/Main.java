@@ -1,5 +1,7 @@
 package org.xtext.msl;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.xtext.msl.mSL.AbstractComponent;
 import org.xtext.msl.mSL.AbstractComponentName;
@@ -30,9 +32,12 @@ public class Main {
 		EList<AbstractInteraction> inter = absPattern.getInteractions();
 		for (AbstractGroup a : ag) {
 			System.out.println("group " + a.getName());
-			AbstractSystem sys = a.getManSys();
-			if (sys != null) {
-				System.out.println("\tmanagedSyS " + sys.getName());
+			
+			List<AbstractSystem> sysS = a.getManSys();
+			if (sysS != null) {
+				for(AbstractSystem sys: sysS) {
+					System.out.println("\tmanagedSyS " + sys.getName());
+				}
 			}
 			EList<AbstractComponent> ac = a.getComponents();
 			System.out.print("\tcomponents ");
