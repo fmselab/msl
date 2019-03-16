@@ -2,7 +2,6 @@ package org.xtext.msl.generator.asmgenerator;
 
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -11,7 +10,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.eclipse.emf.common.util.EList;
 import org.xtext.msl.Loader;
 import org.xtext.msl.generator.Generator;
 import org.xtext.msl.generator.VariationPointSemantics;
@@ -135,7 +133,7 @@ public class AsmGenerator extends Generator {
 					String funcName = systemName.toLowerCase() + "ManagedBy" + groupName;
 					
 					boolean useSet = false;
-					System.out.println("sn: " + systemName);
+					//System.out.println("sn: " + systemName);
 					int counter = 0;
 					for(ConcreteSystem concrSysInConf: configuration.getConcreteSystems()) {
 						//System.out.println(concrSysInConf.getName());
@@ -148,14 +146,14 @@ public class AsmGenerator extends Generator {
 					if(counter > 1) {
 						g:for(GroupBinding g: pattern.getGroups()) {
 							String gName = g.getName();
-							System.out.println("gName: " + gName);
+							//System.out.println("gName: " + gName);
 							for(ConcreteGroup concrGroupInConf: configuration.getConcreteGroups()) {
 								//System.out.println("concrGroupInConf: " + concrGroupInConf.getAbstractGroups().get(0).getName());
 								if(concrGroupInConf.getAbstractGroups().get(0).getName().equals(gName)) {
 									counter = 0;
 									for(ConcreteSystem ms: concrGroupInConf.getManSys()) {
 										if(ms.getBindings().get(0).getName().equals(systemName)) {
-											System.out.println(gName + "\t" + ms.getName()+ "\t" + ms.getBindings().get(0).getName());
+											//System.out.println(gName + "\t" + ms.getName()+ "\t" + ms.getBindings().get(0).getName());
 											counter++;
 										}
 									}
@@ -648,7 +646,7 @@ public class AsmGenerator extends Generator {
 	}
 
 	public static void main(String[] args) {
-		AsmGenerator g = new AsmGenerator("examples/Hierarchical_AQ_HC_MAPE_new.msl");
+		AsmGenerator g = new AsmGenerator("examples/Example.msl");
 		// AsmGenerator g = new AsmGenerator(args[0]);
 		g.generate();
 	}
