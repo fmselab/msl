@@ -53,7 +53,7 @@ configuration MySmartHomeAQ_HC instanceOf Hierarchical_AQ_HC_MAPE {
     aqs_ff: Hierarchical_AQ_HC_MAPE.SysA //managed windows system for First Floor
     
 	main_aq: Hierarchical_AQ_HC_MAPE.MainAQ {
-		managedSyS hs_ff, aqs_ff
+		managedSyS aqs_gf, aqs_ff
 		components m_aq:M, a_aq:A, p_aq:P, e_aq:E
 	}
     
