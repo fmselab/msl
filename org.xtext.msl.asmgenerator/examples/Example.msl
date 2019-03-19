@@ -1,0 +1,59 @@
+abstract pattern AggregateMAPE {
+	system SysA
+	system SysB
+	system SysC
+
+	group Main {
+		components M, A, P, E
+	} 
+	
+	group Interface {
+		managedSyS SysA, SysB, SysC
+		components M, E
+	}
+
+	interaction Interface.M -> Main.M [*-ALL,1]
+	interaction Main.E -> Interface.E [1,*-ALL]
+	interaction Main.M -> Main.A [1,1]
+	interaction Main.A -> Main.P [1,1]
+	interaction Main.P -> Main.E [1,1]
+}
+
+concrete pattern ConcrPattern concretizationOf AggregateMAPE {
+	system ConcrPattManagedSysA : AggregateMAPE.SysA
+	system ConcrPattManagedSysB : AggregateMAPE.SysB
+	system ConcrPattManagedSysC : AggregateMAPE.SysC
+    group MainCH: AggregateMAPE.Main
+    group IntTemp: AggregateMAPE.Interface
+}
+
+configuration Example instanceOf ConcrPattern {
+    hsA0: ConcrPattern.ConcrPattManagedSysA
+    hsA1: ConcrPattern.ConcrPattManagedSysA
+    hsB0: ConcrPattern.ConcrPattManagedSysB
+    hsB1: ConcrPattern.ConcrPattManagedSysB
+    hsC0: ConcrPattern.ConcrPattManagedSysC
+    hsC1: ConcrPattern.ConcrPattManagedSysC
+
+	ch: ConcrPattern.MainCH {
+		components m_ch:M, a_ch:A, p_ch:P, e_ch:E
+	}
+
+	h0: ConcrPattern.IntTemp {
+		managedSyS hsA0, hsA1, hsB0, hsC0
+		components m_h0:M, e_h0:E
+	}
+
+    h1: ConcrPattern.IntTemp {
+		managedSyS hsA1, hsB0, hsB1, hsC1
+		components m_h1:M, e_h1:E
+	}
+
+	ch.m_ch -> ch.a_ch
+	ch.a_ch -> ch.p_ch
+	ch.p_ch -> ch.e_ch
+	h0.m_h0 -> ch.m_ch
+	h1.m_h1 -> ch.m_ch
+	ch.e_ch -> h0.e_h0
+	ch.e_ch -> h1.e_h1
+}

@@ -66,9 +66,11 @@ abstract public class Generator {
 
 		nameBinding = new HashMap<>();
 		for (SystemBinding ms : pattern.getManagedSystems()) {
-			assert !nameBinding.containsKey(ms.getAbsSys().getName());
-			nameBinding.put(ms.getAbsSys().getName(), ms.getName());
-			// System.err.println(ms.getAbsSys().getName() + "-> " + ms.getName());
+			//assert !nameBinding.containsKey(ms.getAbsSys().getName()): "nameBinding: " + nameBinding + "\nms.getAbsSys().getName(): " + ms.getAbsSys().getName();
+			if(!nameBinding.containsKey(ms.getAbsSys().getName())) {
+				nameBinding.put(ms.getAbsSys().getName(), ms.getName());
+				//System.err.println(ms.getAbsSys().getName() + "-> " + ms.getName());
+			}
 		}
 		for (GroupBinding g : pattern.getGroups()) {
 			// System.err.println(g.getAbsGroup().getName() + "-> " + g.getName());
