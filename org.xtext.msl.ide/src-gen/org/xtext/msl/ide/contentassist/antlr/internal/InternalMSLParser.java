@@ -1,13 +1,6 @@
 package org.xtext.msl.ide.contentassist.antlr.internal;
 
-import java.io.InputStream;
 import org.eclipse.xtext.*;
-import org.eclipse.xtext.parser.*;
-import org.eclipse.xtext.parser.impl.*;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream;
-import org.eclipse.xtext.parser.antlr.XtextTokenStream.HiddenTokens;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.AbstractInternalContentAssistParser;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.internal.DFA;
 import org.xtext.msl.services.MSLGrammarAccess;
@@ -15,9 +8,6 @@ import org.xtext.msl.services.MSLGrammarAccess;
 
 
 import org.antlr.runtime.*;
-import java.util.Stack;
-import java.util.List;
-import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalMSLParser extends AbstractInternalContentAssistParser {
@@ -82,8 +72,10 @@ public class InternalMSLParser extends AbstractInternalContentAssistParser {
         }
         
 
-    public String[] getTokenNames() { return InternalMSLParser.tokenNames; }
-    public String getGrammarFileName() { return "InternalMSL.g"; }
+    @Override
+	public String[] getTokenNames() { return InternalMSLParser.tokenNames; }
+    @Override
+	public String getGrammarFileName() { return "InternalMSL.g"; }
 
 
     	private MSLGrammarAccess grammarAccess;
@@ -15188,7 +15180,8 @@ public class InternalMSLParser extends AbstractInternalContentAssistParser {
             this.special = dfa_5;
             this.transition = dfa_6;
         }
-        public String getDescription() {
+        @Override
+		public String getDescription() {
             return "()* loopback of 2611:2: ( rule__Configuration__ConcreteSystemsAssignment_5 )*";
         }
     }

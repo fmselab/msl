@@ -84,6 +84,7 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
+	@Override
 	public Class<? extends ISemanticSequencer> bindISemanticSequencer() {
 		return MSLSemanticSequencer.class;
 	}
@@ -94,6 +95,7 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.serializer.SerializerFragment2
+	@Override
 	public Class<? extends ISerializer> bindISerializer() {
 		return Serializer.class;
 	}
@@ -104,6 +106,7 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+	@Override
 	public Class<? extends ITokenToStringConverter> bindITokenToStringConverter() {
 		return AntlrTokenToStringConverter.class;
 	}
@@ -119,6 +122,7 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
+	@Override
 	public Class<? extends ITokenDefProvider> bindITokenDefProvider() {
 		return AntlrTokenDefProvider.class;
 	}
@@ -142,6 +146,7 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
+	@Override
 	public Class<? extends IScopeProvider> bindIScopeProvider() {
 		return MSLScopeProvider.class;
 	}
@@ -152,6 +157,7 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
+	@Override
 	public Class<? extends IGlobalScopeProvider> bindIGlobalScopeProvider() {
 		return DefaultGlobalScopeProvider.class;
 	}
@@ -162,11 +168,13 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+	@Override
 	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return DefaultDeclarativeQualifiedNameProvider.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+	@Override
 	public Class<? extends IContainer.Manager> bindIContainer$Manager() {
 		return StateBasedContainerManager.class;
 	}
@@ -177,6 +185,7 @@ public abstract class AbstractMSLRuntimeModule extends DefaultRuntimeModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+	@Override
 	public void configureIResourceDescriptions(Binder binder) {
 		binder.bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
 	}
