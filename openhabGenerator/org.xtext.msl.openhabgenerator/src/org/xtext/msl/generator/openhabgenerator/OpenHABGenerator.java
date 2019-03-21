@@ -452,7 +452,7 @@ public class OpenHABGenerator extends Generator {
 			// otherwise there should be an explicit interaction pointing to another
 			// MAPEloop
 //			if (cG.getManSys() != null) {
-			if (cG.getManSys().size() != 0) {
+			/* if (cG.getManSys().size() != 0) {
 				pw.println("rule \"" + "Exec" + "_" + "e_" + cG.getName() + "\"");
 				pw.println("when");
 				pw.println("\tItem start_" + "e_" + cG.getName() + " received command ON"); //TODO: anzicchè prendere il name di cG, cercare all'interno del cG il nome della componente M
@@ -473,9 +473,45 @@ public class OpenHABGenerator extends Generator {
 					pw.println("\t}");
 				pw.println("end\n");
 			}
-		}
+		}*/
+			if (cG.getManSys().size() != 0) {
+                String m_name = new String();
+                String e_name = new String();
+                for(ComponentInstance cI : cG.getComponents()) {
+                    if (cI.getType().equals("M"))
+                        m_name = cI.getName();
+                    else if (cI.getType().equals("E"))
+                        e_name = cI.getName();           
+                }
+                if(!m_name.isEmpty()  && !e_name.isEmpty()) {
+                    pw.println("rule \"" + "Exec" + "_" + "e_" + e_name + "\"");
+                    pw.println("when");
+                    //pw.println("\tItem start_" + "e_" + e_name + " received command ON");
+                    pw.println("\tItem start_" + e_name + " received command ON");
+                    pw.println("then");
+                    if (writeLog) {
+                        pw.println("\tcounter_" + cG.getName() + " = counter_" + cG.getName() + " + 1");
+                        pw.println("\tlogInfo(\"" + configuration.getName() + ".rules\", \"Exec active for group ("
+                                + cG.getName() + "), counter_" + cG.getName() + " = \" + counter_" + cG.getName() + ")");
+                        pw.println("\tcounter_" + cG.getName() + " = 0");
+                    }
+                    //pw.println("\tsendCommand(start_" + "e_" + e_name + ", OFF)");
+                    pw.println("\tsendCommand(start_" + e_name + ", OFF)");
+                    if (writeLog && exec_number > 0) {
+                        pw.println("\tif(exec_counter > 0) {");
+                        pw.print("\t");
+                    }
+                    //pw.println("\tsendCommand(start_" + "m_" + m_name + ", ON)");
+                    pw.println("\tsendCommand(start_" + m_name + ", ON)");
+                    if (writeLog && exec_number > 0)
+                        pw.println("\t}");
+                    pw.println("end\n");
+                }
+            }
+		
 		if (configuration.getConcreteInteractions().size() != 0) {
 			PrintIntergroup();
+		}
 		}
 		pw.flush();
 	}
