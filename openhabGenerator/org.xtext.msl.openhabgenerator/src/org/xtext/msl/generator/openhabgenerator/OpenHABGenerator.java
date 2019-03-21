@@ -484,7 +484,8 @@ public class OpenHABGenerator extends Generator {
                         e_name = cI.getName();           
                 }
                 if(!m_name.isEmpty()  && !e_name.isEmpty()) {
-                    pw.println("rule \"" + "Exec" + "_" + "e_" + e_name + "\"");
+                    //pw.println("rule \"" + "Exec" + "_" + "e_" + e_name + "\"");
+                	pw.println("rule \"" + "Exec" + "_" + e_name + "\"");
                     pw.println("when");
                     //pw.println("\tItem start_" + "e_" + e_name + " received command ON");
                     pw.println("\tItem start_" + e_name + " received command ON");
