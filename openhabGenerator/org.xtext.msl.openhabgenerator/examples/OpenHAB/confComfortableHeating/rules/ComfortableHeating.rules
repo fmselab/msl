@@ -4,7 +4,7 @@ rule "StartLoop_ComfortableHeating"
 when
 	System started
 then
-	start_m_ch.sendCommand(OFF)
+	start_m_ch.sendCommand(ON)
 	start_a_ch.sendCommand(OFF)
 	start_p_ch.sendCommand(OFF)
 	start_e_ch.sendCommand(OFF)
@@ -49,6 +49,14 @@ when
 then
 	sendCommand(start_p_ch, OFF)
 	sendCommand(start_e_ch, ON)
+end
+
+rule "Exec_e_ch"
+when
+	Item start_e_ch received command ON
+then
+	sendCommand(start_e_ch, OFF)
+	sendCommand(start_m_ch, ON)
 end
 
 rule "Exec_e_h0"

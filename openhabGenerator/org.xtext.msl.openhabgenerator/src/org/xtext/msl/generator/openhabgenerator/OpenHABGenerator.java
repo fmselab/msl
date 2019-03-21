@@ -348,9 +348,9 @@ public class OpenHABGenerator extends Generator {
 					pw.println("\tstart_" + cI.getName() + ".sendCommand(OFF)");
 			}
 		}
-		for (String aR : adaptReqs) {
-			pw.println("\t" + aR + " = true");
-		}
+		//for (String aR : adaptReqs) {
+			//pw.println("\t" + aR + " = true"); //Necessaria?
+		//}
 		pw.println("end\n");
 		// generates one rule for each of the implicit intra-group concrete interactions
 		// by resolving them from the abstract interactions specified in the abstract
@@ -451,10 +451,11 @@ public class OpenHABGenerator extends Generator {
 			// generates the implicit loopback rule if the group has a managed system,
 			// otherwise there should be an explicit interaction pointing to another
 			// MAPEloop
-			if (cG.getManSys() != null) {
+//			if (cG.getManSys() != null) {
+			if (cG.getManSys().size() != 0) {
 				pw.println("rule \"" + "Exec" + "_" + "e_" + cG.getName() + "\"");
 				pw.println("when");
-				pw.println("\tItem start_" + "e_" + cG.getName() + " received command ON");
+				pw.println("\tItem start_" + "e_" + cG.getName() + " received command ON"); //TODO: anzicchè prendere il name di cG, cercare all'interno del cG il nome della componente M
 				pw.println("then");
 				if (writeLog) {
 					pw.println("\tcounter_" + cG.getName() + " = counter_" + cG.getName() + " + 1");
