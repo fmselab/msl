@@ -186,11 +186,13 @@ public abstract class AbstractMSLUiModule extends DefaultUiModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.labeling.LabelProviderFragment2
+	@Override
 	public Class<? extends ILabelProvider> bindILabelProvider() {
 		return MSLLabelProvider.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.labeling.LabelProviderFragment2
+	@Override
 	public void configureResourceUIServiceLabelProvider(Binder binder) {
 		binder.bind(ILabelProvider.class).annotatedWith(ResourceServiceDescriptionLabelProvider.class).to(MSLDescriptionLabelProvider.class);
 	}
@@ -206,6 +208,7 @@ public abstract class AbstractMSLUiModule extends DefaultUiModule {
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.quickfix.QuickfixProviderFragment2
+	@Override
 	public Class<? extends IssueResolutionProvider> bindIssueResolutionProvider() {
 		return MSLQuickfixProvider.class;
 	}
