@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: org.xtext.msl.ide
 Bundle-Vendor: foselab.unibg.it
-Bundle-Version: 1.0.7
+Bundle-Version: 1.0.8
 Bundle-SymbolicName: org.xtext.msl.ide; singleton:=true
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.xtext.msl,
