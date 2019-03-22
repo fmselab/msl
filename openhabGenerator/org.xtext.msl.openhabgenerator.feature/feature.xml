@@ -2,7 +2,7 @@
 <feature
       id="org.xtext.msl.OpenHABgenerator.feature"
       label="OpenHAB generator"
-      version="1.0.11"
+      version="1.0.12"
       provider-name="foselab.unibg.it">
 
    <license url="">

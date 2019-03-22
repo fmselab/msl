@@ -38,4 +38,19 @@
          </toolbar>
       </menuContribution>
    </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.xtext.msl.MSL"
+            class="org.xtext.msl.generator.openhabgenerator.ui.OpenHABGeneratorPreferencePage"
+            id="org.xtext.msl.generator.openhabgenerator.Preferences"
+            name="OpenHAB generator">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.xtext.msl.generator.openhabgenerator.ui.PreferenceInitializer">
+      </initializer>
+   </extension>
 </plugin>

@@ -2,14 +2,15 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: OpenHAB generator
 Bundle-SymbolicName: org.xtext.msl.openhabgenerator.ui;singleton:=true
-Bundle-Version: 1.0.11
+Bundle-Version: 1.0.12
 Bundle-Activator: org.xtext.msl.generator.openhabgenerator.ui.OpenHABGeneratorActivator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.ui.ide,
  org.eclipse.ui.console,
  org.xtext.msl.openhabgenerator,
- org.xtext.msl
+ org.xtext.msl,
+ org.eclipse.jface
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Bundle-ActivationPolicy: lazy
 Bundle-Vendor: foselab.unibg.it

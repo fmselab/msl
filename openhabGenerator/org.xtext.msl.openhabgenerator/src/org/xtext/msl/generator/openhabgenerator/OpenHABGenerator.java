@@ -18,6 +18,14 @@ public class OpenHABGenerator extends Generator {
 	private boolean writeLog;
 
 	private int exec_number;
+	public int getExec_number() {
+		return exec_number;
+	}
+
+	public void setExec_number(int exec_number) {
+		this.exec_number = exec_number;
+	}
+
 	private static final int exec_default = 10;
 	private static final boolean writeLog_default = false;
 
@@ -455,7 +463,7 @@ public class OpenHABGenerator extends Generator {
 			/* if (cG.getManSys().size() != 0) {
 				pw.println("rule \"" + "Exec" + "_" + "e_" + cG.getName() + "\"");
 				pw.println("when");
-				pw.println("\tItem start_" + "e_" + cG.getName() + " received command ON"); //TODO: anzicchè prendere il name di cG, cercare all'interno del cG il nome della componente M
+				pw.println("\tItem start_" + "e_" + cG.getName() + " received command ON"); //TODO: anzicchï¿½ prendere il name di cG, cercare all'interno del cG il nome della componente M
 				pw.println("then");
 				if (writeLog) {
 					pw.println("\tcounter_" + cG.getName() + " = counter_" + cG.getName() + " + 1");
@@ -674,6 +682,22 @@ public class OpenHABGenerator extends Generator {
 				}
 			}
 		}
+	}
+
+	public boolean isWriteLog() {
+		return writeLog;
+	}
+
+	public void setWriteLog(boolean writeLog) {
+		this.writeLog = writeLog;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
 	}
 
 	public static void main(String[] args) {

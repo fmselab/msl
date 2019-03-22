@@ -8,6 +8,7 @@ import java.io.StringWriter;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
@@ -22,6 +23,8 @@ import org.eclipse.ui.console.IConsoleView;
 import org.eclipse.ui.console.MessageConsole;
 import org.eclipse.ui.handlers.HandlerUtil;
 import org.xtext.msl.generator.openhabgenerator.OpenHABGenerator;
+import org.xtext.msl.generator.openhabgenerator.ui.OpenHABGeneratorActivator;
+import org.xtext.msl.generator.openhabgenerator.ui.OpenHABGeneratorPreferencePage;
 
 /**
  * @see org.eclipse.core.commands.IHandler
@@ -68,6 +71,11 @@ public class OpenHABGeneratorHandler extends AbstractHandler {
 			StringWriter sw = new StringWriter();
 			PrintWriter pw = new PrintWriter(sw);
 			OpenHABGenerator openhabGenerator = new OpenHABGenerator(path, pw);
+			IPreferenceStore store = OpenHABGeneratorActivator.getDefault().getPreferenceStore();
+			boolean pLogMode = store.getBoolean(OpenHABGeneratorPreferencePage.P_LOG_MODE);
+			int numOfSimulations = store.getInt(OpenHABGeneratorPreferencePage.P_NUMBER_SIMULATIONS);
+			openhabGenerator.setExec_number(numOfSimulations);
+			openhabGenerator.setWriteLog(pLogMode);
 			openhabGenerator.generate();
 			String openhabText = sw.toString();
 			printOut.println(openhabText);
