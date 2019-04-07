@@ -33,7 +33,7 @@ abstract pattern HierarchicalControlMAPE {
 	
 	
 	interaction High.A -> High.E [1,1]
-
+}
 //Concrete pattern for the combined adaptation concern AQ_HC for air quality (AQ) and heating comfort (HC)
 concrete pattern Hierarchical_AQ_HC_MAPE concretizationOf HierarchicalControlMAPE {
 	system Sys: HierarchicalControlMAPE.Sys //Heating and air sub-systems

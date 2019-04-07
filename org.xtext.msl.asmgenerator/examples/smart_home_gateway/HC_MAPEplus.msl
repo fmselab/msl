@@ -1,12 +1,13 @@
-abstract pattern AggregateMAPE {
-	system Sys
+abstract pattern AggregateMAPEplus {
+	system SysOne
+	system SysTwo
 
 	group Main {
 		components M, A, P, E
 	} 
 	
 	group Interface {
-		managedSyS Sys
+		managedSyS SysOne,SysTwo
 		components M, E
 	}
 
@@ -18,10 +19,11 @@ abstract pattern AggregateMAPE {
 }
 
 //Aggregate MAPE loop for the concern Heating Comfort
-concrete pattern HC_MAPE concretizationOf AggregateMAPE {
-	system Heating: AggregateMAPE.Sys
-    group MainHC: AggregateMAPE.Main
-    group IntHC: AggregateMAPE.Interface
+concrete pattern HC_MAPE concretizationOf AggregateMAPEplus {
+    system Heating: AggregateMAPEplus.SysOne //Heating sub-system
+    system Air: AggregateMAPEplus.SysTwo//Air (or windows) sub-system
+    group MainHC: AggregateMAPEplus.Main
+    group IntHC: AggregateMAPEplus.Interface
 }
 
 //MySmartHome heating system; two managed heating zones: First Floor (FF), Ground floor (GF) 
@@ -33,10 +35,12 @@ concrete pattern HC_MAPE concretizationOf AggregateMAPE {
 // group Switch HeatingFF, Number Temperature_Setpoint_FF, Number Temperature_Midpoint_FF, Number Heating_Setting_FF, group Number TemperatureFF, group Contact WindowsFF
 
 
-configuration MySmartHomeHC instanceOf HC_MAPE {
+configuration MySmartHomeHCplus instanceOf HC_MAPE {
     hs_ff: HC_MAPE.Heating //managed heating system for First Floor
     hs_gf: HC_MAPE.Heating //managed heating system for Ground Floor
-
+    ws_gf: HC_MAPE.Air //managed windows system for Ground Floor
+    ws_ff: HC_MAPE.Air //managed windows system for First Floor
+    
 	//main group for the concern Heating Comfort 
 	main_hc: HC_MAPE.MainHC {
 		components m_hc:M, a_hc:A, p_hc:P, e_hc:E
@@ -44,13 +48,13 @@ configuration MySmartHomeHC instanceOf HC_MAPE {
 
     //interface group for the ground floor 
 	int_hc_gf: HC_MAPE.IntHC {
-		managedSyS hs_gf //(heatingGF,state),(windowsGF,state),...
+		managedSyS hs_gf, ws_gf
 		components m_hc:M, e_hc:E
 	}
 
     //interface group for the first floor
     int_hc_ff: HC_MAPE.IntHC {
-		managedSyS hs_ff //(heatingFF,state),(windowsFF,state),...  
+		managedSyS hs_ff,ws_ff  
 		components m_hc:M, e_hc:E
 	}
 
