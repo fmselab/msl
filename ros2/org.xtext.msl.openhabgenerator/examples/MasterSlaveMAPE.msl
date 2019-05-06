@@ -1,0 +1,53 @@
+//This pattern organizes the adaptation logic by creating a hierarchical
+//relationship between one (centralized) master component that is responsible
+//for the analysis and planning of adaptations (A and P activities) and multiple
+//slave components that are responsible for monitoring and execution (M and E
+//activities)
+
+abstract pattern MasterSlaveMAPE {
+	system Sys
+
+	group Master {
+		components A, P
+	}
+
+	group Slave {
+		managedSyS Sys
+		components M, E
+	}
+
+	interaction Slave.M -> Master.A [*-ALL,1]
+	interaction Master.P -> Slave.E [1,*-ALL]
+	interaction Master.A -> Master.P [1,1]
+}
+
+concrete pattern ComfortableHeatingMAPE concretizationOf MasterSlaveMAPE {
+	system Heater : MasterSlaveMAPE.Sys
+    group MasterCH : MasterSlaveMAPE.Master
+    group SlaveCH : MasterSlaveMAPE.Slave
+    }
+
+configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
+    hs0: ComfortableHeatingMAPE.Heater
+    hs1: ComfortableHeatingMAPE.Heater
+    
+	chm: ComfortableHeatingMAPE.MasterCH {
+		components a_chm:A, p_chm:P
+	}
+	
+	hs0: ComfortableHeatingMAPE.SlaveCH {
+		managedSyS hs0
+		components m_hs0:M, e_hs0:E
+	}
+	
+	hs1: ComfortableHeatingMAPE.SlaveCH {
+	managedSyS hs1
+		components m_hs1:M, e_hs1:E
+	}
+	
+	hs0.m_hs0 -> chm.a_chm
+	hs1.m_hs1 -> chm.a_chm
+	chm.p_chm -> hs0.e_hs0
+	chm.p_chm -> hs1.e_hs1
+	
+}

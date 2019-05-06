@@ -1,0 +1,52 @@
+//Execution semantics: one loop instance execution at a time and cycling. 
+//Different loops instances run concurrently.
+//Example of OpenHAB rules from a simple MAPE loop ComfortableHeating
+
+var counter = 0
+
+rule "StartLoop_ComfortableHeating"
+when
+    System started
+then
+       start_m_ch.postUpdate(ON)
+       println("Loop ComfortableHeating started.")	
+end
+
+rule "Monitor_m_ch"
+when
+    //start_m_ch changed from OFF to ON
+    Item start_m_ch received command ON 
+then
+       //<monitor_logic_block>
+       start_m_ch.postUpdate(OFF) //signal clean-up
+       start_a_ch.postUpdate(ON) //trigger A
+       counter = counter + 1
+end
+
+rule "Analyse_a_ch"
+when
+    start_a_ch changed from OFF to ON
+then
+       //<analyse_logic_block>
+       start_a_ch.postUpdate(OFF) //signal clean-up
+       start_p_ch.postUpdate(ON) //trigger P
+end
+
+rule "Plan_p_ch"
+when
+    start_p_ch changed from OFF to ON
+then
+       //<plan_logic_block>
+       start_p_ch.postUpdate(OFF) //signal clean-up
+       start_e_ch.postUpdate(ON) //trigger E
+end
+
+
+rule "Exec_e_ch"
+when
+    start_e_ch changed from OFF to ON
+then
+       //<exec_logic_block>
+       start_e_ch.postUpdate(OFF) //signal clean-up
+       start_m_ch.postUpdate(ON) //trigger M again
+end

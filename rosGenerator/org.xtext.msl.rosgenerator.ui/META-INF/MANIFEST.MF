@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ROS generator
+Bundle-SymbolicName: org.xtext.msl.rosgenerator.ui;singleton:=true
+Bundle-Version: 1.0.1
+Bundle-Activator: org.xtext.msl.generator.rosgenerator.ui.ROSGeneratorActivator
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui.ide,
+ org.eclipse.ui.console,
+ org.xtext.msl.rosgenerator,
+ org.xtext.msl,
+ org.eclipse.jface
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-ActivationPolicy: lazy
+Bundle-Vendor: foselab.unibg.it
+Bundle-ClassPath: .
+Import-Package: org.eclipse.debug.ui.console

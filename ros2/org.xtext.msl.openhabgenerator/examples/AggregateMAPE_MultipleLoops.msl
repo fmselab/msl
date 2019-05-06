@@ -1,0 +1,64 @@
+abstract pattern AggregateMAPE {
+	system Sys
+
+	group Main {
+		components M, A, P, E
+	} 
+	
+	group Interface {
+		managedSyS Sys
+		components M, E
+	}
+
+	interaction Interface.M -> Main.M [*-ALL,1]
+	interaction Main.E -> Interface.E [1,*-ALL]
+	interaction Main.M -> Main.A [1,1]
+	interaction Main.A -> Main.P [1,1]
+	interaction Main.P -> Main.E [1,1]
+}
+
+concrete pattern ComfortableHeatingMAPE concretizationOf AggregateMAPE {
+	system Heater : AggregateMAPE.Sys
+    group MainCH: AggregateMAPE.Main
+    group IntTemp: AggregateMAPE.Interface
+}
+
+configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
+    hs00: ComfortableHeatingMAPE.Heater
+    hs01: ComfortableHeatingMAPE.Heater
+    hs10: ComfortableHeatingMAPE.Heater
+    hs11: ComfortableHeatingMAPE.Heater
+
+	ch0: ComfortableHeatingMAPE.MainCH {
+		components m_ch0:M, a_ch0:A, p_ch0:P, e_ch0:E
+	}
+
+	h00: ComfortableHeatingMAPE.IntTemp {
+		managedSyS hs00
+		components m_h00:M, e_h00:E
+	}
+
+    h01: ComfortableHeatingMAPE.IntTemp {
+		managedSyS hs01
+		components m_h01:M, e_h01:E
+	}
+
+	ch1: ComfortableHeatingMAPE.MainCH {
+		components m_ch1:M, a_ch1:A, p_ch1:P, e_ch1:E
+	}
+
+	h10: ComfortableHeatingMAPE.IntTemp {
+		managedSyS hs10
+		components m_h10:M, e_h10:E
+	}
+
+    h11: ComfortableHeatingMAPE.IntTemp {
+		managedSyS hs11
+		components m_h11:M, e_h11:E
+	}
+
+	h10.m_h10 -> ch.m_ch1
+	h11.m_h11 -> ch.m_ch1
+	ch1.e_ch1 -> h0.e_h10
+	ch1.e_ch1 -> h1.e_h11
+}

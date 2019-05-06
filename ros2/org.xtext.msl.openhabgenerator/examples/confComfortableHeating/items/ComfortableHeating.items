@@ -1,0 +1,21 @@
+Group ch "ch"
+
+Switch start_m_ch "m_ch" (ch)
+Switch start_a_ch "a_ch" (ch)
+Switch start_p_ch "p_ch" (ch)
+Switch start_e_ch "e_ch" (ch)
+
+Group h0 "h0"
+
+Switch start_m_h0 "m_h0" (h0)
+Switch start_e_h0 "e_h0" (h0)
+
+Group h1 "h1"
+
+Switch start_m_h1 "m_h1" (h1)
+Switch start_e_h1 "e_h1" (h1)
+
+Group:Switch:AND(ON, OFF) h0h1_to_ch "h0h1_to_ch"
+
+Switch h0_to_ch "h0_to_ch" (h0h1_to_ch)
+Switch h1_to_ch "h1_to_ch" (h0h1_to_ch)

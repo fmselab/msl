@@ -1,4 +1,4 @@
-package org.xtext.msl.generator.openhabgenerator.ui;
+package org.xtext.msl.generator.rosgenerator.ui;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
@@ -7,18 +7,18 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class OpenHABGeneratorActivator extends AbstractUIPlugin {
+public class ROSGeneratorActivator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "org.xtext.msl.openhabgenerator.ui"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "org.xtext.msl.rosgenerator.ui"; //$NON-NLS-1$
 
 	// The shared instance
-	private static OpenHABGeneratorActivator plugin;
+	private static ROSGeneratorActivator plugin;
 
 	/**
 	 * The constructor
 	 */
-	public OpenHABGeneratorActivator() {
+	public ROSGeneratorActivator() {
 	}
 
 	/*
@@ -50,7 +50,7 @@ public class OpenHABGeneratorActivator extends AbstractUIPlugin {
 	 *
 	 * @return the shared instance
 	 */
-	public static OpenHABGeneratorActivator getDefault() {
+	public static ROSGeneratorActivator getDefault() {
 		return plugin;
 	}
 

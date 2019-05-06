@@ -1,0 +1,93 @@
+//This pattern organizes the adaptation logic as a hierarchy of MAPE loops
+
+abstract pattern HierarchicalControlMAPE {
+	system Sys
+
+	group Interface {
+		managedSyS Sys
+		components M, A, P, E
+	}
+
+	group Intermediate {
+		managedGrp Interface [*-ALL], High
+		components M, A, P, E
+	}
+
+	group High {
+        managedGrp Intermediate
+		components M, A, P, E
+	}
+
+	interaction Interface.M -> Interface.A [1,1]
+	interaction Interface.A -> Interface.P [1,1]
+	interaction Interface.P -> Interface.E [1,1]
+	interaction Intermediate.M -> Intermediate.A [1,1]
+	interaction Intermediate.A -> Intermediate.P [1,1]
+	interaction Intermediate.P -> Intermediate.E [1,1]
+	interaction High.M -> High.A [1,1]
+	interaction High.A -> High.P [1,1]
+	interaction High.P -> High.E [1,1]
+}
+
+//Concrete pattern for adaptation concern A
+concrete pattern A_MAPE concretizationOf HierarchicalControlMAPE {
+	system SysA: HierarchicalControlMAPE.Sys
+	group InterfaceA: HierarchicalControlMAPE.Interface
+    group IntermediateA: HierarchicalControlMAPE.Intermediate
+    group HighA: HierarchicalControlMAPE.High
+}
+
+configuration ConfHC instanceOf A_MAPE {
+    s0: A_MAPE.SysA
+    s1: A_MAPE.SysA 
+    s2: A_MAPE.SysA
+
+	i0: A_MAPE.InterfaceA {
+		managedSyS s0
+		components m_i0:M, a_i0:A, p_i0:P, e_i0:E 
+	}
+
+    i1: A_MAPE.InterfaceA {
+		managedSyS s1
+		components m_i1:M, a_i1:A, p_i1:P, e_i1:E 
+	}
+
+	i2: A_MAPE.InterfaceA {
+		managedSyS s2
+		components m_i2:M, a_i2:A, p_i2:P, e_i2:E 
+	}
+
+    int1: A_MAPE.IntermediateA {
+	    managedGrp i0, i1
+		components m_int1:M, a_int1:A, p_int1:P, e_int1:E 
+	}
+
+    int2: A_MAPE.IntermediateA {
+	    managedGrp i2
+		components m_int2:M, a_int2:A, p_int2:P, e_int2:E 
+	}
+
+    h0: A_MAPE.HighA {
+	    managedGrp int1, int2
+		components m_h:M, a_h:A, p_h:P, e_h:E 
+	}
+
+	i0.m_i0 -> i0.a_i0
+	i0.a_i0 -> i0.p_i0
+	i0.p_i0 -> i0.e_i0
+    i1.m_i1 -> i1.a_i1
+	i1.a_i1 -> i1.p_i1
+	i1.p_i1 -> i1.e_i1
+	i2.m_i2 -> i2.a_i2
+	i2.a_i2 -> i2.p_i2
+	i2.p_i2 -> i2.e_i2
+	int1.m_int1 -> int1.a_int1
+	int1.a_int1 -> int1.p_int1
+	int1.p_int1 -> int1.e_int1
+	int2.m_int2 -> int2.a_int2
+	int2.a_int2 -> int2.p_int2
+	int2.p_int2 -> int2.e_int2
+	h0.m_h -> h0.a_h
+	h0.a_h -> h0.p_h
+	h0.p_h -> h0.e_h
+}

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ROS generator
+Bundle-SymbolicName: org.xtext.msl.rosgenerator;singleton:=true
+Bundle-Version: 1.0.1
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Bundle-Vendor: foselab.unibg.it
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.emf.common,
+ org.xtext.msl,
+ org.eclipse.emf.ecore
+Export-Package: org.xtext.msl.generator.rosgenerator

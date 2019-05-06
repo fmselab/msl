@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+			description="ROSGenerator commands"
+			id="org.xtext.msl.rosgenerator.ui.commands.category"
+			name="ROSGenerator">
+		</category>
+      <command
+            name="Generate the ROS"
+            categoryId="org.xtext.msl.rosgenerator.ui.commands.category"
+            id="org.xtext.msl.rosgenerator.ui.commands.runROSGencommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            commandId="org.xtext.msl.rosgenerator.ui.commands.runROSGencommand"
+            class="org.xtext.msl.generator.rosgenerator.ui.handlers.ROSGeneratorHandler">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="org.xtext.msl.rosgenerator.ui.toolbars.flattenerToolbar"
+               label="ROSGenerator">
+            <command
+                  commandId="org.xtext.msl.rosgenerator.ui.commands.runROSGencommand"
+                  icon="icons/runROSGen.gif"
+                  id="org.xtext.msl.rosgenerator.ui.toolbars.runROSGencommand"
+                  label="Generate the ROS"
+                  tooltip="Generate the ROS">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.xtext.msl.MSL"
+            class="org.xtext.msl.generator.rosgenerator.ui.ROSGeneratorPreferencePage"
+            id="org.xtext.msl.generator.rosgenerator.Preferences"
+            name="ROS generator">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.xtext.msl.generator.rosgenerator.ui.PreferenceInitializer">
+      </initializer>
+   </extension>
+</plugin>

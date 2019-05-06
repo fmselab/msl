@@ -1,0 +1,56 @@
+var boolean adaptation_required_a_ch
+
+rule "StartLoop_ComfortableHeatingOne"
+when
+	System started
+then
+	start_m_ch.sendCommand(ON)
+	start_a_ch.sendCommand(OFF)
+	start_p_ch.sendCommand(OFF)
+	start_e_ch.sendCommand(OFF)
+	adaptation_required_a_ch = true
+end
+
+rule "Monitor_m_ch"
+when
+	Item start_m_ch received command ON
+then
+	sendCommand(start_m_ch, OFF)
+	sendCommand(start_a_ch, ON)
+end
+
+rule "Analyze_a_ch"
+when
+	Item start_a_ch received command ON
+then
+	sendCommand(start_a_ch, OFF)
+	if(((Math::random * 100.0).intValue + 1) <= 50 ){
+		adaptation_required_a_ch = true
+	}
+	else {
+		adaptation_required_a_ch = false
+	}
+	if(adaptation_required_a_ch){
+		sendCommand(start_p_ch, ON)
+	}
+	else{
+		sendCommand(start_m_ch, ON)
+	}
+end
+
+rule "Plan_p_ch"
+when
+	Item start_p_ch received command ON
+then
+	sendCommand(start_p_ch, OFF)
+	sendCommand(start_e_ch, ON)
+end
+
+rule "Exec_e_ch"
+when
+	Item start_e_ch received command ON
+then
+	sendCommand(start_e_ch, OFF)
+	sendCommand(start_m_ch, ON)
+end
+
