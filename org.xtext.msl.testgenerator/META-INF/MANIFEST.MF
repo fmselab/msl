@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Testgenerator
+Bundle-SymbolicName: org.xtext.msl.testgenerator
+Bundle-Version: 1.0.0.qualifier
+Export-Package: org.xtext.msl.testgenerator
+Require-Bundle: org.xtext.msl.asmgenerator,
+ org.xtext.msl,
+ org.eclipse.emf.common,
+ org.eclipse.emf.ecore,
+ asmeta.modeladvisor,
+ asmeta.emf,
+ asmeta.smv,
+ asmeta.flattener,
+ asmeta.parser,
+ asmeta.validator
