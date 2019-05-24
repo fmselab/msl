@@ -25,9 +25,13 @@ import org.asmeta.flattener.rule.ForallRuleFlattener;
 import org.asmeta.flattener.rule.LetRuleFlattener;
 import org.asmeta.modeladvisor.AsmetaMA;
 import org.asmeta.modeladvisor.metaproperties.RuleIsReached;
+import org.asmeta.modeladvisor.texpr.AlwaysExpression;
 import org.asmeta.modeladvisor.texpr.Expression;
+import org.asmeta.modeladvisor.texpr.SometimeExpression;
+import org.asmeta.modeladvisor.texpr.TemporalExpression;
 import org.asmeta.nusmv.AsmetaSMV;
 import org.asmeta.nusmv.MapVisitor;
+import org.asmeta.nusmv.util.Util;
 import org.asmeta.parser.ASMParser;
 import org.asmeta.scenariorefinement.ScenarioRefiner;
 import org.xtext.msl.Loader;
@@ -56,8 +60,10 @@ public class SelfAdaptiveASMtestGenerator {
 	private static void testGenerator(String mslPath, String asmPath) throws Exception, IOException {
 		// detect the terminal rules TR of the MAPE loops (those without exiting
 		// interactions)
-		Set<String> terminalRules = getTerminalRules(mslPath);//WRONG!
-		//extractTerminalRulesOfMAPE(mslPath);
+		Set<String> terminalRules = getTerminalRules(mslPath);// WRONG!
+		//extractTerminationOfMAPE(mslPath);
+		terminalRules.clear();
+		terminalRules.add("r_CleanUp_IntHCE");
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
 		// model check the negated RFC
 		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules);
@@ -101,9 +107,10 @@ public class SelfAdaptiveASMtestGenerator {
 			}
 			conditions.remove();
 		}
-		System.out.println(asmetaMA.mv.ruleCond);
+		// System.out.println(asmetaMA.mv.ruleCond);
 		asmetaMA.ruleIsReached = new RuleIsReached(asmetaMA.mv.ruleCond, false);
-		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, asmetaMA.ruleIsReached.createNuSmvProperties());
+		//asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, asmetaMA.ruleIsReached.createNuSmvProperties());
+		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, createProperties(asmetaMA.mv.ruleCond));
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
@@ -133,24 +140,24 @@ public class SelfAdaptiveASMtestGenerator {
 		return terminalRules;
 	}
 
-	private static void extractTerminalRulesOfMAPE(String path) {
-		Specification spec = Loader.loadSpec(path);
+	private static void extractTerminationOfMAPE(String mslPath) {
+		Specification spec = Loader.loadSpec(mslPath);
 		List<Interaction> interactions = spec.getConfiguration().getConcreteInteractions();
 		Map<String, Set<String>> flow = new HashMap<String, Set<String>>();
-		Set<String> elements = new HashSet<String>();
+		Set<String> components = new HashSet<String>();
 		for (Interaction i : interactions) {
 			String startComp = getName(i.getStart());
 			String endComp = getName(i.getEnd());
-			//System.out.println(startComp + " -> " + endComp);
+			// System.out.println(startComp + " -> " + endComp);
 			if (!flow.containsKey(startComp)) {
 				flow.put(startComp, new HashSet<String>());
 			}
 			flow.get(startComp).add(endComp);
-			elements.add(startComp);
-			elements.add(endComp);
+			components.add(startComp);
+			components.add(endComp);
 		}
-		elements.removeAll(flow.keySet());
-		System.out.println("Terminal rules " + elements);
+		components.removeAll(flow.keySet());
+		System.out.println("Terminal components " + components);
 	}
 
 	private static String getName(ComponentName comp) {
@@ -158,5 +165,20 @@ public class SelfAdaptiveASMtestGenerator {
 		ConcreteGroup group = (ConcreteGroup) c.eContainer();
 		String groupName = group.getName();
 		return groupName + "." + c.getName();
+	}
+
+	public static Set<Expression> createProperties(Map<Rule, List<String>> allConds) {
+		Set<Expression> smvProp = new HashSet<Expression>();
+		TemporalExpression property;
+		for (Rule rule : allConds.keySet()) {
+			// sometimes
+			// EF( + cond + );
+			// AG(!( + cond + ))
+			for (String cond : allConds.get(rule)) {
+				property = new SometimeExpression(cond);
+				smvProp.add(property);
+			}
+		}
+		return smvProp;
 	}
 }
