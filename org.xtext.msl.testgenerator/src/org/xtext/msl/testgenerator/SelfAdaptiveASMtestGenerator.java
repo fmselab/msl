@@ -56,7 +56,8 @@ public class SelfAdaptiveASMtestGenerator {
 	private static void testGenerator(String mslPath, String asmPath) throws Exception, IOException {
 		// detect the terminal rules TR of the MAPE loops (those without exiting
 		// interactions)
-		Set<String> terminalRules = getTerminalRules(mslPath);
+		Set<String> terminalRules = getTerminalRules(mslPath);//WRONG!
+		//extractTerminalRulesOfMAPE(mslPath);
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
 		// model check the negated RFC
 		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules);
@@ -88,7 +89,6 @@ public class SelfAdaptiveASMtestGenerator {
 		MapVisitor.ALL_SMV_FLATTENERS = new Class[] { ForallRuleFlattener.class, RemoveArgumentsFlattener.class,
 				LetRuleFlattener.class, CaseRuleFlattener.class, RemoveNestingFlattener.class };
 		AsmetaSMV asmetaSMV = asmetaMA.loadAsmetaSMV();
-		AsmetaMA.LOG_COUNTEREXAMPLES = true;
 		Iterator<Entry<Rule, List<String>>> conditions = asmetaMA.mv.ruleCond.entrySet().iterator();
 		while (conditions.hasNext()) {
 			Entry<Rule, List<String>> entry = conditions.next();
@@ -101,14 +101,11 @@ public class SelfAdaptiveASMtestGenerator {
 			}
 			conditions.remove();
 		}
-		// System.out.println(asmetaMA.mv.ruleCond.size());
+		System.out.println(asmetaMA.mv.ruleCond);
 		asmetaMA.ruleIsReached = new RuleIsReached(asmetaMA.mv.ruleCond, false);
 		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, asmetaMA.ruleIsReached.createNuSmvProperties());
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
-		Set<Expression> properties = asmetaMA.nuSmvProperties.get(asmetaMA.ruleIsReached);
-		Set<String> translatedProperties = asmetaMA.translate(properties);
-		Map<String, Boolean> results = asmetaMA.results(asmetaSMV, translatedProperties);
 		return asmetaSMV;
 	}
 
@@ -144,7 +141,7 @@ public class SelfAdaptiveASMtestGenerator {
 		for (Interaction i : interactions) {
 			String startComp = getName(i.getStart());
 			String endComp = getName(i.getEnd());
-			System.out.println(startComp + " -> " + endComp);
+			//System.out.println(startComp + " -> " + endComp);
 			if (!flow.containsKey(startComp)) {
 				flow.put(startComp, new HashSet<String>());
 			}
