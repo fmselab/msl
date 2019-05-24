@@ -645,6 +645,13 @@ public class AsmGenerator extends Generator {
 		}
 	}
 
+	public ArrayList<String> getAllRules() {
+		return allRules;
+	}
+	public Map<String, Set<String>> getCalledRules() {
+		return calledRules;
+	}
+
 	public static void main(String[] args) {
 		AsmGenerator g = new AsmGenerator("examples/Example.msl");
 		// AsmGenerator g = new AsmGenerator(args[0]);
