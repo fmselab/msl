@@ -2,31 +2,19 @@ scenario scen
 load ../examples/SmartHomeGateway/SmartHomeGateway/asm/MySmartHomeHC_refined_forMC.asm
 
 //state 0
-check temperature_SetpointSaved(int_hc_gf) = undef;
-check temperatureSaved(int_hc_gf) = undef;
 check sgnMainHCEIntHCE(main_hc,int_hc_ff) = false;
 check heatingsON = false;
-check temperatureSaved(int_hc_ff) = undef;
 check sgnMainHCEIntHCE(main_hc,int_hc_gf) = false;
 check heatingManagedByIntHC(int_hc_ff) = hs_ff;
 check heatingManagedByIntHC(int_hc_gf) = hs_gf;
 check fromIntHCMtoMainHCM(int_hc_ff) = main_hc;
-check computeHeatingSetting(int_hc_gf) = undef;
 check fromIntHCMtoMainHCM(int_hc_gf) = main_hc;
-check computeHeatingSetting(int_hc_ff) = undef;
-check heatingStatusSaved(int_hc_ff) = undef;
 check startMainHCM(main_hc) = false;
-check heatingStatusSaved(int_hc_gf) = undef;
-check temperature_MidpointSaved(int_hc_ff) = undef;
-check temperature_MidpointSaved(int_hc_gf) = undef;
 check sgnIntHCMMainHCM(int_hc_ff,main_hc) = false;
 check startMainHCP(main_hc) = true;
-check temperature_SetpointSaved(int_hc_ff) = undef;
 check loopHCCompleted(int_hc_gf) = true;
-check windowsStatusSaved(int_hc_ff) = undef;
 check startMainHCE(main_hc) = true;
 check loopHCCompleted(int_hc_ff) = true;
-check windowsStatusSaved(int_hc_gf) = undef;
 check desiredHeatingSetting(int_hc_ff) = STOPPED;
 check desiredHeatingSetting(int_hc_gf) = STOPPED;
 check startMainHCA(main_hc) = false;

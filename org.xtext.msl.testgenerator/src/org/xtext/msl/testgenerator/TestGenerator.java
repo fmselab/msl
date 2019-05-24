@@ -90,12 +90,12 @@ public class TestGenerator {
 		HashMap<Integer, String> counterExamples = asmetaSMV.getPropertiesCounterExample();
 		for(Integer key: counterExamples.keySet()) {
 			String cex = asmetaSMV.replaceVarsWithLocations(counterExamples.get(key));
-			System.out.println(cex);
+			//System.out.println(cex);
 			BufferedReader br = new BufferedReader(new StringReader(cex));
 			Counterexample counterexample = NuSMVTestSequencesExtractor.parseCounterexample(br, false);
 			//System.out.println(counterexample);
 			
-			Path scenarioPath = ScenarioRefiner.buildScenario(counterexample, "scen", Paths.get("./scen.test"), Paths.get(asmPath), asm, null, true);
+			Path scenarioPath = ScenarioRefiner.buildScenario(counterexample, "scen", Paths.get("./scen.test"), Paths.get(asmPath), asm, null, true, true);
 			
 		}
 		
