@@ -3,12 +3,9 @@ package org.xtext.msl.testgenerator;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -25,13 +22,11 @@ import org.asmeta.flattener.rule.ForallRuleFlattener;
 import org.asmeta.flattener.rule.LetRuleFlattener;
 import org.asmeta.modeladvisor.AsmetaMA;
 import org.asmeta.modeladvisor.metaproperties.RuleIsReached;
-import org.asmeta.modeladvisor.texpr.AlwaysExpression;
 import org.asmeta.modeladvisor.texpr.Expression;
 import org.asmeta.modeladvisor.texpr.SometimeExpression;
 import org.asmeta.modeladvisor.texpr.TemporalExpression;
 import org.asmeta.nusmv.AsmetaSMV;
 import org.asmeta.nusmv.MapVisitor;
-import org.asmeta.nusmv.util.Util;
 import org.asmeta.parser.ASMParser;
 import org.asmeta.scenariorefinement.ScenarioRefiner;
 import org.xtext.msl.Loader;
@@ -60,8 +55,7 @@ public class SelfAdaptiveASMtestGenerator {
 	private static void testGenerator(String mslPath, String asmPath) throws Exception, IOException {
 		// detect the terminal rules TR of the MAPE loops (those without exiting
 		// interactions)
-		Set<String> terminalRules = getTerminalRules(mslPath);// WRONG!
-		//extractTerminationOfMAPE(mslPath);
+		Set<String> terminalRules = extractTerminationOfMAPE(mslPath);
 		terminalRules.clear();
 		terminalRules.add("r_CleanUp_IntHCE");
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
@@ -109,42 +103,20 @@ public class SelfAdaptiveASMtestGenerator {
 		}
 		// System.out.println(asmetaMA.mv.ruleCond);
 		asmetaMA.ruleIsReached = new RuleIsReached(asmetaMA.mv.ruleCond, false);
-		//asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, asmetaMA.ruleIsReached.createNuSmvProperties());
+		// asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached,
+		// asmetaMA.ruleIsReached.createNuSmvProperties());
 		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, createProperties(asmetaMA.mv.ruleCond));
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
 	}
 
-	private static Set<String> getTerminalRules(String path) {
-		AsmGenerator asmGenerator = new AsmGenerator(path, new PrintWriter(new StringWriter()));
-		asmGenerator.generate();
-		ArrayList<String> allRules = asmGenerator.getAllRules();
-		Map<String, Set<String>> calledRules = asmGenerator.getCalledRules();
-		Set<String> rulesCalledInMape = new HashSet<String>();
-		for (String r : allRules) {
-			// System.out.println(r);
-			Set<String> rulesCalledByR = calledRules.get(r);
-			if (rulesCalledByR != null) {
-				rulesCalledInMape.addAll(rulesCalledByR);
-			}
-		}
-		Set<String> terminalRules = new HashSet<String>();
-		System.out.println("Terminal rules");
-		for (String r : rulesCalledInMape) {
-			if (calledRules.get(r) == null) {
-				System.out.println(r);
-				terminalRules.add(r);
-			}
-		}
-		return terminalRules;
-	}
-
-	private static void extractTerminationOfMAPE(String mslPath) {
+	private static Set<String> extractTerminationOfMAPE(String mslPath) {
 		Specification spec = Loader.loadSpec(mslPath);
 		List<Interaction> interactions = spec.getConfiguration().getConcreteInteractions();
 		Map<String, Set<String>> flow = new HashMap<String, Set<String>>();
 		Set<String> components = new HashSet<String>();
+		Map<String, Interaction> compToInteraction = new HashMap<String, Interaction>();
 		for (Interaction i : interactions) {
 			String startComp = getName(i.getStart());
 			String endComp = getName(i.getEnd());
@@ -155,9 +127,27 @@ public class SelfAdaptiveASMtestGenerator {
 			flow.get(startComp).add(endComp);
 			components.add(startComp);
 			components.add(endComp);
+			compToInteraction.put(endComp, i);
 		}
 		components.removeAll(flow.keySet());
-		System.out.println("Terminal components " + components);
+		Iterator<Entry<String, Interaction>> it = compToInteraction.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<String, Interaction> e = it.next();
+			if (!components.contains(e.getKey())) {
+				it.remove();
+			}
+		}
+		// when these rules are executed, it means that the MAPE loop completed
+		Set<String> terminalRules = new HashSet<String>();
+		for (Interaction i : compToInteraction.values()) {
+			ComponentName end = i.getEnd();
+			String absGroup = ((ConcreteGroup) end.getComponent().eContainer()).getAbstractGroups().get(0).getName();
+			String componentType = end.getComponent().getType();
+			// System.out.println(absGroup + "_" + componentType);
+			terminalRules.add(AsmGenerator.CLEAN_UP_PREFIX + absGroup + componentType);
+		}
+		// System.out.println("Terminal rules " + terminalRules);
+		return terminalRules;
 	}
 
 	private static String getName(ComponentName comp) {

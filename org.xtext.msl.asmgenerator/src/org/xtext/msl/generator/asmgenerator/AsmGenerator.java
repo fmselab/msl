@@ -3,7 +3,6 @@ package org.xtext.msl.generator.asmgenerator;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -30,9 +29,9 @@ import org.xtext.msl.mSL.SystemBinding;
 
 public class AsmGenerator extends Generator {
 	private int counter = 0;
-	private static final String CLEAN_UP_PREFIX = "r_CleanUp_";
+	public static final String CLEAN_UP_PREFIX = "r_CleanUp_";
 	private Map<String, String> agentNames = new HashMap<String, String>();
-	private Specification spec;
+	//private Specification spec;
 	// the program
 	private Map<String, String> agentPrograms;
 	// private List<AbstractSystem> managedSys;
@@ -132,33 +131,35 @@ public class AsmGenerator extends Generator {
 					String systemAgent = agentNames.get(systemName);
 					assert systemAgent != null : systemName + "\n" + agentNames;
 					String funcName = systemName.toLowerCase() + "ManagedBy" + groupName;
-					
+
 					boolean useSet = false;
-					//System.out.println("sn: " + systemName);
+					// System.out.println("sn: " + systemName);
 					int counter = 0;
-					for(ConcreteSystem concrSysInConf: configuration.getConcreteSystems()) {
-						//System.out.println(concrSysInConf.getName());
+					for (ConcreteSystem concrSysInConf : configuration.getConcreteSystems()) {
+						// System.out.println(concrSysInConf.getName());
 						SystemBinding b = concrSysInConf.getBindings().get(0);
-						//System.out.println(b.getName());
-						if(systemName.equals(b.getName())) {
+						// System.out.println(b.getName());
+						if (systemName.equals(b.getName())) {
 							counter++;
 						}
 					}
-					if(counter > 1) {
-						g:for(GroupBinding g: pattern.getGroups()) {
+					if (counter > 1) {
+						g: for (GroupBinding g : pattern.getGroups()) {
 							String gName = g.getName();
-							//System.out.println("gName: " + gName);
-							for(ConcreteGroup concrGroupInConf: configuration.getConcreteGroups()) {
-								//System.out.println("concrGroupInConf: " + concrGroupInConf.getAbstractGroups().get(0).getName());
-								if(concrGroupInConf.getAbstractGroups().get(0).getName().equals(gName)) {
+							// System.out.println("gName: " + gName);
+							for (ConcreteGroup concrGroupInConf : configuration.getConcreteGroups()) {
+								// System.out.println("concrGroupInConf: " +
+								// concrGroupInConf.getAbstractGroups().get(0).getName());
+								if (concrGroupInConf.getAbstractGroups().get(0).getName().equals(gName)) {
 									counter = 0;
-									for(ConcreteSystem ms: concrGroupInConf.getManSys()) {
-										if(ms.getBindings().get(0).getName().equals(systemName)) {
-											//System.out.println(gName + "\t" + ms.getName()+ "\t" + ms.getBindings().get(0).getName());
+									for (ConcreteSystem ms : concrGroupInConf.getManSys()) {
+										if (ms.getBindings().get(0).getName().equals(systemName)) {
+											// System.out.println(gName + "\t" + ms.getName()+ "\t" +
+											// ms.getBindings().get(0).getName());
 											counter++;
 										}
 									}
-									if(counter > 1) {
+									if (counter > 1) {
 										useSet = true;
 										break g;
 									}
@@ -166,16 +167,15 @@ public class AsmGenerator extends Generator {
 							}
 						}
 					}
-					
-					
-					String codomain = useSet?"Powerset(" + systemAgent + ")":systemAgent;
-					pw.println("\tcontrolled " + funcName  + ": " + groupAgent + " -> " + codomain);
 
-					if(!managingToManagedToFunc.containsKey(groupAgent)) {
+					String codomain = useSet ? "Powerset(" + systemAgent + ")" : systemAgent;
+					pw.println("\tcontrolled " + funcName + ": " + groupAgent + " -> " + codomain);
+
+					if (!managingToManagedToFunc.containsKey(groupAgent)) {
 						managingToManagedToFunc.put(groupAgent, new ArrayList<String[]>());
 					}
-					managingToManagedToFunc.get(groupAgent).add(new String[] { systemAgent, funcName});
-					
+					managingToManagedToFunc.get(groupAgent).add(new String[] { systemAgent, funcName });
+
 					// System.out.println(groupAgent + "\t" + systemAgent + "\t" + funcName);
 					functionDomain.put(funcName, groupAgent);
 					functionCoDomain.put(funcName, codomain);
@@ -226,13 +226,13 @@ public class AsmGenerator extends Generator {
 			String startRule = "r_" + startGroupName + startComp;
 			String endRule = "r_" + endGroupName + endComp;
 			String cleanUpstartRule = CLEAN_UP_PREFIX + startGroupName + startComp;
-			String cleanUpendRule = CLEAN_UP_PREFIX + endGroupName + endComp;
+			String cleanUpEndRule = CLEAN_UP_PREFIX + endGroupName + endComp;
 			assert allRules.contains(startRule) : startRule + " is missing";
 			assert allRules.contains(cleanUpstartRule) : cleanUpstartRule + " is missing";
 			assert allRules.contains(endRule) : endRule + " is missing";
-			assert allRules.contains(cleanUpendRule) : cleanUpendRule + " is missing";
+			assert allRules.contains(cleanUpEndRule) : cleanUpEndRule + " is missing";
 			assert allRules.indexOf(startRule) == allRules.indexOf(cleanUpstartRule) + 1 : allRules;
-			assert allRules.indexOf(endRule) == allRules.indexOf(cleanUpendRule) + 1;
+			assert allRules.indexOf(endRule) == allRules.indexOf(cleanUpEndRule) + 1;
 
 			if (!startGroupName.equals(endGroupName)) {
 				String high = i.getHigh();
@@ -307,7 +307,7 @@ public class AsmGenerator extends Generator {
 
 					location = signal[0] + "(" + funcName2 + "(self), self)";
 					String cleanUpBody = location + " := false";
-					ruleBody.put(cleanUpendRule, cleanUpBody);
+					ruleBody.put(cleanUpEndRule, cleanUpBody);
 
 				}
 
@@ -351,7 +351,7 @@ public class AsmGenerator extends Generator {
 					}
 
 					String cleanUpBody = "forall $a in " + funcName2 + "(self) do " + signal[0] + "($a, self) := false";
-					ruleBody.put(cleanUpendRule, cleanUpBody);
+					ruleBody.put(cleanUpEndRule, cleanUpBody);
 					// if sgnMM(self,$a) = false then sgnMM(self,$a) := true endif
 					String rBody = "if not " + funcNameSgn + "(self," + funcName1 + "(self)) then " + funcNameSgn
 							+ "(self," + funcName1 + "(self)) := true endif";
@@ -373,10 +373,10 @@ public class AsmGenerator extends Generator {
 				int indexStart = allRules.indexOf(startRule);
 				int endStart = allRules.indexOf(endRule);
 				if (endStart > indexStart) {
-					allRules.remove(cleanUpendRule);
+					allRules.remove(cleanUpEndRule);
 					allRules.remove(endRule);
 					allRules.add(indexStart - 1, endRule);
-					allRules.add(indexStart - 1, cleanUpendRule);
+					allRules.add(indexStart - 1, cleanUpEndRule);
 				}
 			}
 		}
@@ -426,8 +426,8 @@ public class AsmGenerator extends Generator {
 			if (mss != null) {
 				List<String[]> listA = managingToManagedToFunc.get(abstGroupAgent);
 				if (listA != null) {
-					for(String[] a: listA) {
-						//System.out.println("a " + Arrays.toString(a));
+					for (String[] a : listA) {
+						// System.out.println("a " + Arrays.toString(a));
 						if (!managingFuncManagingInstToManagedInst.containsKey(a[1])) {
 							managingFuncManagingInstToManagedInst.put(a[1], new LinkedHashMap<>());
 						}
@@ -439,10 +439,10 @@ public class AsmGenerator extends Generator {
 						for (ConcreteSystem ms : mss) {
 							// System.out.println("bindings: " + ms.getBindings());
 							AbstractSystem absSyst = ms.getBindings().get(0).getAbsSys();
-							
+
 							assert absSyst != null;
-							if((ms.getBindings().get(0).getName() + "MdA").equals(a[0])) {
-								//System.out.println("absSyst: " + ms.getBindings().get(0).getName());
+							if ((ms.getBindings().get(0).getName() + "MdA").equals(a[0])) {
+								// System.out.println("absSyst: " + ms.getBindings().get(0).getName());
 								list.add(ms.getName());
 							}
 						}
@@ -625,10 +625,9 @@ public class AsmGenerator extends Generator {
 			for (String cg : concrGrpToConcrSys.keySet()) {
 				ArrayList<String> list = concrGrpToConcrSys.get(cg);
 				String listStr = list.toString();
-				if(isSet) {
+				if (isSet) {
 					listStr = listStr.replaceAll("\\[", "{").replaceAll("\\]", "}");
-				}
-				else {
+				} else {
 					listStr = listStr.replaceAll("\\[", "").replaceAll("\\]", "");
 				}
 				pw.println("\t\t\tcase " + cg + ": " + listStr);
@@ -649,6 +648,7 @@ public class AsmGenerator extends Generator {
 	public ArrayList<String> getAllRules() {
 		return allRules;
 	}
+
 	public Map<String, Set<String>> getCalledRules() {
 		return calledRules;
 	}
