@@ -24,4 +24,4 @@ Eclipse update site of MSL editor, ASM generator, and OpenHAB generator: [http:/
 
 Arcaini P., Mirandola R., Riccobene E., Scandurra P. (2018) A DSL for MAPE Patterns Representation in Self-adapting Systems. In: Cuesta C., Garlan D., Pérez J. (eds) Software Architecture. ECSA 2018. Lecture Notes in Computer Science, vol 11048. Springer, Cham \[[doi](https://doi.org/10.1007/978-3-030-00761-4_1)\]
 
-Arcaini P., Mirandola R., Riccobene E., Scandurra P. (2019) A Pattern-oriented Design Framework for Self-adaptive Software Systems. In ICSA 2019 Companion Proceedings. (to appear)
+Arcaini P., Mirandola R., Riccobene E., Scandurra P. (2019) A Pattern-oriented Design Framework for Self-adaptive Software Systems. In ICSA 2019 Companion Proceedings. \[[doi](https://doi.org/10.1109/ICSA-C.2019.00037)\] 
