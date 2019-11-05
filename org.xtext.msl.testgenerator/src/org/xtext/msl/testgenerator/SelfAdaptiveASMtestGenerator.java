@@ -78,6 +78,7 @@ public class SelfAdaptiveASMtestGenerator {
 			String name = asm.getName() + "_scen" + (counter++);
 			Path scenarioPath = ScenarioRefiner.buildScenario(counterexample, name, Paths.get("./" + name + ".test"),
 					Paths.get(asmPath), asm, null, true, false);
+			System.out.println(scenarioPath);
 		}
 	}
 
