@@ -1,0 +1,170 @@
+var boolean adaptation_required_a_hc
+
+rule "StartLoop_MySmartHomeHC"
+when
+	System started
+then
+	start_m_hc.sendCommand(ON)
+	start_a_hc.sendCommand(OFF)
+	start_p_hc.sendCommand(OFF)
+	start_e_hc.sendCommand(OFF)
+	start_m_hc.sendCommand(ON)
+	start_e_hc.sendCommand(OFF)
+	start_m_hc.sendCommand(ON)
+	start_e_hc.sendCommand(OFF)
+end
+
+rule "Monitor_m_hc"
+when
+	Item start_m_hc received command ON
+then
+	sendCommand(start_m_hc, OFF)
+	sendCommand(start_a_hc, ON)
+end
+
+rule "Analyze_a_hc"
+when
+	Item start_a_hc received command ON
+then
+	sendCommand(start_a_hc, OFF)
+	if(((Math::random * 100.0).intValue + 1) <= 50 ){
+		adaptation_required_a_hc = true
+	}
+	else {
+		adaptation_required_a_hc = false
+	}
+	if(adaptation_required_a_hc){
+		sendCommand(start_p_hc, ON)
+	}
+	else{
+		sendCommand(start_m_hc, ON)
+		sendCommand(start_m_hc, ON)
+	}
+end
+
+rule "Plan_p_hc"
+when
+	Item start_p_hc received command ON
+then
+	sendCommand(start_p_hc, OFF)
+	sendCommand(start_e_hc, ON)
+end
+
+rule "Monitor_m_hc"
+when
+	Item start_m_hc received command ON
+then
+	sendCommand(start_m_hc, OFF)
+	sendCommand(int_hc_gf_to_main_hc, ON)
+end
+
+rule "Monitor_m_hc"
+when
+	Item start_m_hc received command ON
+then
+	sendCommand(start_m_hc, OFF)
+	sendCommand(int_hc_ff_to_main_hc, ON)
+end
+
+rule "Aggregator_m_hc_m_hc_m_hc"
+when
+	Item int_hc_gfint_hc_ff_to_main_hc received update ON
+then
+	sendCommand(int_hc_gf_to_main_hc, OFF)
+	sendCommand(int_hc_ff_to_main_hc, OFF)
+	sendCommand(start_m_hc, ON)
+end
+
+rule "Exec_e_hc"
+when
+	Item start_e_hc received command ON
+then
+	sendCommand(start_e_hc, OFF)
+	sendCommand(start_e_hc, ON)
+	sendCommand(start_e_hc, ON)
+end
+
+rule "Exec_e_hc"
+when
+	Item start_e_hc received command ON
+then
+	sendCommand(start_e_hc, OFF)
+	sendCommand(start_m_hc, ON)
+end
+
+rule "Monitor_m_hc"
+when
+	Item start_m_hc received command ON
+then
+	sendCommand(start_m_hc, OFF)
+	sendCommand(int_hc_gf_to_main_hc, ON)
+end
+
+rule "Monitor_m_hc"
+when
+	Item start_m_hc received command ON
+then
+	sendCommand(start_m_hc, OFF)
+	sendCommand(int_hc_ff_to_main_hc, ON)
+end
+
+rule "Aggregator_m_hc_m_hc_m_hc"
+when
+	Item int_hc_gfint_hc_ff_to_main_hc received update ON
+then
+	sendCommand(int_hc_gf_to_main_hc, OFF)
+	sendCommand(int_hc_ff_to_main_hc, OFF)
+	sendCommand(start_m_hc, ON)
+end
+
+rule "Exec_e_hc"
+when
+	Item start_e_hc received command ON
+then
+	sendCommand(start_e_hc, OFF)
+	sendCommand(start_e_hc, ON)
+	sendCommand(start_e_hc, ON)
+end
+
+rule "Exec_e_hc"
+when
+	Item start_e_hc received command ON
+then
+	sendCommand(start_e_hc, OFF)
+	sendCommand(start_m_hc, ON)
+end
+
+rule "Monitor_m_hc"
+when
+	Item start_m_hc received command ON
+then
+	sendCommand(start_m_hc, OFF)
+	sendCommand(int_hc_gf_to_main_hc, ON)
+end
+
+rule "Monitor_m_hc"
+when
+	Item start_m_hc received command ON
+then
+	sendCommand(start_m_hc, OFF)
+	sendCommand(int_hc_ff_to_main_hc, ON)
+end
+
+rule "Aggregator_m_hc_m_hc_m_hc"
+when
+	Item int_hc_gfint_hc_ff_to_main_hc received update ON
+then
+	sendCommand(int_hc_gf_to_main_hc, OFF)
+	sendCommand(int_hc_ff_to_main_hc, OFF)
+	sendCommand(start_m_hc, ON)
+end
+
+rule "Exec_e_hc"
+when
+	Item start_e_hc received command ON
+then
+	sendCommand(start_e_hc, OFF)
+	sendCommand(start_e_hc, ON)
+	sendCommand(start_e_hc, ON)
+end
+

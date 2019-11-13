@@ -1,0 +1,21 @@
+Group main_hc "main_hc"
+
+Switch start_m_hc "m_hc" (main_hc)
+Switch start_a_hc "a_hc" (main_hc)
+Switch start_p_hc "p_hc" (main_hc)
+Switch start_e_hc "e_hc" (main_hc)
+
+Group int_hc_gf "int_hc_gf"
+
+Switch start_m_hc "m_hc" (int_hc_gf)
+Switch start_e_hc "e_hc" (int_hc_gf)
+
+Group int_hc_ff "int_hc_ff"
+
+Switch start_m_hc "m_hc" (int_hc_ff)
+Switch start_e_hc "e_hc" (int_hc_ff)
+
+Group:Switch:OR(ON, OFF) int_hc_gfint_hc_ff_to_main_hc "int_hc_gfint_hc_ff_to_main_hc"
+
+Switch int_hc_gf_to_main_hc "int_hc_gf_to_main_hc" (int_hc_gfint_hc_ff_to_main_hc)
+Switch int_hc_ff_to_main_hc "int_hc_ff_to_main_hc" (int_hc_gfint_hc_ff_to_main_hc)
