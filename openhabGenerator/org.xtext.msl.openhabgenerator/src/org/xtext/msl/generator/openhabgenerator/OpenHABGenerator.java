@@ -517,11 +517,11 @@ public class OpenHABGenerator extends Generator {
                     pw.println("end\n");
                 }
             }
-		
+		}
 		if (configuration.getConcreteInteractions().size() != 0) {
 			PrintIntergroup();
 		}
-		}
+		//}
 		pw.flush();
 	}
 

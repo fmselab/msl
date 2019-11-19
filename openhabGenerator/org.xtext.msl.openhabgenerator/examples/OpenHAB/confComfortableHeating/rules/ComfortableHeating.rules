@@ -1,111 +1,84 @@
-var boolean adaptation_required_a_ch
+var boolean adaptation_required_a_chm
 
 rule "StartLoop_ComfortableHeating"
 when
 	System started
 then
-	start_m_ch.sendCommand(ON)
-	start_a_ch.sendCommand(OFF)
-	start_p_ch.sendCommand(OFF)
-	start_e_ch.sendCommand(OFF)
-	start_m_h0.sendCommand(ON)
-	start_e_h0.sendCommand(OFF)
-	start_m_h1.sendCommand(ON)
-	start_e_h1.sendCommand(OFF)
-	adaptation_required_a_ch = true
+	start_a_chm.sendCommand(OFF)
+	start_p_chm.sendCommand(OFF)
+	start_m_hs0.sendCommand(ON)
+	start_e_hs0.sendCommand(OFF)
+	start_m_hs1.sendCommand(ON)
+	start_e_hs1.sendCommand(OFF)
 end
 
-rule "Monitor_m_ch"
+rule "Analyze_a_chm"
 when
-	Item start_m_ch received command ON
+	Item start_a_chm received command ON
 then
-	sendCommand(start_m_ch, OFF)
-	sendCommand(start_a_ch, ON)
-end
-
-rule "Analyze_a_ch"
-when
-	Item start_a_ch received command ON
-then
-	sendCommand(start_a_ch, OFF)
+	sendCommand(start_a_chm, OFF)
 	if(((Math::random * 100.0).intValue + 1) <= 50 ){
-		adaptation_required_a_ch = true
+		adaptation_required_a_chm = true
 	}
 	else {
-		adaptation_required_a_ch = false
+		adaptation_required_a_chm = false
 	}
-	if(adaptation_required_a_ch){
-		sendCommand(start_p_ch, ON)
+	if(adaptation_required_a_chm){
+		sendCommand(start_p_chm, ON)
 	}
 	else{
-		sendCommand(start_m_h0, ON)
-		sendCommand(start_m_h1, ON)
+		sendCommand(start_m_hs0, ON)
+		sendCommand(start_m_hs1, ON)
 	}
 end
 
-rule "Plan_p_ch"
+rule "Exec_e_hs0"
 when
-	Item start_p_ch received command ON
+	Item start_e_hs0 received command ON
 then
-	sendCommand(start_p_ch, OFF)
-	sendCommand(start_e_ch, ON)
+	sendCommand(start_e_hs0, OFF)
+	sendCommand(start_m_hs0, ON)
 end
 
-rule "Exec_e_ch"
+rule "Exec_e_hs1"
 when
-	Item start_e_ch received command ON
+	Item start_e_hs1 received command ON
 then
-	sendCommand(start_e_ch, OFF)
-	sendCommand(start_m_ch, ON)
+	sendCommand(start_e_hs1, OFF)
+	sendCommand(start_m_hs1, ON)
 end
 
-rule "Exec_e_h0"
+rule "Monitor_m_hs0"
 when
-	Item start_e_h0 received command ON
+	Item start_m_hs0 received command ON
 then
-	sendCommand(start_e_h0, OFF)
-	sendCommand(start_m_h0, ON)
+	sendCommand(start_m_hs0, OFF)
+	sendCommand(hs0_to_chm, ON)
 end
 
-rule "Exec_e_h1"
+rule "Monitor_m_hs1"
 when
-	Item start_e_h1 received command ON
+	Item start_m_hs1 received command ON
 then
-	sendCommand(start_e_h1, OFF)
-	sendCommand(start_m_h1, ON)
+	sendCommand(start_m_hs1, OFF)
+	sendCommand(hs1_to_chm, ON)
 end
 
-rule "Monitor_m_h0"
+rule "Aggregator_m_hs0_m_hs1_a_chm"
 when
-	Item start_m_h0 received command ON
+	Item hs0hs1_to_chm received update ON
 then
-	sendCommand(start_m_h0, OFF)
-	sendCommand(h0_to_ch, ON)
+	sendCommand(hs0_to_chm, OFF)
+	sendCommand(hs1_to_chm, OFF)
+	sendCommand(start_a_chm, ON)
 end
 
-rule "Monitor_m_h1"
+rule "Plan_p_chm"
 when
-	Item start_m_h1 received command ON
+	Item start_p_chm received command ON
 then
-	sendCommand(start_m_h1, OFF)
-	sendCommand(h1_to_ch, ON)
-end
-
-rule "Aggregator_m_h0_m_h1_m_ch"
-when
-	Item h0h1_to_ch received update ON
-then
-	sendCommand(h0_to_ch, OFF)
-	sendCommand(h1_to_ch, OFF)
-	sendCommand(start_m_ch, ON)
-end
-
-rule "Exec_e_ch"
-when
-	Item start_e_ch received command ON
-then
-	sendCommand(start_e_ch, OFF)
-	sendCommand(start_e_h0, ON)
-	sendCommand(start_e_h1, ON)
+	sendCommand(start_p_chm, OFF)
+	sendCommand(start_e_hs0, ON)
+	sendCommand(start_e_hs1, ON)
 end
 
