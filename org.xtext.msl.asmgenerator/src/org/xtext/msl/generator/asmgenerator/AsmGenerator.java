@@ -236,9 +236,13 @@ public class AsmGenerator extends Generator {
 
 			if (!startGroupName.equals(endGroupName)) {
 				String high = i.getHigh();
-				assert high != null;
+				if(high == null) {
+					high = VariationPointSemantics.ONE_SEMANTICS.getValue();
+				}
 				String low = i.getLow();
-				assert low != null;
+				if(low == null) {
+					low = VariationPointSemantics.ONE_SEMANTICS.getValue();
+				}
 
 				pw.println("\t//I: " + startGroupName + "." + startComp + " -> " + endGroupName + "." + endComp + " ["
 						+ low + "," + high + "]");
