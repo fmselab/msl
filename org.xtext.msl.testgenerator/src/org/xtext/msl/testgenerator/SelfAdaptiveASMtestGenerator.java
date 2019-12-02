@@ -27,10 +27,13 @@ import org.asmeta.modeladvisor.texpr.SometimeExpression;
 import org.asmeta.modeladvisor.texpr.TemporalExpression;
 import org.asmeta.nusmv.AsmetaSMV;
 import org.asmeta.nusmv.MapVisitor;
+import org.asmeta.nusmv.util.Util;
 import org.asmeta.parser.ASMParser;
 import org.asmeta.scenariorefinement.ScenarioRefiner;
+import org.eclipse.emf.common.util.EList;
 import org.xtext.msl.Loader;
 import org.xtext.msl.generator.asmgenerator.AsmGenerator;
+import org.xtext.msl.mSL.AbstractInteraction;
 import org.xtext.msl.mSL.ComponentInstance;
 import org.xtext.msl.mSL.ComponentName;
 import org.xtext.msl.mSL.ConcreteGroup;
@@ -60,7 +63,7 @@ public class SelfAdaptiveASMtestGenerator {
 		terminalRules.add("r_CleanUp_IntHCE");
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
 		// model check the negated RFC
-		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules);
+		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules, true);
 		// use the counterexamples to build scenarios for the self-adaptive ASM
 		buildScenariosFromCexs(asmPath, asmetaSMV);
 	}
@@ -82,8 +85,8 @@ public class SelfAdaptiveASMtestGenerator {
 		}
 	}
 
-	private static AsmetaSMV buildRFCandModelCheck(String asmPath, Set<String> terminalRules) throws Exception {
-		AsmetaMA asmetaMA = new AsmetaMA(asmPath);
+	private static AsmetaSMV buildRFCandModelCheck(String asmPath, Set<String> terminalRules, boolean some) throws Exception {
+		AsmetaMA asmetaMA = AsmetaMA.buildAsmetaMA(asmPath);
 		asmetaMA.execRuleIsReached = true;
 		MapVisitor.FLATTEN = true;
 		Class<? extends AsmetaFlattener>[] backup = MapVisitor.ALL_SMV_FLATTENERS;
@@ -106,7 +109,9 @@ public class SelfAdaptiveASMtestGenerator {
 		asmetaMA.ruleIsReached = new RuleIsReached(asmetaMA.mv.ruleCond, false);
 		// asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached,
 		// asmetaMA.ruleIsReached.createNuSmvProperties());
-		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, createProperties(asmetaMA.mv.ruleCond));
+		Set<Expression> properties = some?createProperties(asmetaMA.mv.ruleCond):createProperty(asmetaMA.mv.ruleCond);
+		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
+		System.out.println(asmetaMA.nuSmvProperties);
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
@@ -138,9 +143,10 @@ public class SelfAdaptiveASMtestGenerator {
 				it.remove();
 			}
 		}
-		// when these rules are executed, it means that the MAPE loop completed
+		// when these rules are executed, it means that the MAPE loop is completed
 		Set<String> terminalRules = new HashSet<String>();
 		for (Interaction i : compToInteraction.values()) {
+			getAbstractInteraction(spec, i);
 			ComponentName end = i.getEnd();
 			String absGroup = ((ConcreteGroup) end.getComponent().eContainer()).getAbstractGroups().get(0).getName();
 			String componentType = end.getComponent().getType();
@@ -150,6 +156,15 @@ public class SelfAdaptiveASMtestGenerator {
 		// System.out.println("Terminal rules " + terminalRules);
 		return terminalRules;
 	}
+	
+	private static void getAbstractInteraction(Specification spec, Interaction i) {
+		List<AbstractInteraction> abstractInteractions = spec.getAbsPattern().getInteractions();
+		ComponentInstance startComponent = i.getStart().getComponent();
+		System.out.println(startComponent.getName() + " " + startComponent.getType());
+		ComponentInstance endComponent = i.getEnd().getComponent();
+		System.out.println(endComponent.getName() + " " + endComponent.getType());
+	}
+	
 
 	private static String getName(ComponentName comp) {
 		ComponentInstance c = comp.getComponent();
@@ -166,10 +181,29 @@ public class SelfAdaptiveASMtestGenerator {
 			// EF( + cond + );
 			// AG(!( + cond + ))
 			for (String cond : allConds.get(rule)) {
+				//System.out.println(cond);
 				property = new SometimeExpression(cond);
 				smvProp.add(property);
 			}
 		}
 		return smvProp;
 	}
+	
+	public static Set<Expression> createProperty(Map<Rule, List<String>> allConds) {
+		Set<Expression> smvProp = new HashSet<Expression>();
+		TemporalExpression property;
+		for (Rule rule : allConds.keySet()) {
+			// sometimes
+			// EF( + cond + );
+			// AG(!( + cond + ))
+			property = new SometimeExpression(Util.and(allConds.get(rule)));
+			smvProp.add(property);
+		}
+		return smvProp;
+	}
+}
+
+class TerminalRule {
+	private String terminalRule;
+	
 }
