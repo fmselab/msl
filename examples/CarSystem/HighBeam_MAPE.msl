@@ -1,0 +1,26 @@
+abstract pattern SimpleMAPE {
+	system Sys
+
+	group Main {
+		managedSyS Sys
+		components M, A, P, E
+	}
+
+	interaction Main.M -> Main.A 
+	interaction Main.A -> Main.P
+	interaction Main.P -> Main.E 
+}
+
+concrete pattern HighBeamMAPE concretizationOf SimpleMAPE {
+	system HighBeamLights : SimpleMAPE.Sys
+    group Main: SimpleMAPE.Main
+}
+
+configuration AdaptiveHighBeamLights instanceOf HighBeamMAPE {
+    hbl: HighBeamMAPE.HighBeamLights
+    
+	ahbl: HighBeamMAPE.Main { 
+	    managedSyS hbl
+		components m_ahbl:M, a_ahbl:A, p_ahbl:P, e_ahbl:E
+	}
+}
