@@ -30,9 +30,10 @@ import org.asmeta.nusmv.MapVisitor;
 import org.asmeta.nusmv.util.Util;
 import org.asmeta.parser.ASMParser;
 import org.asmeta.scenariorefinement.ScenarioRefiner;
-import org.eclipse.emf.common.util.EList;
 import org.xtext.msl.Loader;
 import org.xtext.msl.generator.asmgenerator.AsmGenerator;
+import org.xtext.msl.mSL.AbstractComponentName;
+import org.xtext.msl.mSL.AbstractGroup;
 import org.xtext.msl.mSL.AbstractInteraction;
 import org.xtext.msl.mSL.ComponentInstance;
 import org.xtext.msl.mSL.ComponentName;
@@ -47,6 +48,7 @@ import asmeta.transitionrules.basictransitionrules.MacroCallRule;
 import asmeta.transitionrules.basictransitionrules.Rule;
 
 public class SelfAdaptiveASMtestGenerator {
+	private static Map<String, String> ruleMult;
 
 	public static void main(String[] args) throws Exception {
 		String mslPath = "../examples/SmartHomeGateway/SmartHomeGateway/HC_MAPE.msl";
@@ -59,8 +61,9 @@ public class SelfAdaptiveASMtestGenerator {
 		// detect the terminal rules TR of the MAPE loops (those without exiting
 		// interactions)
 		Set<String> terminalRules = extractTerminationOfMAPE(mslPath);
-		terminalRules.clear();
-		terminalRules.add("r_CleanUp_IntHCE");
+		//System.out.println(terminalRules);
+		//terminalRules.clear();
+		//terminalRules.add("r_CleanUp_IntHCE");
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
 		// model check the negated RFC
 		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules, true);
@@ -144,25 +147,50 @@ public class SelfAdaptiveASMtestGenerator {
 			}
 		}
 		// when these rules are executed, it means that the MAPE loop is completed
+		ruleMult = new HashMap<String, String>();
 		Set<String> terminalRules = new HashSet<String>();
 		for (Interaction i : compToInteraction.values()) {
-			getAbstractInteraction(spec, i);
 			ComponentName end = i.getEnd();
 			String absGroup = ((ConcreteGroup) end.getComponent().eContainer()).getAbstractGroups().get(0).getName();
 			String componentType = end.getComponent().getType();
 			// System.out.println(absGroup + "_" + componentType);
-			terminalRules.add(AsmGenerator.CLEAN_UP_PREFIX + absGroup + componentType);
+			String terminalRule = AsmGenerator.CLEAN_UP_PREFIX + absGroup + componentType;
+			terminalRules.add(terminalRule);
+			
+			AbstractInteraction ai = getAbstractInteraction(spec, i);
+			ruleMult.put(terminalRule, ai.getLow());
 		}
 		// System.out.println("Terminal rules " + terminalRules);
 		return terminalRules;
 	}
 	
-	private static void getAbstractInteraction(Specification spec, Interaction i) {
+	private static AbstractInteraction getAbstractInteraction(Specification spec, Interaction i) {
 		List<AbstractInteraction> abstractInteractions = spec.getAbsPattern().getInteractions();
-		ComponentInstance startComponent = i.getStart().getComponent();
-		System.out.println(startComponent.getName() + " " + startComponent.getType());
-		ComponentInstance endComponent = i.getEnd().getComponent();
-		System.out.println(endComponent.getName() + " " + endComponent.getType());
+		//ComponentInstance startComponent = i.getStart().getComponent();
+		//System.out.print(startComponent.getName() + " " + startComponent.getType());
+		//ComponentInstance endComponent = i.getEnd().getComponent();
+		//System.out.println("\t" + endComponent.getName() + " " + endComponent.getType());
+
+		ComponentName startInt = i.getStart();
+		ConcreteGroup startConcreteGroup = (ConcreteGroup) startInt.getComponent().eContainer();
+		assert startConcreteGroup != null : startInt.getComponent();
+		ComponentName endInt = i.getEnd();
+		ConcreteGroup endConcreteGroup = (ConcreteGroup) endInt.getComponent().eContainer();
+		String absGroupStart = startConcreteGroup.getAbstractGroups().get(0).getAbsGroup().getName();
+		String absGroupEnd = endConcreteGroup.getAbstractGroups().get(0).getAbsGroup().getName();		
+		String startType = startInt.getComponent().getType();
+		String endType = endInt.getComponent().getType();
+		for(AbstractInteraction ai: abstractInteractions) {
+			AbstractComponentName start = ai.getStart();
+			AbstractComponentName end = ai.getEnd();
+			String startGroup = ((AbstractGroup) (start.getType().eContainer())).getName();
+			String endGroup = ((AbstractGroup) (end.getType().eContainer())).getName();
+			if(startGroup.equals(absGroupStart) && start.getType().getName().equals(startType) && endGroup.equals(absGroupEnd) && end.getType().getName().equals(endType)) {
+				System.out.println(absGroupStart + "." + startType + " -> " + absGroupEnd + "." + endType);
+				return ai;
+			}
+		}
+		return null;
 	}
 	
 
