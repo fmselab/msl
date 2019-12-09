@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.asmeta.flattener.RemoveArgumentsFlattener;
 import org.asmeta.flattener.nesting.RemoveNestingFlattener;
@@ -48,7 +50,6 @@ import asmeta.transitionrules.basictransitionrules.MacroCallRule;
 import asmeta.transitionrules.basictransitionrules.Rule;
 
 public class SelfAdaptiveASMtestGenerator {
-	private static Map<String, String> ruleMult;
 
 	public static void main(String[] args) throws Exception {
 		String mslPath = "../examples/SmartHomeGateway/SmartHomeGateway/HC_MAPE.msl";
@@ -60,13 +61,13 @@ public class SelfAdaptiveASMtestGenerator {
 	private static void testGenerator(String mslPath, String asmPath) throws Exception, IOException {
 		// detect the terminal rules TR of the MAPE loops (those without exiting
 		// interactions)
-		Set<String> terminalRules = extractTerminationOfMAPE(mslPath);
+		Set<TerminalRule> terminalRules = extractTerminationOfMAPE(mslPath);
 		//System.out.println(terminalRules);
 		//terminalRules.clear();
 		//terminalRules.add("r_CleanUp_IntHCE");
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
 		// model check the negated RFC
-		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules, true);
+		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules);
 		// use the counterexamples to build scenarios for the self-adaptive ASM
 		buildScenariosFromCexs(asmPath, asmetaSMV);
 	}
@@ -88,7 +89,7 @@ public class SelfAdaptiveASMtestGenerator {
 		}
 	}
 
-	private static AsmetaSMV buildRFCandModelCheck(String asmPath, Set<String> terminalRules, boolean some) throws Exception {
+	private static AsmetaSMV buildRFCandModelCheck(String asmPath, Set<TerminalRule> terminalRules) throws Exception {
 		AsmetaMA asmetaMA = AsmetaMA.buildAsmetaMA(asmPath);
 		asmetaMA.execRuleIsReached = true;
 		MapVisitor.FLATTEN = true;
@@ -97,12 +98,23 @@ public class SelfAdaptiveASMtestGenerator {
 				LetRuleFlattener.class, CaseRuleFlattener.class, RemoveNestingFlattener.class };
 		AsmetaSMV asmetaSMV = asmetaMA.loadAsmetaSMV();
 		Iterator<Entry<Rule, List<String>>> conditions = asmetaMA.mv.ruleCond.entrySet().iterator();
+		boolean found = false;
+		boolean some = false;
 		while (conditions.hasNext()) {
 			Entry<Rule, List<String>> entry = conditions.next();
 			Rule k = entry.getKey();
 			if (k instanceof MacroCallRule) {
-				if (terminalRules.contains(((MacroCallRule) k).getCalledMacro().getName())) {
-					// System.out.println("Keep " + k);
+				String calledMacro = ((MacroCallRule) k).getCalledMacro().getName();
+				//if (terminalRules.contains(calledMacro)) {
+				List<TerminalRule> matched = terminalRules.stream().filter(tr -> tr.getTerminalRule().equals(calledMacro)).collect(Collectors.toList());
+				assert matched.size() <= 1: matched;
+				if (matched.size() > 0) {
+					//System.out.println("Keep " + matched.get(0));
+					if(found) {
+						throw new Exception("Only one supported!");
+					}
+					found = true;
+					some = matched.get(0).equals("*-SOME");//TODO: check correct multiplicity
 					continue;
 				}
 			}
@@ -120,7 +132,7 @@ public class SelfAdaptiveASMtestGenerator {
 		return asmetaSMV;
 	}
 
-	private static Set<String> extractTerminationOfMAPE(String mslPath) {
+	private static Set<TerminalRule> extractTerminationOfMAPE(String mslPath) {
 		Specification spec = Loader.loadSpec(mslPath);
 		List<Interaction> interactions = spec.getConfiguration().getConcreteInteractions();
 		Map<String, Set<String>> flow = new HashMap<String, Set<String>>();
@@ -147,18 +159,15 @@ public class SelfAdaptiveASMtestGenerator {
 			}
 		}
 		// when these rules are executed, it means that the MAPE loop is completed
-		ruleMult = new HashMap<String, String>();
-		Set<String> terminalRules = new HashSet<String>();
+		Set<TerminalRule> terminalRules = new HashSet<TerminalRule>();
 		for (Interaction i : compToInteraction.values()) {
 			ComponentName end = i.getEnd();
 			String absGroup = ((ConcreteGroup) end.getComponent().eContainer()).getAbstractGroups().get(0).getName();
 			String componentType = end.getComponent().getType();
 			// System.out.println(absGroup + "_" + componentType);
 			String terminalRule = AsmGenerator.CLEAN_UP_PREFIX + absGroup + componentType;
-			terminalRules.add(terminalRule);
-			
 			AbstractInteraction ai = getAbstractInteraction(spec, i);
-			ruleMult.put(terminalRule, ai.getLow());
+			terminalRules.add(new TerminalRule(terminalRule, ai.getLow()));
 		}
 		// System.out.println("Terminal rules " + terminalRules);
 		return terminalRules;
@@ -192,7 +201,6 @@ public class SelfAdaptiveASMtestGenerator {
 		}
 		return null;
 	}
-	
 
 	private static String getName(ComponentName comp) {
 		ComponentInstance c = comp.getComponent();
@@ -233,5 +241,37 @@ public class SelfAdaptiveASMtestGenerator {
 
 class TerminalRule {
 	private String terminalRule;
+	private String mult;
 	
+	public TerminalRule(String terminalRule, String mult) {
+		this.terminalRule = terminalRule;
+		this.mult = mult;
+	}
+
+	public String getTerminalRule() {
+		return terminalRule;
+	}
+	
+	public String getMult() {
+		return mult;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof TerminalRule) {
+			TerminalRule otr = (TerminalRule)obj;
+			return otr.terminalRule.equals(terminalRule) && otr.mult.equals(mult);
+ 		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return (terminalRule + mult).hashCode();
+	}
+
+	@Override
+	public String toString() {
+		return terminalRule + "(" + mult + ")";
+	}
 }
