@@ -3,8 +3,8 @@ abstract pattern AggregateMAPE {
 
 	group Main {
 		components M, A, P, E
-	} 
-	
+	}
+
 	group Interface {
 		managedSyS Sys
 		components M, E
@@ -24,7 +24,7 @@ concrete pattern HC_MAPE concretizationOf AggregateMAPE {
     group IntHC: AggregateMAPE.Interface
 }
 
-//MySmartHome heating system; two managed heating zones: First Floor (FF), Ground floor (GF) 
+//MySmartHome heating system; two managed heating zones: First Floor (FF), Ground floor (GF)
 //Managed items of both systems hs_gf and hs_ff:
 //group Number HeatingStatus, group Contact WindowsStatus
 //Managed items of system hs_gf:
@@ -37,12 +37,12 @@ configuration MySmartHomeHC instanceOf HC_MAPE {
     hs_ff: HC_MAPE.Heating //managed heating system for First Floor
     hs_gf: HC_MAPE.Heating //managed heating system for Ground Floor
 
-	//main group for the concern Heating Comfort 
+	//main group for the concern Heating Comfort
 	main_hc: HC_MAPE.MainHC {
 		components m_hc:M, a_hc:A, p_hc:P, e_hc:E
 	}
 
-    //interface group for the ground floor 
+    //interface group for the ground floor
 	int_hc_gf: HC_MAPE.IntHC {
 		managedSyS hs_gf //(heatingGF,state),(windowsGF,state),...
 		components m_hc:M, e_hc:E
@@ -50,7 +50,7 @@ configuration MySmartHomeHC instanceOf HC_MAPE {
 
     //interface group for the first floor
     int_hc_ff: HC_MAPE.IntHC {
-		managedSyS hs_ff //(heatingFF,state),(windowsFF,state),...  
+		managedSyS hs_ff //(heatingFF,state),(windowsFF,state),...
 		components m_hc:M, e_hc:E
 	}
 
@@ -58,7 +58,7 @@ configuration MySmartHomeHC instanceOf HC_MAPE {
 	main_hc.m_hc -> main_hc.a_hc
 	main_hc.a_hc -> main_hc.p_hc
 	main_hc.p_hc -> main_hc.e_hc
-	
+
 	//intra-interactions
 	int_hc_gf.m_hc -> main_hc.m_hc
 	int_hc_ff.m_hc -> main_hc.m_hc

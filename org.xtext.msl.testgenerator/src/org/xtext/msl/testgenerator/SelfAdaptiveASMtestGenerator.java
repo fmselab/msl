@@ -76,13 +76,14 @@ public class SelfAdaptiveASMtestGenerator {
 		Asm asm = ASMParser.setUpReadAsm(new File(asmPath)).getMain();
 		HashMap<Integer, String> counterExamples = asmetaSMV.getPropertiesCounterExample();
 		int counter = 0;
+		boolean multipleScenarios = counterExamples.size() > 1;
 		for (Integer key : counterExamples.keySet()) {
 			String cex = asmetaSMV.replaceVarsWithLocations(counterExamples.get(key));
 			// System.out.println(cex);
 			BufferedReader br = new BufferedReader(new StringReader(cex));
 			Counterexample counterexample = NuSMVTestSequencesExtractor.parseCounterexample(br, false);
 			// System.out.println(counterexample);
-			String name = asm.getName() + "_scen" + (counter++);
+			String name = asm.getName() + "_scen" + (multipleScenarios?(counter++):"");
 			Path scenarioPath = ScenarioRefiner.buildScenario(counterexample, name, Paths.get("./" + name + ".test"),
 					Paths.get(asmPath), asm, null, true, false);
 			System.out.println(scenarioPath);
@@ -107,14 +108,16 @@ public class SelfAdaptiveASMtestGenerator {
 				String calledMacro = ((MacroCallRule) k).getCalledMacro().getName();
 				//if (terminalRules.contains(calledMacro)) {
 				List<TerminalRule> matched = terminalRules.stream().filter(tr -> tr.getTerminalRule().equals(calledMacro)).collect(Collectors.toList());
-				assert matched.size() <= 1: matched;
+				if(matched.size() > 1) {
+					throw new Exception("At most one rule should match!");
+				}
 				if (matched.size() > 0) {
 					//System.out.println("Keep " + matched.get(0));
 					if(found) {
 						throw new Exception("Only one supported!");
 					}
 					found = true;
-					some = matched.get(0).equals("*-SOME");//TODO: check correct multiplicity
+					some = matched.get(0).getMult().equals("*-SOME");
 					continue;
 				}
 			}
@@ -126,7 +129,7 @@ public class SelfAdaptiveASMtestGenerator {
 		// asmetaMA.ruleIsReached.createNuSmvProperties());
 		Set<Expression> properties = some?createProperties(asmetaMA.mv.ruleCond):createProperty(asmetaMA.mv.ruleCond);
 		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
-		System.out.println(asmetaMA.nuSmvProperties);
+		//System.out.println(asmetaMA.nuSmvProperties);
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
@@ -167,7 +170,7 @@ public class SelfAdaptiveASMtestGenerator {
 			// System.out.println(absGroup + "_" + componentType);
 			String terminalRule = AsmGenerator.CLEAN_UP_PREFIX + absGroup + componentType;
 			AbstractInteraction ai = getAbstractInteraction(spec, i);
-			terminalRules.add(new TerminalRule(terminalRule, ai.getLow()));
+			terminalRules.add(new TerminalRule(terminalRule, ai.getHigh()));
 		}
 		// System.out.println("Terminal rules " + terminalRules);
 		return terminalRules;
@@ -195,7 +198,8 @@ public class SelfAdaptiveASMtestGenerator {
 			String startGroup = ((AbstractGroup) (start.getType().eContainer())).getName();
 			String endGroup = ((AbstractGroup) (end.getType().eContainer())).getName();
 			if(startGroup.equals(absGroupStart) && start.getType().getName().equals(startType) && endGroup.equals(absGroupEnd) && end.getType().getName().equals(endType)) {
-				System.out.println(absGroupStart + "." + startType + " -> " + absGroupEnd + "." + endType);
+				//System.out.println(absGroupStart + "." + startType + " -> " + absGroupEnd + "." + endType);
+				//System.out.println(ai.getLow() + " " + ai.getHigh());
 				return ai;
 			}
 		}

@@ -5,9 +5,9 @@ load ../examples/SmartHomeGateway/SmartHomeGateway/asm/MySmartHomeHC_refined_for
 check temperature_SetpointSaved(int_hc_gf)=undef;
 check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
 check temperatureSaved(int_hc_gf)=undef;
-check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
 check temperatureSaved(int_hc_ff)=undef;
 check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
 check heatingManagedByIntHC(int_hc_gf)=hs_gf;
 check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
 check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
