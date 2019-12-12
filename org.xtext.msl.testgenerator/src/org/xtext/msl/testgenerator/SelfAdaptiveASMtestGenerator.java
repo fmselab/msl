@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.asmeta.flattener.RemoveArgumentsFlattener;
@@ -25,6 +24,7 @@ import org.asmeta.flattener.rule.LetRuleFlattener;
 import org.asmeta.modeladvisor.AsmetaMA;
 import org.asmeta.modeladvisor.metaproperties.RuleIsReached;
 import org.asmeta.modeladvisor.texpr.Expression;
+import org.asmeta.modeladvisor.texpr.SimpleExpression;
 import org.asmeta.modeladvisor.texpr.SometimeExpression;
 import org.asmeta.modeladvisor.texpr.TemporalExpression;
 import org.asmeta.nusmv.AsmetaSMV;
@@ -55,10 +55,10 @@ public class SelfAdaptiveASMtestGenerator {
 		String mslPath = "../examples/SmartHomeGateway/SmartHomeGateway/HC_MAPE.msl";
 		String asmPath = "../examples/SmartHomeGateway/SmartHomeGateway/asm/MySmartHomeHC_refined_forMC.asm";
 
-		testGenerator(mslPath, asmPath);
+		testGenerator(mslPath, asmPath, TypeOfProperty.ONE);
 	}
 
-	private static void testGenerator(String mslPath, String asmPath) throws Exception, IOException {
+	private static void testGenerator(String mslPath, String asmPath, TypeOfProperty top) throws Exception, IOException {
 		// detect the terminal rules TR of the MAPE loops (those without exiting
 		// interactions)
 		Set<TerminalRule> terminalRules = extractTerminationOfMAPE(mslPath);
@@ -67,7 +67,7 @@ public class SelfAdaptiveASMtestGenerator {
 		//terminalRules.add("r_CleanUp_IntHCE");
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
 		// model check the negated RFC
-		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules);
+		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules, top);
 		// use the counterexamples to build scenarios for the self-adaptive ASM
 		buildScenariosFromCexs(asmPath, asmetaSMV);
 	}
@@ -90,7 +90,7 @@ public class SelfAdaptiveASMtestGenerator {
 		}
 	}
 
-	private static AsmetaSMV buildRFCandModelCheck(String asmPath, Set<TerminalRule> terminalRules) throws Exception {
+	private static AsmetaSMV buildRFCandModelCheck(String asmPath, Set<TerminalRule> terminalRules, TypeOfProperty top) throws Exception {
 		AsmetaMA asmetaMA = AsmetaMA.buildAsmetaMA(asmPath);
 		asmetaMA.execRuleIsReached = true;
 		MapVisitor.FLATTEN = true;
@@ -100,7 +100,7 @@ public class SelfAdaptiveASMtestGenerator {
 		AsmetaSMV asmetaSMV = asmetaMA.loadAsmetaSMV();
 		Iterator<Entry<Rule, List<String>>> conditions = asmetaMA.mv.ruleCond.entrySet().iterator();
 		boolean found = false;
-		boolean some = false;
+		//boolean some = false;
 		while (conditions.hasNext()) {
 			Entry<Rule, List<String>> entry = conditions.next();
 			Rule k = entry.getKey();
@@ -117,7 +117,7 @@ public class SelfAdaptiveASMtestGenerator {
 						throw new Exception("Only one supported!");
 					}
 					found = true;
-					some = matched.get(0).getMult().equals("*-SOME");
+					//some = matched.get(0).getMult().equals("*-SOME");//this is not what we want
 					continue;
 				}
 			}
@@ -127,13 +127,26 @@ public class SelfAdaptiveASMtestGenerator {
 		asmetaMA.ruleIsReached = new RuleIsReached(asmetaMA.mv.ruleCond, false);
 		// asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached,
 		// asmetaMA.ruleIsReached.createNuSmvProperties());
-		Set<Expression> properties = some?createProperties(asmetaMA.mv.ruleCond):createProperty(asmetaMA.mv.ruleCond);
+		Set<Expression> properties = buildProperties(asmetaMA.mv.ruleCond, top);
 		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
 		//System.out.println(asmetaMA.nuSmvProperties);
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
 	}
+	
+	private static Set<Expression> buildProperties(Map<Rule, List<String>> conds, TypeOfProperty top) {
+		switch (top) {
+		case ONE:
+			return createSingleProperties(conds);
+		case ALL_SYNCH:
+			return createPropertySynch(conds);
+		case ALL_ASYNCH:
+			return createPropertyAsynch(conds);
+		default:
+			throw new RuntimeException("Type of property " + top + " not supported!");
+		}
+	} 
 
 	private static Set<TerminalRule> extractTerminationOfMAPE(String mslPath) {
 		Specification spec = Loader.loadSpec(mslPath);
@@ -213,7 +226,7 @@ public class SelfAdaptiveASMtestGenerator {
 		return groupName + "." + c.getName();
 	}
 
-	public static Set<Expression> createProperties(Map<Rule, List<String>> allConds) {
+	public static Set<Expression> createSingleProperties(Map<Rule, List<String>> allConds) {
 		Set<Expression> smvProp = new HashSet<Expression>();
 		TemporalExpression property;
 		for (Rule rule : allConds.keySet()) {
@@ -229,7 +242,7 @@ public class SelfAdaptiveASMtestGenerator {
 		return smvProp;
 	}
 	
-	public static Set<Expression> createProperty(Map<Rule, List<String>> allConds) {
+	public static Set<Expression> createPropertySynch(Map<Rule, List<String>> allConds) {
 		Set<Expression> smvProp = new HashSet<Expression>();
 		TemporalExpression property;
 		for (Rule rule : allConds.keySet()) {
@@ -239,6 +252,21 @@ public class SelfAdaptiveASMtestGenerator {
 			property = new SometimeExpression(Util.and(allConds.get(rule)));
 			smvProp.add(property);
 		}
+		return smvProp;
+	}
+
+	public static Set<Expression> createPropertyAsynch(Map<Rule, List<String>> allConds) {
+		Set<Expression> smvProp = new HashSet<Expression>();
+		TemporalExpression property;
+		Set<String> tempExps = new HashSet<String>();
+		for (Rule rule : allConds.keySet()) {
+			// sometimes
+			// EF( + cond + );
+			// AG(!( + cond + ))
+			property = new SometimeExpression(Util.and(allConds.get(rule)));
+			tempExps.add(property.getSMV());
+		}
+		smvProp.add(new SimpleExpression(Util.or(tempExps)));
 		return smvProp;
 	}
 }
@@ -279,3 +307,8 @@ class TerminalRule {
 		return terminalRule + "(" + mult + ")";
 	}
 }
+
+enum TypeOfProperty {
+	ONE, ALL_SYNCH, ALL_ASYNCH;
+}
+
