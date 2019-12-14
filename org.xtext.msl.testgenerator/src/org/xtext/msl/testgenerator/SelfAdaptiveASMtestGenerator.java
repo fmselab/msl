@@ -56,27 +56,39 @@ public class SelfAdaptiveASMtestGenerator {
 	public static void main(String[] args) throws Exception {
 		String mslPath = "../examples/SmartHomeGateway/SmartHomeGateway/HC_MAPE.msl";
 		String asmPath = "../examples/SmartHomeGateway/SmartHomeGateway/asm/MySmartHomeHC_refined_forMC.asm";
-
 		testGenerator(mslPath, asmPath, TypeOfProperty.ALL_ASYNCH);
-		
+	}
+	
+	public static void testGenerator(String mslPath, TypeOfProperty top) throws Exception, IOException {
+		Specification spec = Loader.loadSpec(mslPath);
+		Path mslP = Paths.get(mslPath).getParent();
+		String asmPath = mslP.resolve("asm").resolve(spec.getConfiguration().getName() + "_refined_forMC.asm").toString() ;
+		testGenerator(mslPath, asmPath, top);
 	}
 
-	private static void testGenerator(String mslPath, String asmPath, TypeOfProperty top) throws Exception, IOException {
+	public static void testGenerator(String mslPath, String asmPath, TypeOfProperty top) throws Exception, IOException {
 		// detect the terminal rules TR of the MAPE loops (those without exiting
 		// interactions)
 		Set<TerminalRule> terminalRules = extractTerminationOfMAPE(mslPath);
-		//System.out.println(terminalRules);
-		//terminalRules.clear();
-		//terminalRules.add("r_CleanUp_IntHCE");
+		
+		Path mslP = Paths.get(mslPath);
+		String mslName = mslP.getFileName().toString().replaceAll(".msl", "");
+		
+		Path mslFolder = mslP.getParent();
+		File scenariosFolder = mslFolder.resolve("scenarios").toFile();
+		if (!scenariosFolder.exists()) {
+			scenariosFolder.mkdir();
+		}
+		
 		// build the conditions (RFC: Rule Firing Conditions) that trigger TR
 		// model check the negated RFC
 		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules, top);
 		// use the counterexamples to build scenarios for the self-adaptive ASM
-		buildScenariosFromCexs(asmPath, asmetaSMV);
+		buildScenariosFromCexs(asmPath, asmetaSMV, top, mslName, scenariosFolder.getAbsolutePath());
 	}
 
-	private static void buildScenariosFromCexs(String asmPath, AsmetaSMV asmetaSMV) throws Exception, IOException {
-		Asm asm = ASMParser.setUpReadAsm(new File(asmPath)).getMain();
+	private static void buildScenariosFromCexs(String asmFileName, AsmetaSMV asmetaSMV, TypeOfProperty top, String mslName, String scenarioFolder) throws Exception, IOException {
+		Asm asm = ASMParser.setUpReadAsm(new File(asmFileName)).getMain();
 		HashMap<Integer, String> counterExamples = asmetaSMV.getPropertiesCounterExample();
 		int counter = 0;
 		boolean multipleScenarios = counterExamples.size() > 1;
@@ -86,10 +98,9 @@ public class SelfAdaptiveASMtestGenerator {
 			BufferedReader br = new BufferedReader(new StringReader(cex));
 			Counterexample counterexample = NuSMVTestSequencesExtractor.parseCounterexample(br, false);
 			// System.out.println(counterexample);
-			String name = asm.getName() + "_scen" + (multipleScenarios?(counter++):"");
-			Path scenarioPath = ScenarioRefiner.buildScenario(counterexample, name, Paths.get("./" + name + ".test"),
-					Paths.get(asmPath), asm, null, true, false);
-			System.out.println(scenarioPath);
+			String name =  asm.getName() + "_" + mslName + "_" + top + "_scen" + (multipleScenarios?(counter++):"");
+			Path scenarioPath = ScenarioRefiner.buildScenario(counterexample, name, Paths.get(scenarioFolder + "/" + name + ".avalla"), Paths.get("../asm/" + Paths.get(asmFileName).getFileName().toString()), asm, null, true, false);
+			//System.out.println(scenarioPath);
 		}
 	}
 
@@ -132,7 +143,7 @@ public class SelfAdaptiveASMtestGenerator {
 		// asmetaMA.ruleIsReached.createNuSmvProperties());
 		Set<Expression> properties = buildProperties(asmetaMA.mv.ruleCond, top);
 		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
-		System.out.println(asmetaMA.nuSmvProperties);
+		//System.out.println(asmetaMA.nuSmvProperties);
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
@@ -275,7 +286,7 @@ public class SelfAdaptiveASMtestGenerator {
 				start.append("EF(" + conds.get(conds.size() - 1));
 				end.append(")");
 				property = new SimpleExpression(start.toString() + end.toString());
-				System.out.println(property.getSMV());
+				//System.out.println(property.getSMV());
 				tempExps.add(property.getSMV());
 			}
 			smvProp.add(new SimpleExpression("!(" + Util.or(tempExps) + ")"));
