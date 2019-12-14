@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -55,7 +57,8 @@ public class SelfAdaptiveASMtestGenerator {
 		String mslPath = "../examples/SmartHomeGateway/SmartHomeGateway/HC_MAPE.msl";
 		String asmPath = "../examples/SmartHomeGateway/SmartHomeGateway/asm/MySmartHomeHC_refined_forMC.asm";
 
-		testGenerator(mslPath, asmPath, TypeOfProperty.ONE);
+		testGenerator(mslPath, asmPath, TypeOfProperty.ALL_ASYNCH);
+		
 	}
 
 	private static void testGenerator(String mslPath, String asmPath, TypeOfProperty top) throws Exception, IOException {
@@ -129,7 +132,7 @@ public class SelfAdaptiveASMtestGenerator {
 		// asmetaMA.ruleIsReached.createNuSmvProperties());
 		Set<Expression> properties = buildProperties(asmetaMA.mv.ruleCond, top);
 		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
-		//System.out.println(asmetaMA.nuSmvProperties);
+		System.out.println(asmetaMA.nuSmvProperties);
 		asmetaMA.execCheck(asmetaSMV);
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
@@ -258,17 +261,41 @@ public class SelfAdaptiveASMtestGenerator {
 	public static Set<Expression> createPropertyAsynch(Map<Rule, List<String>> allConds) {
 		Set<Expression> smvProp = new HashSet<Expression>();
 		TemporalExpression property;
-		Set<String> tempExps = new HashSet<String>();
 		for (Rule rule : allConds.keySet()) {
-			// sometimes
-			// EF( + cond + );
-			// AG(!( + cond + ))
-			property = new SometimeExpression(Util.and(allConds.get(rule)));
-			tempExps.add(property.getSMV());
+			List<List<String>> condsPerms = buildPermutations(allConds.get(rule), 0);
+			Set<String> tempExps = new HashSet<String>();
+			for (List<String> conds : condsPerms) {
+				StringBuilder start = new StringBuilder();
+				StringBuilder end = new StringBuilder();
+				for (int i = 0; i < conds.size() - 1; i++) {
+					String cond = conds.get(i);
+					start.append("EF(" + cond + " & ");
+					end.append(")");
+				}
+				start.append("EF(" + conds.get(conds.size() - 1));
+				end.append(")");
+				property = new SimpleExpression(start.toString() + end.toString());
+				System.out.println(property.getSMV());
+				tempExps.add(property.getSMV());
+			}
+			smvProp.add(new SimpleExpression("!(" + Util.or(tempExps) + ")"));
 		}
-		smvProp.add(new SimpleExpression(Util.or(tempExps)));
 		return smvProp;
 	}
+	
+	static List<List<String>> buildPermutations(List<String> elements, int index) {
+		List<List<String>> permutations = new ArrayList<List<String>>();
+        for (int i = index; i < elements.size(); i++) {
+            Collections.swap(elements, i, index);
+            permutations.addAll(buildPermutations(elements, index + 1));
+            Collections.swap(elements, index, i);
+        }
+        if (index == elements.size() - 1) {
+        	permutations.add(new ArrayList<String>(elements));
+        }
+        return permutations;
+    }
+
 }
 
 class TerminalRule {

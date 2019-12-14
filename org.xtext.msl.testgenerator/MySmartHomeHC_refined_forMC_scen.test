@@ -1,10 +1,10 @@
-scenario MySmartHomeHC_refined_forMC_scen1
+scenario MySmartHomeHC_refined_forMC_scen
 load ../examples/SmartHomeGateway/SmartHomeGateway/asm/MySmartHomeHC_refined_forMC.asm
 
 //state 0
 check temperature_SetpointSaved(int_hc_gf)=undef;
-check temperatureSaved(int_hc_gf)=undef;
 check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
+check temperatureSaved(int_hc_gf)=undef;
 check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
 check temperatureSaved(int_hc_ff)=undef;
 check heatingManagedByIntHC(int_hc_ff)=hs_ff;
