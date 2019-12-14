@@ -346,7 +346,3 @@ class TerminalRule {
 	}
 }
 
-enum TypeOfProperty {
-	ONE, ALL_SYNCH, ALL_ASYNCH;
-}
-
