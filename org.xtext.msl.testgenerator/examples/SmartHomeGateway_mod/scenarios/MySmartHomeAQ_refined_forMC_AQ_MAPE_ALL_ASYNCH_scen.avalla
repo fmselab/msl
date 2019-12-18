@@ -1,0 +1,64 @@
+scenario MySmartHomeAQ_refined_forMC_AQ_MAPE_ALL_ASYNCH_scen
+load ../asm/MySmartHomeAQ_refined_forMC.asm
+
+//state 0
+check sgnMainAQMtoA(aq_main)=false;
+check windowsStatusSaved(aq_main)=undef;
+check aQInsideCO2Saved(aq_main)=undef;
+check nolongerBadAirInside=true;
+check outsideAqiSaved(aq_main)=undef;
+check loopAQCompleted(aq_main)=true;
+check sgnMainAQAtoE(aq_main)=false;
+
+
+set outsideAqi(aqs_gf) := -1;
+set outsideAqi(aqs_ff) := -1;
+set aQInsideCO2(aqs_ff) := 0;
+set windowsStatus(aqs_ff) := CLOSED;
+set windowsStatus(aqs_gf) := CLOSED;
+set aQInsideCO2(aqs_gf) := 0;
+step
+
+
+//state 1
+check sgnMainAQMtoA(aq_main)=true;
+check windowsStatusSaved(aq_main)=CLOSED;
+check loopAQCompleted(aq_main)=false;
+check outsideAqiSaved(aq_main)=-1;
+check aQInsideCO2Saved(aq_main)=0;
+
+
+step
+
+
+//state 2
+check sgnMainAQMtoA(aq_main)=false;
+check loopAQCompleted(aq_main)=true;
+
+
+set windowsStatus(aqs_ff) := OPEN;
+set aQInsideCO2(aqs_gf) := 1;
+set aQInsideCO2(aqs_ff) := 3;
+set outsideAqi(aqs_gf) := 2;
+step
+
+
+//state 3
+check sgnMainAQMtoA(aq_main)=true;
+check windowsStatusSaved(aq_main)=OPEN;
+check loopAQCompleted(aq_main)=false;
+check aQInsideCO2Saved(aq_main)=2;
+check outsideAqiSaved(aq_main)=2;
+
+
+set windowsStatus(aqs_ff) := CLOSED;
+set aQInsideCO2(aqs_gf) := 0;
+set outsideAqi(aqs_gf) := -1;
+set aQInsideCO2(aqs_ff) := 0;
+step
+
+
+//state 4
+check sgnMainAQMtoA(aq_main)=false;
+check sgnMainAQAtoE(aq_main)=true;
+
