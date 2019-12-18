@@ -1,3 +1,9 @@
+//Manual and adaptive high beam headlights
+//from ELS-30 to ELS-38
+
+//We assume a max illumination area of 360 m and 100% of luminous strenght in the flasher mode.
+//We assume key is inserted to activate high beam in a fixed way
+
 asm AdaptiveHighBeamLights_refined
 
 import StandardLibrary

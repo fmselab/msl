@@ -1,0 +1,36 @@
+abstract pattern SimpleMAPE {
+	system Sys
+
+	group Main {
+		managedSyS Sys
+		components M, A, P, E
+	}
+
+	interaction Main.M -> Main.A 
+	interaction Main.A -> Main.P
+	interaction Main.P -> Main.E 
+}
+
+concrete pattern CruiseControlMAPE concretizationOf SimpleMAPE {
+	system CruiseSpeed : SimpleMAPE.Sys
+    group ACC: SimpleMAPE.Main
+}
+
+configuration AdaptiveCruiseControl instanceOf CruiseControlMAPE {
+    cs: CruiseControlMAPE.CruiseSpeed //Speed increasing/decreasing; warning/acoustic signals management
+    
+	acc: CruiseControlMAPE.ACC { 
+	    managedSyS cs
+		components m_acc:M, a_acc:A, p_acc:P, e_acc:E
+	}
+   
+	//interactions
+	acc.m_acc -> acc.a_acc
+	acc.a_acc -> acc.p_acc 
+	acc.p_acc -> acc.e_acc
+
+}
+
+
+
+

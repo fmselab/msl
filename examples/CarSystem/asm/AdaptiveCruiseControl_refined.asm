@@ -1,16 +1,20 @@
-//Seventh refinement of Adaptive Exterior Light and Speed Control System
+//Speed Control System
 //Setting and modifying desired speed - 
 //Cruise control - Speed limit - Traffic sign detection
 //from SCS-1 to SCS-17
 //from SCS-29 to SCS-35
 //from SCS-36 to SCS-39
 //from SCS-18 to SCS-26
+asm AdaptiveCruiseControl_refined
 
-asm AdaptiveSpeedControl
 import StandardLibrary
 
 signature:
 	// DOMAINS
+	//CruiseControlMAPE
+	domain CruiseSpeedMdA subsetof Agent
+	domain ACCMgA subsetof Agent
+	//Added by incremental refinement
 	enum domain SCSLever = {DOWNWARD5_SCS | UPWARD5_SCS | DOWNWARD7_SCS | UPWARD7_SCS | NEUTRAL | FORWARD_SCS | BACKWARD_SCS | HEAD} // Cruise control lever positions
 	enum domain KeyPosition = {NOKEYINSERTED | KEYINSERTED | KEYINIGNITIONONPOSITION} // Key state
 	enum domain CruiseControlMode = {CCM0 | CCM1 | CCM2}
@@ -28,8 +32,17 @@ signature:
 	//====================================	
 	domain TimeImpactBrake subsetof Integer
 	
-	// FUNCTIONS
+	//FUNCTIONS	
+	controlled cruisespeedManagedByACC: ACCMgA -> CruiseSpeedMdA
+	derived startACCM: ACCMgA -> Boolean
+	derived startACCA: ACCMgA -> Boolean
+	derived startACCP: ACCMgA -> Boolean
+	derived startACCE: ACCMgA -> Boolean
+	//AdaptiveCruiseControl
+	static cs: CruiseSpeedMdA
+	static acc: ACCMgA
 
+	//Added by incremental refinement
 	monitored cruiseControlMode: CruiseControlMode // State of cruise control
 	monitored sCSLever: SCSLever // Position of the Cruise control lever
 	controlled sCSLeve_Previous: SCSLever // Position of the Cruise control lever in previous state 
@@ -44,7 +57,6 @@ signature:
 	monitored passed2Sec: Boolean // Are 2 seconds passed?
 	controlled passed2SecYes: Boolean // Are 2 seconds passed?
 	monitored accelerationUserHighCruiseControl: Boolean // User acceleration is higher than cruise control
-//====================================			
 	controlled orangeLed: Boolean //The orange led is on (true) or off (false)
 	monitored gasPedal: GasPedalPerc //Gas pedal value in percentage
 	controlled speedLimitActive: Boolean //speedLimiter is running
@@ -54,10 +66,8 @@ signature:
 	monitored speedLimitDetected: CurrentSpeed //Speed detected when traffic sign detection is active
 	monitored setSpeedLimitManually: Boolean //Set speed limit manually or automaticcly using traffic sign detection
 	monitored trafficSignDetectionOn: Boolean // Traffic sign detector is on
-	
 	derived engineOn: KeyPosition -> Boolean // Depending on keyState engineOn is true or false
 	derived adaptiveCruiseControlActivated: Boolean //Depending whether cruiseControlMode = CCM2 or not
-	//derived adaptiveCruiseControlDeactivated: Boolean
 	controlled acousticWarningOn: Boolean //Acoustic warning command True, False
 	controlled visualWarningOn: Boolean
 	monitored rangeRadarState: RangeRadarState
@@ -76,31 +86,37 @@ signature:
 	monitored movingObstacle: Boolean // A moving obstacle is present
 	controlled acousticSignalImpact: Boolean // Acoustic signal of brake emergency assistant
 	monitored timeImpact: TimeImpactBrake // Time to impact: depending on this value emergency brake is activated at 20%, 60% or 100%
-//====================================	
-	
-definitions:	
-	domain CurrentSpeed = {0..2000} //5000 Si può ridurre a 2000? che corrisponde a velocità massima di 200km/h??
-	//1km/h = 10 unità
+
+
+definitions:
+   //DOMAINS definitions added by incremental refinement
+    domain CurrentSpeed = {0..2000} //5000 Si può ridurre a 2000? che corrisponde a velocità massima di 200km/h?? //1km/h = 10 unità
 	domain BrakePedal = {0..225} //res 0.2° 0° - 45° -> 1° = 5 unità
-//====================================		
 	domain GasPedalPerc = {0..100}
 	domain RangeRadarSensor = {0..200} //0 = no dectected obstacle in the travel corridor
 									//1-200 = distance in meters of obstacle detected in the travel corridor
-///	domain SafetyDistance = {2.0, 2.5, 3.0}
+    //domain SafetyDistance = {2.0, 2.5, 3.0}
 	domain BrakePressure = {0..100}
 	domain TimeImpactBrake = {0..100}
 	
-	// FUNCTION DEFINITIONS
-		
+	//FUNCTIONS DEFINITIONS
+	
+	function startACCA($b in ACCMgA) = //Refined!
+		adaptiveCruiseControlActivated
+
+	function startACCP($b in ACCMgA) =
+		true
+
+	function startACCE($b in ACCMgA) =
+		true
+
+	//Added by incremental refinement
 	//Engine state is determined by KeyPosition value. If the key is on the engine is on, otherwise is off
 	function engineOn ($key in KeyPosition)=
 		($key = KEYINIGNITIONONPOSITION)
 		
 	function adaptiveCruiseControlActivated = 
 		(cruiseControlMode = CCM2)
-		
-	//function adaptiveCruiseControlDeactivated = 
-	//	(sCSLever = BACKWARD_SCS or not cruiseControlMode = CCM2)
 	
 	function obstacleAhead = 
 		(rangeRadarState = READY and not rangeRadarSensor = 0)
@@ -111,11 +127,9 @@ definitions:
 	function brakingDistance = 
 	 	 rtoi((currentSpeed*currentSpeed)/20)
 	 	 
-//====================================
-
+	//RULE DEFINITIONS
 	
-	// RULE DEFINITIONS
-	
+	//Added by incremental refinement
 	//SCS-2 SCS-3
 	macro rule r_SCSLeverForward ($speed in CurrentSpeed) = 
 		if (sCSLever = FORWARD_SCS) then
@@ -327,9 +341,58 @@ definitions:
 			keyState_Previous := keyState
 		endpar 
 	
+	//SCS-28
+	macro rule r_activateEmergencyBrake = 
+		if (timeImpact != 0) then
+			par
+				acousticSignalImpact := true
+				if (timeImpact = 1) then
+					brakePressure := 20
+				endif
+				if (timeImpact = 2) then
+					brakePressure := 60
+				endif
+				if (timeImpact = 3) then
+					brakePressure := 100
+				endif
+			endpar
+		endif
+	
+	//SCS-27
+	macro rule r_EmergencyBrake = 
+		if ((currentSpeed > 0 and currentSpeed <= 60 and stationaryObstacle) or (currentSpeed > 0 and currentSpeed <= 120 and movingObstacle)) then
+			r_activateEmergencyBrake[] 	
+		else
+			if (acousticSignalImpact) then
+				acousticSignalImpact := false
+			endif
+		endif
+				
+	//SCS-24
+	macro rule r_SafetyDistanceByUser =
+		if not adaptiveCruiseControlActivated then
+			if (currentSpeed > 200) then
+				if (sCSLever = HEAD) then
+					setSafetyDistance := rtoi((currentSpeed/10)/3.6*(safetyDistance))
+				endif
+			endif
+		endif
+	
+	//SCS-21		
+	//@AE_MAPE_CC
+	macro rule r_CollisionDetection =
+		 par
+			 if (rangeRadarSensor < brakingDistance)  then //SCS-21 checks if adaptation is necessary
+		 	 	acousticCollisionSignals := true
+		 	 endif
+		 	 if (rangeRadarSensor > brakingDistance and acousticCollisionSignals = true)  then //SCS-21 checks if adaptation is necessary
+		 	 	acousticCollisionSignals := false
+		 	 endif
+	 	 endpar
+	
 	//SCS-23 
-	//@PE_MAPE_CC
-	macro rule r_CalculateSafetyDistancePlan_CC = 
+	//@AE_MAPE_CC
+	macro rule r_CalculateSafetyDistance_CC = 
 			if currentSpeed<200 then
 				par
 					speedVehicleAhead_Prec := speedVehicleAhead
@@ -344,29 +407,6 @@ definitions:
 					endif
 				endpar
 			endif
-		
-	//SCS-24
-	//@PE_MAPE_CC
-	macro rule r_SafetyDistanceByUser =
-		if not adaptiveCruiseControlActivated then
-			if (currentSpeed > 200) then
-				if (sCSLever = HEAD) then
-					setSafetyDistance := rtoi((currentSpeed/10)/3.6*(safetyDistance))
-				endif
-			endif
-		endif
-	
-	//SCS-21
-	//@PE_MAPE_CC
-	macro rule r_CollisionDetection =
-		 par
-			 if (rangeRadarSensor < brakingDistance)  then //SCS-21 checks if adaptation is necessary
-		 	 	acousticCollisionSignals := true
-		 	 endif
-		 	 if (rangeRadarSensor > brakingDistance and acousticCollisionSignals = true)  then //SCS-21 checks if adaptation is necessary
-		 	 	acousticCollisionSignals := false
-		 	 endif
-	 	 endpar
 	
 	//@PE_MAPE_CC
 	macro rule r_AcceleratePlan_CC =
@@ -403,91 +443,73 @@ definitions:
 	  	endif 	  
 	  endpar
 	   	  
-	//@MA_MAPE_CC
-	//All MAPE computations of the MAPE loop are executed within one single ASM-step machine.
-	macro rule r_Monitor_Analyze_CC =
-	 if adaptiveCruiseControlActivated then
-	   par	
-	 	 if (obstacleAhead and rangeRadarSensor<setSafetyDistance) then //SCS-22 checks if adaptation is necessary
-	 		r_DeceleratePlan_CC[]
-	 	 endif
-	 	 if (obstacleAhead and rangeRadarSensor>setSafetyDistance) then //SCS-20 checks if adaptation is necessary
-	 		r_AcceleratePlan_CC[]
-	 	 endif
-	 	 r_CollisionDetection[] 
-	 	 if obstacleAhead then //SCS-25, SCS-26 distance warning (if necessary)
-	 	 	r_WarningPlan_CC[] 
-	 	 endif
-	 	 r_CalculateSafetyDistancePlan_CC[] //SCS-23
-	   endpar
-	 endif 
-		
-	
-	macro rule r_MAPE_CC = //MAPE loop may start and stop
-	//par 
-	    r_Monitor_Analyze_CC[] 
-		//if adaptiveCruiseControlDeactivated then //SCS-12
-		//	r_SetModifySpeed[setVehicleSpeed] endif 
-	//endpar
-			
-	//SCS-28
-	macro rule r_activateEmergencyBrake = 
-		if (timeImpact != 0) then
+	rule r_CleanUp_ACCE =
+		skip //<<TODO>>
+
+	rule r_ACCE =
+		if startACCE(self) then
 			par
-				acousticSignalImpact := true
-				if (timeImpact = 1) then
-					brakePressure := 20
-				endif
-				if (timeImpact = 2) then
-					brakePressure := 60
-				endif
-				if (timeImpact = 3) then
-					brakePressure := 100
-				endif
+				skip //<<TODO>>
+				r_CleanUp_ACCE[]
 			endpar
 		endif
-	
-	//SCS-27
-	macro rule r_EmergencyBrake = 
-		if ((currentSpeed > 0 and currentSpeed <= 60 and stationaryObstacle) or (currentSpeed > 0 and currentSpeed <= 120 and movingObstacle)) then
-			r_activateEmergencyBrake[] 	
-		else
-			if (acousticSignalImpact) then
-				acousticSignalImpact := false
-			endif
+
+	rule r_CleanUp_ACCP =
+		skip //<<TODO>>
+
+	rule r_ACCP =
+		if startACCP(self) then
+			par
+				r_WarningPlan_CC[] //SCS-25, SCS-26 distance warning (if necessary)   
+	   			if rangeRadarSensor<setSafetyDistance then //SCS-22 checks if adaptation is necessary
+	 				r_DeceleratePlan_CC[]
+	   			endif
+	   			if rangeRadarSensor>setSafetyDistance then //SCS-20 checks if adaptation is necessary
+	 				r_AcceleratePlan_CC[]
+	   			endif
+				r_CleanUp_ACCP[]
+			endpar
 		endif
-				
-	// INVARIANTS
-	
-	
-	//PROPERTIES
-	
-	
-	// MAIN RULE
-	main rule r_Main =
+
+	rule r_CleanUp_ACCA = 
+		skip //<<TODO>>
+
+    //@MA_MAPE_CC
+	//All MAPE computations of the MAPE loop are executed within one single ASM-step machine.
+	rule r_ACCA = 
+	 if startACCA(self) then
+	  par
+		 if obstacleAhead then r_ACCP[] endif
+	 	 r_CollisionDetection[] 
+	 	 r_CalculateSafetyDistance_CC[] //SCS-23
+		 r_CleanUp_ACCA[]
+	  endpar
+	 endif
+  
+		 
+	rule r_CruiseSpeed = //Refined!
 		par
 			r_ReadMonitorFunctions[] 
 			r_DesiredSpeedVehicleSpeed[] 
 			r_BrakePedal[] 
 			r_SpeedLimit[] 
-			r_MAPE_CC[] 
 			r_SafetyDistanceByUser[] 			
 			r_EmergencyBrake[] 
-		endpar 
+		endpar  
+		
+	rule r_ACC =
+		r_ACCA[]
 
-// INITIAL STATE
+	main rule r_mainRule =
+		forall $a in Agent with true do
+			program($a)
+
 default init s0:
-	function cruiseControlMode = CCM0
-	//Cruise control lever is in NEUTRAL position
-	function sCSLeve_Previous = NEUTRAL
-	//Key is not inserted
-	function keyState_Previous = NOKEYINSERTED
-	function setVehicleSpeed = 0
-	function desiredSpeed = 0
-	function passed2SecYes = false
-	function orangeLed = false
-	function speedLimitActive = false
-	function speedLimitTempDeacti = false
-	function speedLimitSpeed = 0
-	function setSafetyDistance = 2
-	function acousticSignalImpact = false
+	function cruisespeedManagedByACC($x in ACCMgA) =
+		switch($x)
+			case acc: cs
+		endswitch
+
+
+	agent ACCMgA: r_ACC[]
+	agent CruiseSpeedMdA: r_CruiseSpeed[]
