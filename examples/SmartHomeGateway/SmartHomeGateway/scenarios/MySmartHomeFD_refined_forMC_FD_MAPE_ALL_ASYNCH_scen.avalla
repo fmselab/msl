@@ -1,3 +1,4 @@
+// !(EF ((TRUE & startSlaveFDE_FF_SLAVE) & EF ((TRUE & startSlaveFDE_GF_SLAVE) & AX TRUE)) | EF ((TRUE & startSlaveFDE_GF_SLAVE) & EF ((TRUE & startSlaveFDE_FF_SLAVE) & AX TRUE)))
 scenario MySmartHomeFD_refined_forMC_FD_MAPE_ALL_ASYNCH_scen
 load ../asm/MySmartHomeFD_refined_forMC.asm
 

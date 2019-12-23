@@ -1,3 +1,4 @@
+// AG !((TRUE & startSlaveFDE_GF_SLAVE) & AX TRUE)
 scenario MySmartHomeFD_refined_forMC_FD_MAPE_ONE_scen0
 load ../asm/MySmartHomeFD_refined_forMC.asm
 

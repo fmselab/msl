@@ -44,7 +44,7 @@ abstract public class Generator {
 		absPattern = spec.getAbsPattern();
 		List<Pattern> patterns = spec.getPattern();
 		if (patterns.size() > 1) {
-			System.out.println("Multiple concrete pattern are not supported yet by the generator");
+			System.out.println("Multiple concrete patterns are not supported yet by the generator");
 			return;
 		} else if (patterns.size() == 0) {
 			System.out.println("You have to specify a concrete pattern");
@@ -66,17 +66,18 @@ abstract public class Generator {
 
 		nameBinding = new HashMap<>();
 		for (SystemBinding ms : pattern.getManagedSystems()) {
-			//assert !nameBinding.containsKey(ms.getAbsSys().getName()): "nameBinding: " + nameBinding + "\nms.getAbsSys().getName(): " + ms.getAbsSys().getName();
-			if(!nameBinding.containsKey(ms.getAbsSys().getName())) {
+			// assert !nameBinding.containsKey(ms.getAbsSys().getName()): "nameBinding: " +
+			// nameBinding + "\nms.getAbsSys().getName(): " + ms.getAbsSys().getName();
+			if (!nameBinding.containsKey(ms.getAbsSys().getName())) {
 				nameBinding.put(ms.getAbsSys().getName(), ms.getName());
-				//System.err.println(ms.getAbsSys().getName() + "-> " + ms.getName());
+				// System.err.println(ms.getAbsSys().getName() + "-> " + ms.getName());
 			}
 		}
 		for (GroupBinding g : pattern.getGroups()) {
 			// System.err.println(g.getAbsGroup().getName() + "-> " + g.getName());
 			assert !nameBinding.containsKey(g.getAbsGroup().getName());
 			nameBinding.put(g.getAbsGroup().getName(), g.getName());
-					}
+		}
 		/*
 		 * for(Binding b: pattern.getConcrete()) { Abstract abs = b.getAbs(); assert
 		 * !nameBinding.containsKey(abs); String name = b.getName();
@@ -86,5 +87,5 @@ abstract public class Generator {
 		generateCode();
 	}
 
-	abstract public void generateCode();
+	abstract protected void generateCode();
 }

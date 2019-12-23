@@ -1,3 +1,4 @@
+// AG !((TRUE & startSlaveFDE_FF_SLAVE) & AX TRUE)
 scenario MySmartHomeFD_refined_forMC_FD_MAPE_ONE_scen1
 load ../asm/MySmartHomeFD_refined_forMC.asm
 
@@ -21,7 +22,7 @@ check gsmokeSaved(ff_slave)=undef;
 
 
 set gsmoke(fd_gf) := OFF;
-set gsmoke(fd_ff) := OFF;
+set gsmoke(fd_ff) := ON;
 set maxTemperature(fd_gf) := 0;
 set maxTemperature(fd_ff) := 0;
 step
@@ -29,38 +30,30 @@ step
 
 //state 1
 check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=true;
+check loopFDCompleted(ff_slave)=false;
 check loopFDCompleted(gf_slave)=false;
 check gsmokeSaved(gf_slave)=OFF;
 check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=true;
 check maxTemperatureSaved(ff_slave)=0;
 check maxTemperatureSaved(gf_slave)=0;
-check gsmokeSaved(ff_slave)=OFF;
-check loopFDCompleted(ff_slave)=false;
+check gsmokeSaved(ff_slave)=ON;
 
 
+set gsmoke(fd_ff) := OFF;
 step
 
 
 //state 2
-check loopFDCompleted(gf_slave)=true;
+check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=false;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=true;
 
 
-set maxTemperature(fd_gf) := 4;
 step
 
 
 //state 3
-check loopFDCompleted(gf_slave)=false;
-check maxTemperatureSaved(gf_slave)=4;
-
-
-set maxTemperature(fd_gf) := 0;
-step
-
-
-//state 4
 check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=true;
-check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=false;
+check loopFDCompleted(gf_slave)=true;
 check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=false;
-check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=true;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
 

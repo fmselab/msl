@@ -1,3 +1,4 @@
+// !(EF ((TRUE & startIntHCE_INT_HC_FF) & EF ((TRUE & startIntHCE_INT_HC_GF) & AX TRUE)) | EF ((TRUE & startIntHCE_INT_HC_GF) & EF ((TRUE & startIntHCE_INT_HC_FF) & AX TRUE)))
 scenario MySmartHomeHC_refined_forMC_HC_MAPE_ALL_ASYNCH_scen
 load ../asm/MySmartHomeHC_refined_forMC.asm
 

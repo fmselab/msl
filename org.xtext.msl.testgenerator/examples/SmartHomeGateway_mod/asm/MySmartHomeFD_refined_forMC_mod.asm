@@ -118,7 +118,9 @@ definitions:
 							sgnMasterFDPSlaveFDE(self, gf_slave) := true
 						endpar
 					endif
-					if sgnSlaveFDMMasterFDA(ff_slave, self) and not (sgnSlaveFDMMasterFDA(gf_slave, self)) then
+					if sgnSlaveFDMMasterFDA(ff_slave, self)
+					and not sgnSlaveFDMMasterFDA(gf_slave, self)
+					then
 						par 
 						    desiredFireAlarmSetting(ff_slave) := detectFire(ff_slave)
 							sgnMasterFDPSlaveFDE(self, ff_slave) := true
@@ -134,7 +136,7 @@ definitions:
 			if sgnSlaveFDMMasterFDA(gf_slave, self) then
 				sgnSlaveFDMMasterFDA(gf_slave, self) := false
 			endif
-			if sgnSlaveFDMMasterFDA(ff_slave, self) and not (sgnSlaveFDMMasterFDA(gf_slave, self)) then
+			if sgnSlaveFDMMasterFDA(ff_slave, self) and not sgnSlaveFDMMasterFDA(gf_slave, self) then
 				sgnSlaveFDMMasterFDA(ff_slave, self) := false
 			endif
 		endpar
@@ -190,7 +192,6 @@ definitions:
 
 	rule r_SlaveFDE =
 		if startSlaveFDE(self) then
-		//if startSlaveFDE(self) and (self = gf_slave or not(startSlaveFDE(gf_slave))) then
 			par
 				fireAlarm(firedetectionManagedBySlaveFD(self)):= desiredFireAlarmSetting(self) //Added in refinement
 				r_CleanUp_SlaveFDE[]

@@ -1,3 +1,4 @@
+// AG !((TRUE & startSlaveFDE_GF_SLAVE) & AX TRUE)
 scenario MySmartHomeFD_refined_forMC_FD_MAPE_ONE_scen0
 load ../asm/MySmartHomeFD_refined_forMC.asm
 
@@ -59,8 +60,6 @@ step
 
 
 //state 4
-check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=true;
 check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=false;
-check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=false;
 check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=true;
 
