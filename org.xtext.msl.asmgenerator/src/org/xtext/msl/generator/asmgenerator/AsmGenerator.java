@@ -495,31 +495,31 @@ public class AsmGenerator extends Generator {
 							&& f[4].equals(endCompType)) {
 						firstFunc = f[0];
 						getCompIntFuncToDomValues().get(f[0]).add(startGroupName);
-						if (!componentInteractions.containsKey(f[0])) {
-							componentInteractions.put(f[0], new HashMap<>());
+						if (!getComponentInteractions().containsKey(f[0])) {
+							getComponentInteractions().put(f[0], new HashMap<>());
 						}
 					}
 					if (f[1].equals(absGroupEnd) && f[2].equals(endCompType) && f[3].equals(absGroupStart)
 							&& f[4].equals(initCompType)) {
 						secondFunc = f[0];
 						getCompIntFuncToDomValues().get(f[0]).add(endGroupName);
-						if (!componentInteractions.containsKey(f[0])) {
-							componentInteractions.put(f[0], new HashMap<>());
+						if (!getComponentInteractions().containsKey(f[0])) {
+							getComponentInteractions().put(f[0], new HashMap<>());
 						}
 					}
 				}
 				assert firstFunc != null;
 				assert secondFunc != null;
 
-				if (!componentInteractions.get(firstFunc).containsKey(startGroupName)) {
-					componentInteractions.get(firstFunc).put(startGroupName, new ArrayList<>());
+				if (!getComponentInteractions().get(firstFunc).containsKey(startGroupName)) {
+					getComponentInteractions().get(firstFunc).put(startGroupName, new ArrayList<>());
 				}
-				componentInteractions.get(firstFunc).get(startGroupName).add(endGroupName);
+				getComponentInteractions().get(firstFunc).get(startGroupName).add(endGroupName);
 
-				if (!componentInteractions.get(secondFunc).containsKey(endGroupName)) {
-					componentInteractions.get(secondFunc).put(endGroupName, new ArrayList<>());
+				if (!getComponentInteractions().get(secondFunc).containsKey(endGroupName)) {
+					getComponentInteractions().get(secondFunc).put(endGroupName, new ArrayList<>());
 				}
-				componentInteractions.get(secondFunc).get(endGroupName).add(startGroupName);
+				getComponentInteractions().get(secondFunc).get(endGroupName).add(startGroupName);
 			}
 		}
 		// System.out.println(componentInteractions);
@@ -608,7 +608,7 @@ public class AsmGenerator extends Generator {
 				if (ais[7].equals("SET")) {
 					pw.print("{");
 				}
-				ArrayList<String> connected = componentInteractions.get(ais[0]).get(a);
+				ArrayList<String> connected = getComponentInteractions().get(ais[0]).get(a);
 				// System.out.println(componentInteractions.get(ais[0]));
 				pw.print(connected.get(0));
 				for (int i = 1; i < connected.size(); i++) {
@@ -673,5 +673,9 @@ public class AsmGenerator extends Generator {
 
 	public Map<String, Set<String>> getCompIntFuncToDomValues() {
 		return compIntFuncToDomValues;
+	}
+
+	public Map<String, Map<String, ArrayList<String>>> getComponentInteractions() {
+		return componentInteractions;
 	}
 }

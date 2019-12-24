@@ -59,6 +59,7 @@ public class SelfAdaptiveASMtestGenerator {
 	private TypeOfProperty top;
 	private Path mslP;
 	private Specification spec;
+	private TerminalRule terminalRule;
 
 	private SelfAdaptiveASMtestGenerator(String mslPath, TypeOfProperty top) {
 		this.mslPath = mslPath;
@@ -73,6 +74,7 @@ public class SelfAdaptiveASMtestGenerator {
 		// interactions)
 		Set<TerminalRule> terminalRules = extractTerminationOfMAPE();
 		assert terminalRules.size() == 1;
+		terminalRule = terminalRules.iterator().next();
 
 		Path mslP = Paths.get(mslPath);
 		String mslName = mslP.getFileName().toString().replaceAll(".msl", "");
@@ -87,12 +89,12 @@ public class SelfAdaptiveASMtestGenerator {
 		// model check the negated RFC
 		AsmetaSMV asmetaSMV = buildRFCandModelCheck(asmPath, terminalRules, top);
 		// use the counterexamples to build scenarios for the self-adaptive ASM
-		buildScenariosFromCexs(asmPath, asmetaSMV, top, mslName, scenariosFolder.getAbsolutePath());
+		buildScenariosFromCexs(asmetaSMV, mslName, scenariosFolder.getAbsolutePath());
 	}
 
-	private void buildScenariosFromCexs(String asmFileName, AsmetaSMV asmetaSMV, TypeOfProperty top, String mslName,
-			String scenarioFolder) throws Exception, IOException {
-		Asm asm = ASMParser.setUpReadAsm(new File(asmFileName)).getMain();
+	private void buildScenariosFromCexs(AsmetaSMV asmetaSMV, String mslName, String scenarioFolder)
+			throws Exception, IOException {
+		Asm asm = ASMParser.setUpReadAsm(new File(asmPath)).getMain();
 		HashMap<Integer, String> counterExamples = asmetaSMV.getPropertiesCounterExample();
 
 		List<Boolean> nuSmvPropsResults = asmetaSMV.mv.getNuSmvPropsResults();
@@ -117,8 +119,7 @@ public class SelfAdaptiveASMtestGenerator {
 			// String name = asm.getName() + "_" + mslName + "_" + top + "_scen" + key;
 			Path scenarioPath = ScenarioRefiner.buildScenario(counterexample, name,
 					Paths.get(scenarioFolder + "/" + name + ".avalla"),
-					Paths.get("../asm/" + Paths.get(asmFileName).getFileName().toString()), asm, null, true, false,
-					prop);
+					Paths.get("../asm/" + Paths.get(asmPath).getFileName().toString()), asm, null, true, false, prop);
 			// System.out.println(scenarioPath);
 		}
 	}
@@ -162,17 +163,17 @@ public class SelfAdaptiveASMtestGenerator {
 		asmetaMA.ruleIsReached = new RuleIsReached(asmetaMA.mv.ruleCond, false);
 		// asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached,
 		// asmetaMA.ruleIsReached.createNuSmvProperties());
-		Set<Expression> properties = buildProperties(asmetaMA.mv.ruleCond);
+		assert asmetaMA.mv.ruleCond.size() == 1;
+		Set<Expression> properties = buildProperties(asmetaMA.mv.ruleCond.values().iterator().next());
 		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
 		// System.out.println(asmetaMA.nuSmvProperties);
 		asmetaMA.execCheck(asmetaSMV);
-		// System.out.println(asmetaSMV.getSmvFileName());
+		System.out.println(asmetaSMV.getSmvFileName());
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
 	}
 
-	private Set<Expression> buildProperties(Map<Rule, List<String>> conds) {
-		assert conds.size() == 1;
+	private Set<Expression> buildProperties(List<String> conds) {
 		switch (top) {
 		case ONE:
 			return createSingleProperties(conds);
@@ -185,7 +186,7 @@ public class SelfAdaptiveASMtestGenerator {
 		}
 	}
 
-	private Set<TerminalRule> extractTerminationOfMAPE() {
+	private Set<TerminalRule> extractTerminationOfMAPE() throws Exception {
 		// Specification spec = Loader.loadSpec(mslPath);
 		AsmGenerator ag = new AsmGenerator(spec, new PrintWriter(new StringWriter()));
 		ag.generate();
@@ -227,18 +228,33 @@ public class SelfAdaptiveASMtestGenerator {
 			String start = absGroupStart + componentTypeStart;
 			String end = absGroupEnd + componentTypeEnd;
 			String fromTo = "from" + end + "to" + start;
-			String signal = "sng" + start + end + "(" + fromTo + "(self), self)";
+			String signal = "sgn" + start + end + "(" + fromTo + "(self), self)";
 			Set<String> receivers = ag.getCompIntFuncToDomValues().get(fromTo);
-			System.out.println(signal);
-			System.out.println(fromTo);
-			System.out.println(receivers);
+			System.out.println("signal " + signal);
+			System.out.println("fromTo " + fromTo);
+			System.out.println("receivers " + receivers);
+			Map<String, ArrayList<String>> connected;
+			Map<String, String> codomain = new HashMap<>();
+			if (receivers != null) {
+				connected = ag.getComponentInteractions().get(fromTo);
+				for (String r : receivers) {
+					ArrayList<String> d = connected.get(r);
+					if (d.size() > 1) {
+						throw new Exception("Only one supported!");
+					}
+					System.out.println("-- " + d);
+					codomain.put(r, connected.get(r).get(0));
+				}
+			} else {
+				signal = null;
+				fromTo = null;
+			}
 			String terminalRule = AsmGenerator.CLEAN_UP_PREFIX + end;
 			AbstractInteraction ai = getAbstractInteraction(i);
-			terminalRules.add(new TerminalRule(terminalRule, ai.getHigh(), signal, receivers));
+			terminalRules.add(new TerminalRule(terminalRule, ai.getHigh(), signal, fromTo, receivers, codomain));
 		}
 		System.out.println("Terminal rules " + terminalRules);
 		// System.out.println(ag.getManagingFuncManagingInstToManagedInst());
-
 		return terminalRules;
 	}
 
@@ -282,58 +298,94 @@ public class SelfAdaptiveASMtestGenerator {
 		return groupName + "." + c.getName();
 	}
 
-	public Set<Expression> createSingleProperties(Map<Rule, List<String>> allConds) {
+	public Set<Expression> createSingleProperties(List<String> allConds) {
 		Set<Expression> smvProp = new HashSet<Expression>();
 		TemporalExpression property;
-		for (Rule rule : allConds.keySet()) {
-			// sometimes
-			// EF( + cond + );
-			// AG(!( + cond + ))
-
-			for (String cond : allConds.get(rule)) {
-				System.out.println(cond);
-				property = new SometimeExpression(cond + " & AX(TRUE)");
-				smvProp.add(property);
-			}
-		}
-		return smvProp;
-	}
-
-	public Set<Expression> createPropertySynch(Map<Rule, List<String>> allConds) {
-		Set<Expression> smvProp = new HashSet<Expression>();
-		TemporalExpression property;
-		for (Rule rule : allConds.keySet()) {
-			// sometimes
-			// EF( + cond + );
-			// AG(!( + cond + ))
-			property = new SometimeExpression(Util.and(allConds.get(rule)) + " & AX(TRUE)");
+		// sometimes
+		// EF( + cond + );
+		// AG(!( + cond + ))
+		for (String cond : allConds) {
+			System.out.println(cond);
+			String signalRep = getSignal(cond);
+			property = new SometimeExpression(cond + (signalRep != null ? (" & AX(!(" + signalRep + "))") : ""));
 			smvProp.add(property);
 		}
 		return smvProp;
 	}
 
-	public Set<Expression> createPropertyAsynch(Map<Rule, List<String>> allConds) {
+	private String getSignal(String cond) {
+		Set<String> recs = terminalRule.getReceivers();
+		String signal = terminalRule.getSignal();
+		Map<String, String> codomains = terminalRule.getCodomain();
+		System.out.println("codomains " + codomains);
+		String signalRep = signal;
+		if (recs != null) {
+			for (String rec : recs) {
+				if (cond.contains(rec.toUpperCase())) {
+					System.out.println("found " + rec);
+					String codomain = codomains.get(rec);
+					if (codomain != null) {
+						signalRep = signalRep.replaceAll(terminalRule.getFromTo() + "\\(self\\)",
+								codomain.toUpperCase());
+					}
+					signalRep = signalRep.replaceAll("self", rec.toUpperCase());
+					signalRep = signalRep.replace("(", "_");
+					signalRep = signalRep.replace(", ", "_");
+					signalRep = signalRep.replace(")", "");
+					System.out.println("replaced " + signalRep);
+				}
+			}
+		}
+		return signalRep;
+	}
+
+	public Set<Expression> createPropertySynch(List<String> allConds) {
 		Set<Expression> smvProp = new HashSet<Expression>();
 		TemporalExpression property;
-		for (Rule rule : allConds.keySet()) {
-			List<List<String>> condsPerms = buildPermutations(allConds.get(rule), 0);
-			Set<String> tempExps = new HashSet<String>();
-			for (List<String> conds : condsPerms) {
-				StringBuilder start = new StringBuilder();
-				StringBuilder end = new StringBuilder();
-				for (int i = 0; i < conds.size() - 1; i++) {
-					String cond = conds.get(i);
-					start.append("EF(" + cond + " & ");
-					end.append(")");
-				}
-				start.append("EF(" + conds.get(conds.size() - 1) + " & AX(TRUE)");
-				end.append(")");
-				property = new SimpleExpression(start.toString() + end.toString());
-				// System.out.println(property.getSMV());
-				tempExps.add(property.getSMV());
+		// sometimes
+		// EF( + cond + );
+		// AG(!( + cond + ))
+		List<String> signals = getSignals(allConds);
+		property = new SometimeExpression(
+				Util.and(allConds) + (signals.size() == allConds.size() ? (" & AX(" + Util.and(signals) + ")") : ""));
+		smvProp.add(property);
+		return smvProp;
+	}
+
+	private List<String> getSignals(List<String> allConds) {
+		List<String> signals = new ArrayList<>();
+		for (String cond : allConds) {
+			String signalRep = getSignal(cond);
+			if (signalRep != null) {
+				signals.add("!(" + signalRep + ")");
 			}
-			smvProp.add(new SimpleExpression("!(" + Util.or(tempExps) + ")"));
 		}
+		return signals;
+	}
+
+	public Set<Expression> createPropertyAsynch(List<String> allConds) {
+		Set<Expression> smvProp = new HashSet<Expression>();
+		TemporalExpression property;
+		List<List<String>> condsPerms = buildPermutations(allConds, 0);
+		Set<String> tempExps = new HashSet<String>();
+		for (List<String> conds : condsPerms) {
+			List<String> signals = getSignals(conds);
+			StringBuilder start = new StringBuilder();
+			StringBuilder end = new StringBuilder();
+			for (int i = 0; i < conds.size() - 1; i++) {
+				String cond = conds.get(i);
+				start.append("EF(" + cond + (signals.size() == allConds.size() ? (" & AX(" + signals.get(i) + ")") : "")
+						+ " & ");
+				end.append(")");
+			}
+			start.append("EF(" + conds.get(conds.size() - 1)
+					+ (signals.size() == allConds.size() ? (" & AX(" + signals.get(conds.size() - 1) + ")") : ""));
+			end.append(")");
+			property = new SimpleExpression(start.toString() + end.toString());
+			// System.out.println(property.getSMV());
+			tempExps.add(property.getSMV());
+		}
+		smvProp.add(new SimpleExpression("!(" + Util.or(tempExps) + ")"));
 		return smvProp;
 	}
 
@@ -349,7 +401,7 @@ public class SelfAdaptiveASMtestGenerator {
 		}
 		return permutations;
 	}
-	
+
 	public static void testGenerator(String mslPath, TypeOfProperty top) throws Exception, IOException {
 		SelfAdaptiveASMtestGenerator satg = new SelfAdaptiveASMtestGenerator(mslPath, top);
 		satg.testGenerator();
@@ -361,13 +413,18 @@ class TerminalRule {
 	private String terminalRule;
 	private String mult;
 	private String signal;
+	private String fromTo;
 	private Set<String> receivers;
+	private Map<String, String> codomain;
 
-	public TerminalRule(String terminalRule, String mult, String signal, Set<String> receivers) {
+	public TerminalRule(String terminalRule, String mult, String signal, String fromTo, Set<String> receivers,
+			Map<String, String> codomain) {
 		this.terminalRule = terminalRule;
 		this.mult = mult;
 		this.signal = signal;
+		this.fromTo = fromTo;
 		this.receivers = receivers;
+		this.codomain = codomain;
 	}
 
 	public String getTerminalRule() {
@@ -380,6 +437,18 @@ class TerminalRule {
 
 	public String getSignal() {
 		return signal;
+	}
+
+	public String getFromTo() {
+		return fromTo;
+	}
+
+	public Set<String> getReceivers() {
+		return receivers;
+	}
+
+	public Map<String, String> getCodomain() {
+		return codomain;
 	}
 
 	@Override

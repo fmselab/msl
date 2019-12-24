@@ -1,4 +1,4 @@
-// AG !((TRUE & startIntHCE_INT_HC_FF) & AX TRUE)
+// AG !((TRUE & startIntHCE_INT_HC_FF) & AX !sgnMainHCEIntHCE_MAIN_HC_INT_HC_FF)
 scenario MySmartHomeHC_refined_forMC_HC_MAPE_ONE_scen1
 load ../asm/MySmartHomeHC_refined_forMC.asm
 
