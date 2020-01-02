@@ -1,4 +1,4 @@
-// AG !(((TRUE & startSlaveFDE_GF_SLAVE) & (TRUE & startSlaveFDE_FF_SLAVE)) & AX TRUE)
+// AG !(((TRUE & startSlaveFDE_FF_SLAVE) & (TRUE & startSlaveFDE_GF_SLAVE)) & AX (!sgnMasterFDPSlaveFDE_FD_MASTER_FF_SLAVE & !sgnMasterFDPSlaveFDE_FD_MASTER_GF_SLAVE))
 scenario MySmartHomeFD_refined_forMC_FD_MAPE_ALL_SYNCH_scen
 load ../asm/MySmartHomeFD_refined_forMC.asm
 

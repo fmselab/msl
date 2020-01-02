@@ -1,4 +1,4 @@
-// !(EF ((TRUE & startMainAQE_AQ_MAIN) & AX TRUE))
+// !(EF (TRUE & startMainAQE_AQ_MAIN))
 scenario MySmartHomeAQ_refined_forMC_AQ_MAPE_ALL_ASYNCH_scen
 load ../asm/MySmartHomeAQ_refined_forMC.asm
 
