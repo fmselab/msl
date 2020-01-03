@@ -1,4 +1,4 @@
-// AG !((TRUE & startSlaveFDE_GF_SLAVE) & AX !sgnMasterFDPSlaveFDE_FD_MASTER_GF_SLAVE)
+// !( F ((TRUE & startSlaveFDE_GF_SLAVE) &  X !sgnMasterFDPSlaveFDE_FD_MASTER_GF_SLAVE))
 scenario MySmartHomeFD_refined_forMC_FD_MAPE_ONE_scen1
 load ../asm/MySmartHomeFD_refined_forMC.asm
 
@@ -29,39 +29,202 @@ step
 
 
 //state 1
+check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=false;
 check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=true;
-check loopFDCompleted(gf_slave)=false;
-check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
+check loopFDCompleted(ff_slave)=false;
 check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=true;
 check maxTemperatureSaved(ff_slave)=0;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
 check maxTemperatureSaved(gf_slave)=0;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
+check loopFDCompleted(gf_slave)=false;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
 check gsmokeSaved(ff_slave)=OFF;
-check loopFDCompleted(ff_slave)=false;
 
 
+set gsmoke(fd_gf) := OFF;
+set gsmoke(fd_ff) := OFF;
+set maxTemperature(fd_gf) := 0;
+set maxTemperature(fd_ff) := 0;
 step
 
 
 //state 2
+check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=false;
+check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=true;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
+check loopFDCompleted(ff_slave)=false;
+check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=true;
+check maxTemperatureSaved(ff_slave)=0;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
+check maxTemperatureSaved(gf_slave)=0;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
 check loopFDCompleted(gf_slave)=true;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
+check gsmokeSaved(ff_slave)=OFF;
 
 
+set gsmoke(fd_gf) := OFF;
+set gsmoke(fd_ff) := OFF;
 set maxTemperature(fd_gf) := 4;
+set maxTemperature(fd_ff) := 0;
 step
 
 
 //state 3
-check loopFDCompleted(gf_slave)=false;
+check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=false;
+check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=true;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
+check loopFDCompleted(ff_slave)=false;
+check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=true;
+check maxTemperatureSaved(ff_slave)=0;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
 check maxTemperatureSaved(gf_slave)=4;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
+check loopFDCompleted(gf_slave)=false;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
+check gsmokeSaved(ff_slave)=OFF;
 
 
+set gsmoke(fd_gf) := OFF;
+set gsmoke(fd_ff) := OFF;
 set maxTemperature(fd_gf) := 0;
+set maxTemperature(fd_ff) := 0;
 step
 
 
 //state 4
 check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=true;
 check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=false;
-check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=false;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
 check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=true;
+check loopFDCompleted(ff_slave)=false;
+check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=false;
+check maxTemperatureSaved(ff_slave)=0;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
+check maxTemperatureSaved(gf_slave)=4;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
+check loopFDCompleted(gf_slave)=false;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
+check gsmokeSaved(ff_slave)=OFF;
+
+
+set gsmoke(fd_gf) := OFF;
+set gsmoke(fd_ff) := OFF;
+set maxTemperature(fd_gf) := 0;
+set maxTemperature(fd_ff) := 0;
+step
+
+
+//state 5
+check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=false;
+check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=false;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
+check loopFDCompleted(ff_slave)=true;
+check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=false;
+check maxTemperatureSaved(ff_slave)=0;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
+check maxTemperatureSaved(gf_slave)=4;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
+check loopFDCompleted(gf_slave)=true;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
+check gsmokeSaved(ff_slave)=OFF;
+
+
+set gsmoke(fd_gf) := OFF;
+set gsmoke(fd_ff) := OFF;
+set maxTemperature(fd_gf) := 2;
+set maxTemperature(fd_ff) := 2;
+step
+
+
+//state 6
+check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=false;
+check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=true;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
+check loopFDCompleted(ff_slave)=false;
+check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=true;
+check maxTemperatureSaved(ff_slave)=2;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
+check maxTemperatureSaved(gf_slave)=2;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
+check loopFDCompleted(gf_slave)=false;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
+check gsmokeSaved(ff_slave)=OFF;
+
+
+set gsmoke(fd_gf) := OFF;
+set gsmoke(fd_ff) := OFF;
+set maxTemperature(fd_gf) := 0;
+set maxTemperature(fd_ff) := 0;
+step
+
+
+//state 7
+check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=false;
+check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=true;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
+check loopFDCompleted(ff_slave)=false;
+check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=true;
+check maxTemperatureSaved(ff_slave)=2;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
+check maxTemperatureSaved(gf_slave)=2;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
+check loopFDCompleted(gf_slave)=true;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
+check gsmokeSaved(ff_slave)=OFF;
+
+
+set gsmoke(fd_gf) := OFF;
+set gsmoke(fd_ff) := OFF;
+set maxTemperature(fd_gf) := 2;
+set maxTemperature(fd_ff) := 0;
+step
+
+
+//state 8
+check sgnMasterFDPSlaveFDE(fd_master,ff_slave)=false;
+check sgnSlaveFDMMasterFDA(gf_slave,fd_master)=true;
+check fromSlaveFDEtoMasterFDP(ff_slave)=fd_master;
+check sgnMasterFDPSlaveFDE(fd_master,gf_slave)=false;
+check loopFDCompleted(ff_slave)=false;
+check sgnSlaveFDMMasterFDA(ff_slave,fd_master)=true;
+check maxTemperatureSaved(ff_slave)=2;
+check fromSlaveFDEtoMasterFDP(gf_slave)=fd_master;
+check maxTemperatureSaved(gf_slave)=2;
+check firedetectionManagedBySlaveFD(ff_slave)=fd_ff;
+check firedetectionManagedBySlaveFD(gf_slave)=fd_gf;
+check loopFDCompleted(gf_slave)=false;
+check fromSlaveFDMtoMasterFDA(gf_slave)=fd_master;
+check gsmokeSaved(gf_slave)=OFF;
+check fromSlaveFDMtoMasterFDA(ff_slave)=fd_master;
+check gsmokeSaved(ff_slave)=OFF;
 

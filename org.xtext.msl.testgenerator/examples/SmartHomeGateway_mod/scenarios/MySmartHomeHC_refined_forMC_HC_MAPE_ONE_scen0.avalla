@@ -1,4 +1,4 @@
-// AG !((TRUE & startIntHCE_INT_HC_GF) & AX !sgnMainHCEIntHCE_MAIN_HC_INT_HC_GF)
+// !( F ((TRUE & startIntHCE_INT_HC_GF) &  X !sgnMainHCEIntHCE_MAIN_HC_INT_HC_GF))
 scenario MySmartHomeHC_refined_forMC_HC_MAPE_ONE_scen0
 load ../asm/MySmartHomeHC_refined_forMC.asm
 
@@ -44,38 +44,79 @@ step
 
 //state 1
 check temperature_SetpointSaved(int_hc_gf)=0;
+check temperatureSaved(int_hc_gf)=0;
+check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
+check temperatureSaved(int_hc_ff)=0;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=OFF;
+check heatingStatusSaved(int_hc_gf)=OFF;
+check temperature_MidpointSaved(int_hc_ff)=0;
+check temperature_MidpointSaved(int_hc_gf)=0;
+check sgnIntHCMMainHCM(int_hc_ff,main_hc)=true;
+check temperature_SetpointSaved(int_hc_ff)=0;
 check loopHCCompleted(int_hc_gf)=false;
 check windowsStatusSaved(int_hc_ff)=CLOSED;
 check loopHCCompleted(int_hc_ff)=false;
 check windowsStatusSaved(int_hc_gf)=CLOSED;
-check temperatureSaved(int_hc_gf)=0;
-check temperatureSaved(int_hc_ff)=0;
-check heatingStatusSaved(int_hc_ff)=OFF;
-check heatingStatusSaved(int_hc_gf)=OFF;
-check temperature_MidpointSaved(int_hc_ff)=0;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
 check sgnIntHCMMainHCM(int_hc_gf,main_hc)=true;
-check temperature_MidpointSaved(int_hc_gf)=0;
-check sgnIntHCMMainHCM(int_hc_ff,main_hc)=true;
-check temperature_SetpointSaved(int_hc_ff)=0;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
 
 
+set heatingStatus(hs_ff) := OFF;
+set heatingStatus(hs_gf) := OFF;
+set temperature_Setpoint(hs_gf) := 0;
+set temperature_Setpoint(hs_ff) := 0;
+set temperature_Midpoint(hs_gf) := 0;
+set temperature_Midpoint(hs_ff) := 0;
+set windowsStatus(hs_gf) := CLOSED;
+set windowsStatus(hs_ff) := CLOSED;
+set temperature(hs_gf) := 0;
+set temperature(hs_ff) := 0;
 step
 
 
 //state 2
-check loopHCCompleted(int_hc_gf)=true;
-check loopHCCompleted(int_hc_ff)=true;
-check sgnIntHCMMainHCM(int_hc_gf,main_hc)=false;
+check temperature_SetpointSaved(int_hc_gf)=0;
+check temperatureSaved(int_hc_gf)=0;
+check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
+check temperatureSaved(int_hc_ff)=0;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=OFF;
+check heatingStatusSaved(int_hc_gf)=OFF;
+check temperature_MidpointSaved(int_hc_ff)=0;
+check temperature_MidpointSaved(int_hc_gf)=0;
 check sgnIntHCMMainHCM(int_hc_ff,main_hc)=false;
+check temperature_SetpointSaved(int_hc_ff)=0;
+check loopHCCompleted(int_hc_gf)=true;
+check windowsStatusSaved(int_hc_ff)=CLOSED;
+check loopHCCompleted(int_hc_ff)=true;
+check windowsStatusSaved(int_hc_gf)=CLOSED;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
+check sgnIntHCMMainHCM(int_hc_gf,main_hc)=false;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
 
 
+set heatingStatus(hs_ff) := OFF;
 set heatingStatus(hs_gf) := ON;
 set temperature_Setpoint(hs_gf) := 2;
-set windowsStatus(hs_gf) := OPEN;
 set temperature_Setpoint(hs_ff) := 2;
-set windowsStatus(hs_ff) := OPEN;
 set temperature_Midpoint(hs_gf) := 2;
 set temperature_Midpoint(hs_ff) := 2;
+set windowsStatus(hs_gf) := OPEN;
+set windowsStatus(hs_ff) := OPEN;
 set temperature(hs_gf) := 2;
 set temperature(hs_ff) := 2;
 step
@@ -84,7 +125,14 @@ step
 //state 3
 check temperature_SetpointSaved(int_hc_gf)=2;
 check temperatureSaved(int_hc_gf)=2;
+check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
 check temperatureSaved(int_hc_ff)=2;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=OFF;
 check heatingStatusSaved(int_hc_gf)=ON;
 check temperature_MidpointSaved(int_hc_ff)=2;
 check temperature_MidpointSaved(int_hc_gf)=2;
@@ -94,9 +142,14 @@ check loopHCCompleted(int_hc_gf)=false;
 check windowsStatusSaved(int_hc_ff)=OPEN;
 check loopHCCompleted(int_hc_ff)=false;
 check windowsStatusSaved(int_hc_gf)=OPEN;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
 check sgnIntHCMMainHCM(int_hc_gf,main_hc)=true;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
 
 
+set heatingStatus(hs_ff) := OFF;
 set heatingStatus(hs_gf) := OFF;
 set temperature_Setpoint(hs_gf) := 0;
 set temperature_Setpoint(hs_ff) := 0;
@@ -110,8 +163,188 @@ step
 
 
 //state 4
+check temperature_SetpointSaved(int_hc_gf)=2;
 check sgnMainHCEIntHCE(main_hc,int_hc_ff)=true;
+check temperatureSaved(int_hc_gf)=2;
 check sgnMainHCEIntHCE(main_hc,int_hc_gf)=true;
-check sgnIntHCMMainHCM(int_hc_gf,main_hc)=false;
+check temperatureSaved(int_hc_ff)=2;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=OFF;
+check heatingStatusSaved(int_hc_gf)=ON;
+check temperature_MidpointSaved(int_hc_ff)=2;
+check temperature_MidpointSaved(int_hc_gf)=2;
 check sgnIntHCMMainHCM(int_hc_ff,main_hc)=false;
+check temperature_SetpointSaved(int_hc_ff)=2;
+check loopHCCompleted(int_hc_gf)=false;
+check windowsStatusSaved(int_hc_ff)=OPEN;
+check loopHCCompleted(int_hc_ff)=false;
+check windowsStatusSaved(int_hc_gf)=OPEN;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
+check sgnIntHCMMainHCM(int_hc_gf,main_hc)=false;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
+
+
+set heatingStatus(hs_ff) := OFF;
+set heatingStatus(hs_gf) := OFF;
+set temperature_Setpoint(hs_gf) := 0;
+set temperature_Setpoint(hs_ff) := 0;
+set temperature_Midpoint(hs_gf) := 0;
+set temperature_Midpoint(hs_ff) := 0;
+set windowsStatus(hs_gf) := CLOSED;
+set windowsStatus(hs_ff) := CLOSED;
+set temperature(hs_gf) := 0;
+set temperature(hs_ff) := 0;
+step
+
+
+//state 5
+check temperature_SetpointSaved(int_hc_gf)=2;
+check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
+check temperatureSaved(int_hc_gf)=2;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
+check temperatureSaved(int_hc_ff)=2;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=OFF;
+check heatingStatusSaved(int_hc_gf)=ON;
+check temperature_MidpointSaved(int_hc_ff)=2;
+check temperature_MidpointSaved(int_hc_gf)=2;
+check sgnIntHCMMainHCM(int_hc_ff,main_hc)=false;
+check temperature_SetpointSaved(int_hc_ff)=2;
+check loopHCCompleted(int_hc_gf)=true;
+check windowsStatusSaved(int_hc_ff)=OPEN;
+check loopHCCompleted(int_hc_ff)=true;
+check windowsStatusSaved(int_hc_gf)=OPEN;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
+check sgnIntHCMMainHCM(int_hc_gf,main_hc)=false;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
+
+
+set heatingStatus(hs_ff) := ON;
+set heatingStatus(hs_gf) := OFF;
+set temperature_Setpoint(hs_gf) := 2;
+set temperature_Setpoint(hs_ff) := 2;
+set temperature_Midpoint(hs_gf) := 2;
+set temperature_Midpoint(hs_ff) := 2;
+set windowsStatus(hs_gf) := CLOSED;
+set windowsStatus(hs_ff) := CLOSED;
+set temperature(hs_gf) := 3;
+set temperature(hs_ff) := 3;
+step
+
+
+//state 6
+check temperature_SetpointSaved(int_hc_gf)=2;
+check temperatureSaved(int_hc_gf)=3;
+check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
+check temperatureSaved(int_hc_ff)=3;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=ON;
+check heatingStatusSaved(int_hc_gf)=OFF;
+check temperature_MidpointSaved(int_hc_ff)=2;
+check temperature_MidpointSaved(int_hc_gf)=2;
+check sgnIntHCMMainHCM(int_hc_ff,main_hc)=true;
+check temperature_SetpointSaved(int_hc_ff)=2;
+check loopHCCompleted(int_hc_gf)=false;
+check windowsStatusSaved(int_hc_ff)=CLOSED;
+check loopHCCompleted(int_hc_ff)=false;
+check windowsStatusSaved(int_hc_gf)=CLOSED;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
+check sgnIntHCMMainHCM(int_hc_gf,main_hc)=true;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
+
+
+set heatingStatus(hs_ff) := OFF;
+set heatingStatus(hs_gf) := OFF;
+set temperature_Setpoint(hs_gf) := 0;
+set temperature_Setpoint(hs_ff) := 0;
+set temperature_Midpoint(hs_gf) := 0;
+set temperature_Midpoint(hs_ff) := 0;
+set windowsStatus(hs_gf) := CLOSED;
+set windowsStatus(hs_ff) := CLOSED;
+set temperature(hs_gf) := 0;
+set temperature(hs_ff) := 0;
+step
+
+
+//state 7
+check temperature_SetpointSaved(int_hc_gf)=2;
+check temperatureSaved(int_hc_gf)=3;
+check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
+check temperatureSaved(int_hc_ff)=3;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=ON;
+check heatingStatusSaved(int_hc_gf)=OFF;
+check temperature_MidpointSaved(int_hc_ff)=2;
+check temperature_MidpointSaved(int_hc_gf)=2;
+check sgnIntHCMMainHCM(int_hc_ff,main_hc)=false;
+check temperature_SetpointSaved(int_hc_ff)=2;
+check loopHCCompleted(int_hc_gf)=true;
+check windowsStatusSaved(int_hc_ff)=CLOSED;
+check loopHCCompleted(int_hc_ff)=true;
+check windowsStatusSaved(int_hc_gf)=CLOSED;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
+check sgnIntHCMMainHCM(int_hc_gf,main_hc)=false;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
+
+
+set heatingStatus(hs_ff) := ON;
+set heatingStatus(hs_gf) := OFF;
+set temperature_Setpoint(hs_gf) := 2;
+set temperature_Setpoint(hs_ff) := 2;
+set temperature_Midpoint(hs_gf) := 2;
+set temperature_Midpoint(hs_ff) := 2;
+set windowsStatus(hs_gf) := CLOSED;
+set windowsStatus(hs_ff) := CLOSED;
+set temperature(hs_gf) := 3;
+set temperature(hs_ff) := 3;
+step
+
+
+//state 8
+check temperature_SetpointSaved(int_hc_gf)=2;
+check temperatureSaved(int_hc_gf)=3;
+check sgnMainHCEIntHCE(main_hc,int_hc_ff)=false;
+check temperatureSaved(int_hc_ff)=3;
+check sgnMainHCEIntHCE(main_hc,int_hc_gf)=false;
+check heatingManagedByIntHC(int_hc_ff)=hs_ff;
+check heatingManagedByIntHC(int_hc_gf)=hs_gf;
+check fromIntHCMtoMainHCM(int_hc_ff)=main_hc;
+check fromIntHCMtoMainHCM(int_hc_gf)=main_hc;
+check heatingStatusSaved(int_hc_ff)=ON;
+check heatingStatusSaved(int_hc_gf)=OFF;
+check temperature_MidpointSaved(int_hc_ff)=2;
+check temperature_MidpointSaved(int_hc_gf)=2;
+check sgnIntHCMMainHCM(int_hc_ff,main_hc)=true;
+check temperature_SetpointSaved(int_hc_ff)=2;
+check loopHCCompleted(int_hc_gf)=false;
+check windowsStatusSaved(int_hc_ff)=CLOSED;
+check loopHCCompleted(int_hc_ff)=false;
+check windowsStatusSaved(int_hc_gf)=CLOSED;
+check desiredHeatingSetting(int_hc_ff)=STOPPED;
+check desiredHeatingSetting(int_hc_gf)=STOPPED;
+check sgnIntHCMMainHCM(int_hc_gf,main_hc)=true;
+check fromIntHCEtoMainHCE(int_hc_gf)=main_hc;
+check fromIntHCEtoMainHCE(int_hc_ff)=main_hc;
 

@@ -54,6 +54,9 @@ import asmeta.transitionrules.basictransitionrules.MacroCallRule;
 import asmeta.transitionrules.basictransitionrules.Rule;
 
 public class SelfAdaptiveASMtestGenerator {
+	public static boolean USE_LTL = true;
+	public static boolean SPLIT_ASYNCH = true;
+	public static boolean COMPLETE_CEX = true;
 	private String mslPath;
 	private String asmPath;
 	private TypeOfProperty top;
@@ -113,7 +116,7 @@ public class SelfAdaptiveASMtestGenerator {
 			String prop = properties.get(key);
 			// System.out.println(prop);
 			BufferedReader br = new BufferedReader(new StringReader(cex));
-			Counterexample counterexample = NuSMVTestSequencesExtractor.parseCounterexample(br, false);
+			Counterexample counterexample = NuSMVTestSequencesExtractor.parseCounterexample(br, COMPLETE_CEX);
 			// System.out.println(counterexample);
 			String name = asm.getName() + "_" + mslName + "_" + top + "_scen" + (multipleScenarios ? (counter++) : "");
 			// String name = asm.getName() + "_" + mslName + "_" + top + "_scen" + key;
@@ -165,9 +168,32 @@ public class SelfAdaptiveASMtestGenerator {
 		// asmetaMA.ruleIsReached.createNuSmvProperties());
 		assert asmetaMA.mv.ruleCond.size() == 1;
 		Set<Expression> properties = buildProperties(asmetaMA.mv.ruleCond.values().iterator().next());
-		asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
+		
+		
+		//asmetaMA.nuSmvProperties.put(asmetaMA.ruleIsReached, properties);
 		// System.out.println(asmetaMA.nuSmvProperties);
-		asmetaMA.execCheck(asmetaSMV);
+		//asmetaMA.execCheck(asmetaSMV);
+		
+		// we don't want to check other CTL/LTL properties
+		asmetaSMV.mv.ctlList.clear();
+		asmetaSMV.mv.ltlList.clear();
+		asmetaSMV.mv.ctlListNames.clear();
+		asmetaSMV.mv.ltlListNames.clear();
+		Set<String> smvProps = new HashSet<String>();
+		for (Expression t : properties) {
+			smvProps.add(t.getSMV());
+		}
+		if(USE_LTL) {
+			asmetaSMV.addLtlProperties(smvProps);
+		}
+		else {
+			asmetaSMV.addCtlProperties(smvProps);
+		}
+		asmetaSMV.createTempNuSMVfile();
+		asmetaSMV.executeNuSMV();
+		
+		
+		
 		System.out.println(asmetaSMV.getSmvFileName());
 		MapVisitor.ALL_SMV_FLATTENERS = backup;
 		return asmetaSMV;
@@ -307,7 +333,12 @@ public class SelfAdaptiveASMtestGenerator {
 		for (String cond : allConds) {
 			System.out.println(cond);
 			String signalRep = getSignal(cond);
-			property = new SometimeExpression(cond + (signalRep != null ? (" & AX(!(" + signalRep + "))") : ""));
+			if(USE_LTL) {
+				property = new SimpleExpression("!F(" + cond + (signalRep != null ? (" & X(!(" + signalRep + "))") : "") + ")");
+			}
+			else {
+				property = new SometimeExpression(cond + (signalRep != null ? (" & AX(!(" + signalRep + "))") : ""));
+			}
 			smvProp.add(property);
 		}
 		return smvProp;
@@ -346,8 +377,12 @@ public class SelfAdaptiveASMtestGenerator {
 		// EF( + cond + );
 		// AG(!( + cond + ))
 		List<String> signals = getSignals(allConds);
-		property = new SometimeExpression(
-				Util.and(allConds) + (signals.size() == allConds.size() ? (" & AX(" + Util.and(signals) + ")") : ""));
+		if(USE_LTL) {
+			property = new SimpleExpression("!F(" + Util.and(allConds) + (signals.size() == allConds.size() ? (" & X(" + Util.and(signals) + ")") : "") + ")");
+		}
+		else {
+			property = new SometimeExpression(Util.and(allConds) + (signals.size() == allConds.size() ? (" & AX(" + Util.and(signals) + ")") : ""));
+		}
 		smvProp.add(property);
 		return smvProp;
 	}
@@ -374,18 +409,35 @@ public class SelfAdaptiveASMtestGenerator {
 			StringBuilder end = new StringBuilder();
 			for (int i = 0; i < conds.size() - 1; i++) {
 				String cond = conds.get(i);
-				start.append("EF(" + cond + (signals.size() == allConds.size() ? (" & AX(" + signals.get(i) + ")") : "")
-						+ " & ");
+				if(USE_LTL) {
+					start.append("F(" + cond + (signals.size() == allConds.size() ? (" & X(" + signals.get(i) + ")") : "") + " & ");
+				}
+				else {
+					start.append("EF(" + cond + (signals.size() == allConds.size() ? (" & AX(" + signals.get(i) + ")") : "") + " & ");
+				}
 				end.append(")");
 			}
-			start.append("EF(" + conds.get(conds.size() - 1)
-					+ (signals.size() == allConds.size() ? (" & AX(" + signals.get(conds.size() - 1) + ")") : ""));
+			if(USE_LTL) {
+				start.append("F(" + conds.get(conds.size() - 1) + (signals.size() == allConds.size() ? (" & X(" + signals.get(conds.size() - 1) + ")") : ""));
+			}
+			else {
+				start.append("EF(" + conds.get(conds.size() - 1) + (signals.size() == allConds.size() ? (" & AX(" + signals.get(conds.size() - 1) + ")") : ""));
+			}
 			end.append(")");
 			property = new SimpleExpression(start.toString() + end.toString());
-			// System.out.println(property.getSMV());
+			//System.out.println(property.getSMV());
 			tempExps.add(property.getSMV());
 		}
-		smvProp.add(new SimpleExpression("!(" + Util.or(tempExps) + ")"));
+		if(SPLIT_ASYNCH) {
+			for(String tempExp: tempExps) {
+				SimpleExpression simpleExpr = new SimpleExpression("!(" + tempExp + ")");
+				smvProp.add(simpleExpr);
+			}
+		}
+		else {
+			SimpleExpression simpleExpr = new SimpleExpression("!(" + Util.or(tempExps) + ")");
+			smvProp.add(simpleExpr);
+		}
 		return smvProp;
 	}
 
