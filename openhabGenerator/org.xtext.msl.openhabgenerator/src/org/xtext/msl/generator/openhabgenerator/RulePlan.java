@@ -25,7 +25,7 @@ public class RulePlan extends OpenHABRule{
 		temp += "then\n";
 		
 		//Turns switch off
-		temp += OpenHABGenerator.tab + "sendcommand(" + getTriggers().get(0).getName() + ", OFF)\n";
+		temp += OpenHABGenerator.tab + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
 		
 		//Logging infrastructure
 		if(OpenHABGenerator.writeLog) {
@@ -66,7 +66,7 @@ public class RulePlan extends OpenHABRule{
 			
 			//Turn exit switch ON
 			for(OpenHABRule ohr : getOut())
-				temp += OpenHABGenerator.tab + "sendcommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+				temp += OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 		}
 		temp += "end\n";
 		return temp;

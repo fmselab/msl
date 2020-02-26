@@ -37,7 +37,7 @@ public class RuleExecute extends OpenHABRule {
 		temp += "then\n";
 		
 		//Turns switch OFF
-		temp += OpenHABGenerator.tab + "sendcommand(" + getTriggers().get(0).getName() + ", OFF)\n";
+		temp += OpenHABGenerator.tab + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
 		
 		//Logging infrastructure
 		if(OpenHABGenerator.writeLog) {
@@ -124,7 +124,7 @@ public class RuleExecute extends OpenHABRule {
 				if(needEndLoop) {
 					temp += OpenHABGenerator.tab;
 				}
-				temp += OpenHABGenerator.tab + "sendcommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+				temp += OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 			}
 			
 			//If there are no more executions left, don't reset the loop

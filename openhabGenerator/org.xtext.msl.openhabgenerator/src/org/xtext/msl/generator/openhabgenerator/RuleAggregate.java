@@ -102,14 +102,14 @@ public class RuleAggregate extends OpenHABRule {
 			
 			//Turning OFF switches
 			for(OpenHABSwitch ohs : this.getTriggers()) {
-				temp += OpenHABGenerator.tab + "sendcommand(" + ohs.getName() + ", OFF)\n";
+				temp += OpenHABGenerator.tab + "sendCommand(" + ohs.getName() + ", OFF)\n";
 			}
 			temp += "\n";
 		}
 		
 		//Turning ON exit switch
 		for(OpenHABRule ohr : getOut()) {
-			temp += OpenHABGenerator.tab + "sendcommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+			temp += OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 		}
 		temp += "end\n";
 		return temp;

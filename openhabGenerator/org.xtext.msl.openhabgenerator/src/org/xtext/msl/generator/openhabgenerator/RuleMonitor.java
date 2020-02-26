@@ -40,7 +40,7 @@ public class RuleMonitor extends OpenHABRule {
 		temp += "then\n";
 		
 		//Turning switch OFF
-		temp += OpenHABGenerator.tab + "sendcommand(" + getTriggers().get(0).getName() + ", OFF)\n";
+		temp += OpenHABGenerator.tab + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
 		
 		//Logging infrastructure
 		if(OpenHABGenerator.writeLog) {
@@ -99,9 +99,9 @@ public class RuleMonitor extends OpenHABRule {
 			
 			//Turning exit switch ON
 			if(ohr instanceof RuleAggregate) {
-				temp += OpenHABGenerator.tab + "sendcommand(" + getLoopSwitch().getName() + ", ON)\n";
+				temp += OpenHABGenerator.tab + "sendCommand(" + getLoopSwitch().getName() + ", ON)\n";
 			} else {
-				temp += OpenHABGenerator.tab + "sendcommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+				temp += OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 			}
 		}
 		temp += "end\n";

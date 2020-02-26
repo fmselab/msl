@@ -39,7 +39,7 @@ public class RuleAnalyze extends OpenHABRule {
 		temp += "then\n";
 		
 		//Turning switch OFF
-		temp += OpenHABGenerator.tab + "sendcommand(" + getTriggers().get(0).getName() + ", OFF)\n";
+		temp += OpenHABGenerator.tab + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
 		
 		if(OpenHABGenerator.writeLog) {
 			temp += "\n" + OpenHABGenerator.tab + getCounterVarName() + " = " + getCounterVarName() + " + 1\n";
@@ -223,7 +223,7 @@ public class RuleAnalyze extends OpenHABRule {
 			
 			//Turning exit switch ON
 			for(OpenHABRule ohr : getOut())
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendcommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 			temp += OpenHABGenerator.tab + "}\n";
 			//IF adaptation required ends here
 			
@@ -253,13 +253,13 @@ public class RuleAnalyze extends OpenHABRule {
 				if (ohrVisitor instanceof RuleMonitor && ((RuleMonitor)ohrVisitor).isStart()) {
 					
 					//Turning on monitor switch
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendcommand(" + ohrVisitor.getTriggers().get(0).getName() + ", ON)\n";
+					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohrVisitor.getTriggers().get(0).getName() + ", ON)\n";
 				} else {
 					ohrVisitor = ohrVisitor.getIn().get(0);
 					if(ohrVisitor instanceof RuleAggregate) {
 						for(OpenHABRule ohr : ohrVisitor.getIn()) {
 							if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-								temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendcommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+								temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 							}
 						}
 					}

@@ -96,7 +96,9 @@ public class RuleStart {
 			}
 		}
 		temp += "\n";
-		temp += OpenHABGenerator.tab + "createTimer(now.plusSeconds(1)) [|\n";
+		
+		//Not sure this timer is needed
+		temp += OpenHABGenerator.tab + "//createTimer(now.plusSeconds(1)) [|\n";
 		
 		//Switch state initialization
 		for(OpenHABRule ohr : configurationRules) {
@@ -108,7 +110,7 @@ public class RuleStart {
 				}
 			}
 		}
-		temp += OpenHABGenerator.tab + "|]\n";
+		temp += OpenHABGenerator.tab + "//|]\n";
 		temp += "end\n";
 		return temp;
 	}
