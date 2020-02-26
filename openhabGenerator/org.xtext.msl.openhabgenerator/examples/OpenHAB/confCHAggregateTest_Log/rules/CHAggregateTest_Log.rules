@@ -24,7 +24,7 @@ then
 
     adaptation_required_a_ch = false
 
-    createTimer(now.plusSeconds(1)) [|
+    //createTimer(now.plusSeconds(1)) [|
         start_m_ch_CHAggregateTest_Log.sendCommand(OFF)
         start_a_ch_CHAggregateTest_Log.sendCommand(OFF)
         start_p_ch_CHAggregateTest_Log.sendCommand(OFF)
@@ -33,27 +33,27 @@ then
         start_e_h0_CHAggregateTest_Log.sendCommand(OFF)
         start_m_h1_CHAggregateTest_Log.sendCommand(ON)
         start_e_h1_CHAggregateTest_Log.sendCommand(OFF)
-    |]
+    //|]
 end
 
 rule "Monitor_m_ch_CHAggregateTest_Log"
 when
     Item start_m_ch_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_m_ch_CHAggregateTest_Log, OFF)
+    sendCommand(start_m_ch_CHAggregateTest_Log, OFF)
 
     counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Monitor for group (ch_CHAggregateTest_Log) active.")
     logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
 
-    sendcommand(start_a_ch_CHAggregateTest_Log, ON)
+    sendCommand(start_a_ch_CHAggregateTest_Log, ON)
 end
 
 rule "Analyze_a_ch_CHAggregateTest_Log"
 when
     Item start_a_ch_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_a_ch_CHAggregateTest_Log, OFF)
+    sendCommand(start_a_ch_CHAggregateTest_Log, OFF)
 
     counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Analyze for group (ch_CHAggregateTest_Log) active.")
@@ -70,7 +70,7 @@ then
         logInfo("CHAggregateTest_Log.rules", "Adaptation required for CHAggregateTest_Log.")
         logInfo("CHAggregateTest_Log.rules", "Proceeding with loop.")
 
-        sendcommand(start_p_ch_CHAggregateTest_Log, ON)
+        sendCommand(start_p_ch_CHAggregateTest_Log, ON)
     }
     else {
         logInfo("CHAggregateTest_Log.rules", "Adaptation not required for CHAggregateTest_Log.")
@@ -79,8 +79,8 @@ then
         if(exec_counter_CHAggregateTest_Log > 0){
             logInfo("CHAggregateTest_Log.rules", "Resetting loop.")
 
-            sendcommand(start_m_h0_CHAggregateTest_Log, ON)
-        sendcommand(start_m_h1_CHAggregateTest_Log, ON)
+            sendCommand(start_m_h0_CHAggregateTest_Log, ON)
+        sendCommand(start_m_h1_CHAggregateTest_Log, ON)
         }
         else {
             logInfo("CHAggregateTest_Log.rules", "exec_counter_CHAggregateTest_Log = 0.")
@@ -93,48 +93,48 @@ rule "Plan_p_ch_CHAggregateTest_Log"
 when
     Item start_p_ch_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_p_ch_CHAggregateTest_Log, OFF)
+    sendCommand(start_p_ch_CHAggregateTest_Log, OFF)
 
     counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Plan for group (ch_CHAggregateTest_Log) active.")
     logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
 
-    sendcommand(start_e_ch_CHAggregateTest_Log, ON)
+    sendCommand(start_e_ch_CHAggregateTest_Log, ON)
 end
 
 rule "Execute_e_ch_CHAggregateTest_Log"
 when
     Item start_e_ch_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_e_ch_CHAggregateTest_Log, OFF)
+    sendCommand(start_e_ch_CHAggregateTest_Log, OFF)
 
     counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Execute for group (ch_CHAggregateTest_Log) active.")
     logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
     counter_ch_CHAggregateTest_Log = 0
 
-    sendcommand(start_e_h0_CHAggregateTest_Log, ON)
-    sendcommand(start_e_h1_CHAggregateTest_Log, ON)
+    sendCommand(start_e_h0_CHAggregateTest_Log, ON)
+    sendCommand(start_e_h1_CHAggregateTest_Log, ON)
 end
 
 rule "Monitor_m_h0_CHAggregateTest_Log"
 when
     Item start_m_h0_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_m_h0_CHAggregateTest_Log, OFF)
+    sendCommand(start_m_h0_CHAggregateTest_Log, OFF)
 
     counter_h0_CHAggregateTest_Log = counter_h0_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Monitor for group (h0_CHAggregateTest_Log) active.")
     logInfo("CHAggregateTest_Log.rules", "counter_h0_CHAggregateTest_Log = " + counter_h0_CHAggregateTest_Log + ".")
 
-    sendcommand(start_h0_to_ch_CHAggregateTest_Log, ON)
+    sendCommand(start_h0_to_ch_CHAggregateTest_Log, ON)
 end
 
 rule "Execute_e_h0_CHAggregateTest_Log"
 when
     Item start_e_h0_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_e_h0_CHAggregateTest_Log, OFF)
+    sendCommand(start_e_h0_CHAggregateTest_Log, OFF)
 
     counter_h0_CHAggregateTest_Log = counter_h0_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Execute for group (h0_CHAggregateTest_Log) active.")
@@ -142,7 +142,7 @@ then
     counter_h0_CHAggregateTest_Log = 0
 
     if(exec_counter_CHAggregateTest_Log > 0){
-        sendcommand(start_m_h0_CHAggregateTest_Log, ON)
+        sendCommand(start_m_h0_CHAggregateTest_Log, ON)
     }
     else {
         logInfo("CHAggregateTest_Log.rules", "exec_counter_CHAggregateTest_Log = 0.")
@@ -154,20 +154,20 @@ rule "Monitor_m_h1_CHAggregateTest_Log"
 when
     Item start_m_h1_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_m_h1_CHAggregateTest_Log, OFF)
+    sendCommand(start_m_h1_CHAggregateTest_Log, OFF)
 
     counter_h1_CHAggregateTest_Log = counter_h1_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Monitor for group (h1_CHAggregateTest_Log) active.")
     logInfo("CHAggregateTest_Log.rules", "counter_h1_CHAggregateTest_Log = " + counter_h1_CHAggregateTest_Log + ".")
 
-    sendcommand(start_h1_to_ch_CHAggregateTest_Log, ON)
+    sendCommand(start_h1_to_ch_CHAggregateTest_Log, ON)
 end
 
 rule "Execute_e_h1_CHAggregateTest_Log"
 when
     Item start_e_h1_CHAggregateTest_Log received command ON
 then
-    sendcommand(start_e_h1_CHAggregateTest_Log, OFF)
+    sendCommand(start_e_h1_CHAggregateTest_Log, OFF)
 
     counter_h1_CHAggregateTest_Log = counter_h1_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "Execute for group (h1_CHAggregateTest_Log) active.")
@@ -175,7 +175,7 @@ then
     counter_h1_CHAggregateTest_Log = 0
 
     if(exec_counter_CHAggregateTest_Log > 0){
-        sendcommand(start_m_h1_CHAggregateTest_Log, ON)
+        sendCommand(start_m_h1_CHAggregateTest_Log, ON)
     }
     else {
         logInfo("CHAggregateTest_Log.rules", "exec_counter_CHAggregateTest_Log = 0.")
@@ -195,10 +195,10 @@ then
     counter_h1_CHAggregateTest_Log = counter_h1_CHAggregateTest_Log + 1
     logInfo("CHAggregateTest_Log.rules", "counter_h1_CHAggregateTest_Log = " + counter_h1_CHAggregateTest_Log + ".")
 
-    sendcommand(start_h0_to_ch_CHAggregateTest_Log, OFF)
-    sendcommand(start_h1_to_ch_CHAggregateTest_Log, OFF)
+    sendCommand(start_h0_to_ch_CHAggregateTest_Log, OFF)
+    sendCommand(start_h1_to_ch_CHAggregateTest_Log, OFF)
 
-    sendcommand(start_m_ch_CHAggregateTest_Log, ON)
+    sendCommand(start_m_ch_CHAggregateTest_Log, ON)
 end
 
 rule "Execution stop countdown"

@@ -14,32 +14,32 @@ then
 
     adaptation_required_a_ch = false
 
-    createTimer(now.plusSeconds(1)) [|
+    //createTimer(now.plusSeconds(1)) [|
         start_m_ch_CHSimpleTest_Log_NE.sendCommand(ON)
         start_a_ch_CHSimpleTest_Log_NE.sendCommand(OFF)
         start_p_ch_CHSimpleTest_Log_NE.sendCommand(OFF)
         start_e_ch_CHSimpleTest_Log_NE.sendCommand(OFF)
-    |]
+    //|]
 end
 
 rule "Monitor_m_ch_CHSimpleTest_Log_NE"
 when
     Item start_m_ch_CHSimpleTest_Log_NE received command ON
 then
-    sendcommand(start_m_ch_CHSimpleTest_Log_NE, OFF)
+    sendCommand(start_m_ch_CHSimpleTest_Log_NE, OFF)
 
     counter_ch_CHSimpleTest_Log_NE = counter_ch_CHSimpleTest_Log_NE + 1
     logInfo("CHSimpleTest_Log_NE.rules", "Monitor for group (ch_CHSimpleTest_Log_NE) active.")
     logInfo("CHSimpleTest_Log_NE.rules", "counter_ch_CHSimpleTest_Log_NE = " + counter_ch_CHSimpleTest_Log_NE + ".")
 
-    sendcommand(start_a_ch_CHSimpleTest_Log_NE, ON)
+    sendCommand(start_a_ch_CHSimpleTest_Log_NE, ON)
 end
 
 rule "Analyze_a_ch_CHSimpleTest_Log_NE"
 when
     Item start_a_ch_CHSimpleTest_Log_NE received command ON
 then
-    sendcommand(start_a_ch_CHSimpleTest_Log_NE, OFF)
+    sendCommand(start_a_ch_CHSimpleTest_Log_NE, OFF)
 
     counter_ch_CHSimpleTest_Log_NE = counter_ch_CHSimpleTest_Log_NE + 1
     logInfo("CHSimpleTest_Log_NE.rules", "Analyze for group (ch_CHSimpleTest_Log_NE) active.")
@@ -56,14 +56,14 @@ then
         logInfo("CHSimpleTest_Log_NE.rules", "Adaptation required for CHSimpleTest_Log_NE.")
         logInfo("CHSimpleTest_Log_NE.rules", "Proceeding with loop.")
 
-        sendcommand(start_p_ch_CHSimpleTest_Log_NE, ON)
+        sendCommand(start_p_ch_CHSimpleTest_Log_NE, ON)
     }
     else {
         logInfo("CHSimpleTest_Log_NE.rules", "Adaptation not required for CHSimpleTest_Log_NE.")
         counter_ch_CHSimpleTest_Log_NE = 0
         logInfo("CHSimpleTest_Log_NE.rules", "Resetting loop.")
 
-        sendcommand(start_m_ch_CHSimpleTest_Log_NE, ON)
+        sendCommand(start_m_ch_CHSimpleTest_Log_NE, ON)
     }
 end
 
@@ -71,26 +71,26 @@ rule "Plan_p_ch_CHSimpleTest_Log_NE"
 when
     Item start_p_ch_CHSimpleTest_Log_NE received command ON
 then
-    sendcommand(start_p_ch_CHSimpleTest_Log_NE, OFF)
+    sendCommand(start_p_ch_CHSimpleTest_Log_NE, OFF)
 
     counter_ch_CHSimpleTest_Log_NE = counter_ch_CHSimpleTest_Log_NE + 1
     logInfo("CHSimpleTest_Log_NE.rules", "Plan for group (ch_CHSimpleTest_Log_NE) active.")
     logInfo("CHSimpleTest_Log_NE.rules", "counter_ch_CHSimpleTest_Log_NE = " + counter_ch_CHSimpleTest_Log_NE + ".")
 
-    sendcommand(start_e_ch_CHSimpleTest_Log_NE, ON)
+    sendCommand(start_e_ch_CHSimpleTest_Log_NE, ON)
 end
 
 rule "Execute_e_ch_CHSimpleTest_Log_NE"
 when
     Item start_e_ch_CHSimpleTest_Log_NE received command ON
 then
-    sendcommand(start_e_ch_CHSimpleTest_Log_NE, OFF)
+    sendCommand(start_e_ch_CHSimpleTest_Log_NE, OFF)
 
     counter_ch_CHSimpleTest_Log_NE = counter_ch_CHSimpleTest_Log_NE + 1
     logInfo("CHSimpleTest_Log_NE.rules", "Execute for group (ch_CHSimpleTest_Log_NE) active.")
     logInfo("CHSimpleTest_Log_NE.rules", "counter_ch_CHSimpleTest_Log_NE = " + counter_ch_CHSimpleTest_Log_NE + ".")
     counter_ch_CHSimpleTest_Log_NE = 0
 
-    sendcommand(start_m_ch_CHSimpleTest_Log_NE, ON)
+    sendCommand(start_m_ch_CHSimpleTest_Log_NE, ON)
 end
 

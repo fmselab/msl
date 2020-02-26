@@ -85,7 +85,7 @@ public class RuleAggregate extends OpenHABRule {
 			if(OpenHABGenerator.writeLog) {
 				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, getName() + " is sleeping for 1 second...");
 			}
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "Thread::Sleep(1000)\n";
+			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "Thread::sleep(1000)\n";
 			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "} while(";
 				//work is used here
 			temp += work;
@@ -93,7 +93,7 @@ public class RuleAggregate extends OpenHABRule {
 			if(OpenHABGenerator.writeLog) {
 				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, getName() + " is sleeping for 1 second...");
 			}
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "Thread::Sleep(1000)\n";
+			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "Thread::sleep(1000)\n";
 			temp += OpenHABGenerator.tab + "} while(" + getOut().get(0).getTriggers().get(0).getName() + ")\n";
 			temp += "\n";
 			
