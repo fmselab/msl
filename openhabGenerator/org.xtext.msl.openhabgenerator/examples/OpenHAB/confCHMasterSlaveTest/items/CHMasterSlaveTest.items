@@ -1,0 +1,20 @@
+Group chm_CHMasterSlaveTest "chm_CHMasterSlaveTest"
+
+Switch start_a_chm_CHMasterSlaveTest "start_a_chm_CHMasterSlaveTest" (chm_CHMasterSlaveTest)
+Switch start_p_chm_CHMasterSlaveTest "start_p_chm_CHMasterSlaveTest" (chm_CHMasterSlaveTest)
+
+Group hs0_CHMasterSlaveTest "hs0_CHMasterSlaveTest"
+
+Switch start_m_hs0_CHMasterSlaveTest "start_m_hs0_CHMasterSlaveTest" (hs0_CHMasterSlaveTest)
+Switch start_e_hs0_CHMasterSlaveTest "start_e_hs0_CHMasterSlaveTest" (hs0_CHMasterSlaveTest)
+
+Group hs1_CHMasterSlaveTest "hs1_CHMasterSlaveTest"
+
+Switch start_m_hs1_CHMasterSlaveTest "start_m_hs1_CHMasterSlaveTest" (hs1_CHMasterSlaveTest)
+Switch start_e_hs1_CHMasterSlaveTest "start_e_hs1_CHMasterSlaveTest" (hs1_CHMasterSlaveTest)
+
+Group:Switch:OR(ON, OFF) hs0hs1_to_chm_CHMasterSlaveTest "hs0hs1_to_chm_CHMasterSlaveTest"
+
+Switch start_hs0_to_chm_CHMasterSlaveTest "start_hs0_to_chm_CHMasterSlaveTest" (hs0hs1_to_chm_CHMasterSlaveTest)
+Switch start_hs1_to_chm_CHMasterSlaveTest "start_hs1_to_chm_CHMasterSlaveTest" (hs0hs1_to_chm_CHMasterSlaveTest)
+

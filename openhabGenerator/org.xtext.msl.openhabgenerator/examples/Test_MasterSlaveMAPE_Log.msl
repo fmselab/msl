@@ -27,7 +27,7 @@ concrete pattern ComfortableHeatingMAPE concretizationOf MasterSlaveMAPE {
     group SlaveCH : MasterSlaveMAPE.Slave
     }
 
-configuration ComfortableHeating instanceOf ComfortableHeatingMAPE {
+configuration CHMasterSlaveTest_Log instanceOf ComfortableHeatingMAPE {
     hs0: ComfortableHeatingMAPE.Heater
     hs1: ComfortableHeatingMAPE.Heater
     

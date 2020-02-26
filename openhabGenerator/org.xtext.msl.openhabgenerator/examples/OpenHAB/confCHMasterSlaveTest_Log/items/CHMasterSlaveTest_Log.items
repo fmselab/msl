@@ -1,0 +1,20 @@
+Group chm_CHMasterSlaveTest_Log "chm_CHMasterSlaveTest_Log"
+
+Switch start_a_chm_CHMasterSlaveTest_Log "start_a_chm_CHMasterSlaveTest_Log" (chm_CHMasterSlaveTest_Log)
+Switch start_p_chm_CHMasterSlaveTest_Log "start_p_chm_CHMasterSlaveTest_Log" (chm_CHMasterSlaveTest_Log)
+
+Group hs0_CHMasterSlaveTest_Log "hs0_CHMasterSlaveTest_Log"
+
+Switch start_m_hs0_CHMasterSlaveTest_Log "start_m_hs0_CHMasterSlaveTest_Log" (hs0_CHMasterSlaveTest_Log)
+Switch start_e_hs0_CHMasterSlaveTest_Log "start_e_hs0_CHMasterSlaveTest_Log" (hs0_CHMasterSlaveTest_Log)
+
+Group hs1_CHMasterSlaveTest_Log "hs1_CHMasterSlaveTest_Log"
+
+Switch start_m_hs1_CHMasterSlaveTest_Log "start_m_hs1_CHMasterSlaveTest_Log" (hs1_CHMasterSlaveTest_Log)
+Switch start_e_hs1_CHMasterSlaveTest_Log "start_e_hs1_CHMasterSlaveTest_Log" (hs1_CHMasterSlaveTest_Log)
+
+Group:Switch:OR(ON, OFF) hs0hs1_to_chm_CHMasterSlaveTest_Log "hs0hs1_to_chm_CHMasterSlaveTest_Log"
+
+Switch start_hs0_to_chm_CHMasterSlaveTest_Log "start_hs0_to_chm_CHMasterSlaveTest_Log" (hs0hs1_to_chm_CHMasterSlaveTest_Log)
+Switch start_hs1_to_chm_CHMasterSlaveTest_Log "start_hs1_to_chm_CHMasterSlaveTest_Log" (hs0hs1_to_chm_CHMasterSlaveTest_Log)
+

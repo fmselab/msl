@@ -1,84 +1,69 @@
-var boolean adaptation_required_a_chm
+import java.util.concurrent.locks.ReentrantLock
+
+val ReentrantLock lock_m = new ReentrantLock()
+val ReentrantLock lock_e = new ReentrantLock()
+var boolean null
+var boolean null
+var boolean null
+var boolean null
+var boolean null
+var boolean null
+var boolean null
+var boolean null
 
 rule "StartLoop_ComfortableHeating"
 when
-	System started
+    System started
 then
-	start_a_chm.sendCommand(OFF)
-	start_p_chm.sendCommand(OFF)
-	start_m_hs0.sendCommand(ON)
-	start_e_hs0.sendCommand(OFF)
-	start_m_hs1.sendCommand(ON)
-	start_e_hs1.sendCommand(OFF)
+    null = false    null = false    null = false    null = false    null = false    null = false    null = false    null = false    createTimer(now.plusSeconds(1)) [|
+        Switch start_a_chm_ComfortableHeating "start_a_chm_ComfortableHeating" (chm_ComfortableHeating).sendCommand(OFF)        Switch start_p_chm_ComfortableHeating "start_p_chm_ComfortableHeating" (chm_ComfortableHeating).sendCommand(OFF)        Switch start_m_hs0_ComfortableHeating "start_m_hs0_ComfortableHeating" (hs0_ComfortableHeating).sendCommand(ON)        Switch start_e_hs0_ComfortableHeating "start_e_hs0_ComfortableHeating" (hs0_ComfortableHeating).sendCommand(OFF)        Switch start_m_hs1_ComfortableHeating "start_m_hs1_ComfortableHeating" (hs1_ComfortableHeating).sendCommand(ON)        Switch start_e_hs1_ComfortableHeating "start_e_hs1_ComfortableHeating" (hs1_ComfortableHeating).sendCommand(OFF)    |]
 end
 
-rule "Analyze_a_chm"
+rule "Analyze_a_chm_ComfortableHeating"
 when
-	Item start_a_chm received command ON
+    Item start_a_chm_ComfortableHeating received command ON
 then
-	sendCommand(start_a_chm, OFF)
-	if(((Math::random * 100.0).intValue + 1) <= 50 ){
-		adaptation_required_a_chm = true
-	}
-	else {
-		adaptation_required_a_chm = false
-	}
-	if(adaptation_required_a_chm){
-		sendCommand(start_p_chm, ON)
-	}
-	else{
-		sendCommand(start_m_hs0, ON)
-		sendCommand(start_m_hs1, ON)
-	}
+    sendcommand(start_a_chm_ComfortableHeating, OFF)
 end
 
-rule "Exec_e_hs0"
+rule "Plan_p_chm_ComfortableHeating"
 when
-	Item start_e_hs0 received command ON
+    Item start_p_chm_ComfortableHeating received command ON
 then
-	sendCommand(start_e_hs0, OFF)
-	sendCommand(start_m_hs0, ON)
+    sendcommand(start_p_chm_ComfortableHeating, OFF)
 end
 
-rule "Exec_e_hs1"
+rule "Monitor_m_hs0_ComfortableHeating"
 when
-	Item start_e_hs1 received command ON
+    Item start_m_hs0_ComfortableHeating received command ON
 then
-	sendCommand(start_e_hs1, OFF)
-	sendCommand(start_m_hs1, ON)
+    sendcommand(start_m_hs0_ComfortableHeating, OFF)
 end
 
-rule "Monitor_m_hs0"
+rule "Execute_e_hs0_ComfortableHeating"
 when
-	Item start_m_hs0 received command ON
+    Item start_e_hs0_ComfortableHeating received command ON
 then
-	sendCommand(start_m_hs0, OFF)
-	sendCommand(hs0_to_chm, ON)
+    sendcommand(start_e_hs0_ComfortableHeating, OFF)
 end
 
-rule "Monitor_m_hs1"
+rule "Monitor_m_hs1_ComfortableHeating"
 when
-	Item start_m_hs1 received command ON
+    Item start_m_hs1_ComfortableHeating received command ON
 then
-	sendCommand(start_m_hs1, OFF)
-	sendCommand(hs1_to_chm, ON)
+    sendcommand(start_m_hs1_ComfortableHeating, OFF)
 end
 
-rule "Aggregator_m_hs0_m_hs1_a_chm"
+rule "Execute_e_hs1_ComfortableHeating"
 when
-	Item hs0hs1_to_chm received update ON
+    Item start_e_hs1_ComfortableHeating received command ON
 then
-	sendCommand(hs0_to_chm, OFF)
-	sendCommand(hs1_to_chm, OFF)
-	sendCommand(start_a_chm, ON)
+    sendcommand(start_e_hs1_ComfortableHeating, OFF)
 end
 
-rule "Plan_p_chm"
+rule "Aggregate_hs0hs1_to_chm_ComfortableHeating"
 when
-	Item start_p_chm received command ON
+    Item start_hs0_to_chm_ComfortableHeating received command ON
 then
-	sendCommand(start_p_chm, OFF)
-	sendCommand(start_e_hs0, ON)
-	sendCommand(start_e_hs1, ON)
 end
 

@@ -1,0 +1,7 @@
+Group ch_CHSimpleTest "ch_CHSimpleTest"
+
+Switch start_m_ch_CHSimpleTest "start_m_ch_CHSimpleTest" (ch_CHSimpleTest)
+Switch start_a_ch_CHSimpleTest "start_a_ch_CHSimpleTest" (ch_CHSimpleTest)
+Switch start_p_ch_CHSimpleTest "start_p_ch_CHSimpleTest" (ch_CHSimpleTest)
+Switch start_e_ch_CHSimpleTest "start_e_ch_CHSimpleTest" (ch_CHSimpleTest)
+

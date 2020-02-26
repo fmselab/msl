@@ -1,0 +1,125 @@
+var boolean adaptation_required_a_ch
+
+var Number counter_ch_CHSimpleTest_Log
+var Number exec_counter_CHSimpleTest_Log
+
+rule "StartLoop_CHSimpleTest_Log"
+when
+    System started
+then
+    logInfo("CHSimpleTest_Log.rules", "Initializing loops for CHSimpleTest_Log.")
+
+    exec_counter_CHSimpleTest_Log = 10
+    logInfo("CHSimpleTest_Log.rules", "Loops will run for 10 iterations.")
+
+    logInfo("CHSimpleTest_Log.rules", "Starting MAPE Loop for group (ch_CHSimpleTest_Log).")
+    counter_ch_CHSimpleTest_Log = 0
+    logInfo("CHSimpleTest_Log.rules", "counter_ch_CHSimpleTest_Log = " + counter_ch_CHSimpleTest_Log + ".")
+
+    adaptation_required_a_ch = false
+
+    createTimer(now.plusSeconds(1)) [|
+        start_m_ch_CHSimpleTest_Log.sendCommand(ON)
+        start_a_ch_CHSimpleTest_Log.sendCommand(OFF)
+        start_p_ch_CHSimpleTest_Log.sendCommand(OFF)
+        start_e_ch_CHSimpleTest_Log.sendCommand(OFF)
+    |]
+end
+
+rule "Monitor_m_ch_CHSimpleTest_Log"
+when
+    Item start_m_ch_CHSimpleTest_Log received command ON
+then
+    sendcommand(start_m_ch_CHSimpleTest_Log, OFF)
+
+    counter_ch_CHSimpleTest_Log = counter_ch_CHSimpleTest_Log + 1
+    logInfo("CHSimpleTest_Log.rules", "Monitor for group (ch_CHSimpleTest_Log) active.")
+    logInfo("CHSimpleTest_Log.rules", "counter_ch_CHSimpleTest_Log = " + counter_ch_CHSimpleTest_Log + ".")
+
+    sendcommand(start_a_ch_CHSimpleTest_Log, ON)
+end
+
+rule "Analyze_a_ch_CHSimpleTest_Log"
+when
+    Item start_a_ch_CHSimpleTest_Log received command ON
+then
+    sendcommand(start_a_ch_CHSimpleTest_Log, OFF)
+
+    counter_ch_CHSimpleTest_Log = counter_ch_CHSimpleTest_Log + 1
+    logInfo("CHSimpleTest_Log.rules", "Analyze for group (ch_CHSimpleTest_Log) active.")
+    logInfo("CHSimpleTest_Log.rules", "counter_ch_CHSimpleTest_Log = " + counter_ch_CHSimpleTest_Log + ".")
+
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_a_ch = true
+    }
+    else {
+        adaptation_required_a_ch = false
+    }
+
+    if(adaptation_required_a_ch){
+        logInfo("CHSimpleTest_Log.rules", "Adaptation required for CHSimpleTest_Log.")
+        logInfo("CHSimpleTest_Log.rules", "Proceeding with loop.")
+
+        sendcommand(start_p_ch_CHSimpleTest_Log, ON)
+    }
+    else {
+        logInfo("CHSimpleTest_Log.rules", "Adaptation not required for CHSimpleTest_Log.")
+        counter_ch_CHSimpleTest_Log = 0
+
+        if(exec_counter_CHSimpleTest_Log > 0){
+            logInfo("CHSimpleTest_Log.rules", "Resetting loop.")
+
+            sendcommand(start_m_ch_CHSimpleTest_Log, ON)
+        }
+        else {
+            logInfo("CHSimpleTest_Log.rules", "exec_counter_CHSimpleTest_Log = 0.")
+            logInfo("CHSimpleTest_Log.rules", "Loops for CHSimpleTest_Log are stopping.")
+        }
+    }
+end
+
+rule "Plan_p_ch_CHSimpleTest_Log"
+when
+    Item start_p_ch_CHSimpleTest_Log received command ON
+then
+    sendcommand(start_p_ch_CHSimpleTest_Log, OFF)
+
+    counter_ch_CHSimpleTest_Log = counter_ch_CHSimpleTest_Log + 1
+    logInfo("CHSimpleTest_Log.rules", "Plan for group (ch_CHSimpleTest_Log) active.")
+    logInfo("CHSimpleTest_Log.rules", "counter_ch_CHSimpleTest_Log = " + counter_ch_CHSimpleTest_Log + ".")
+
+    sendcommand(start_e_ch_CHSimpleTest_Log, ON)
+end
+
+rule "Execute_e_ch_CHSimpleTest_Log"
+when
+    Item start_e_ch_CHSimpleTest_Log received command ON
+then
+    sendcommand(start_e_ch_CHSimpleTest_Log, OFF)
+
+    counter_ch_CHSimpleTest_Log = counter_ch_CHSimpleTest_Log + 1
+    logInfo("CHSimpleTest_Log.rules", "Execute for group (ch_CHSimpleTest_Log) active.")
+    logInfo("CHSimpleTest_Log.rules", "counter_ch_CHSimpleTest_Log = " + counter_ch_CHSimpleTest_Log + ".")
+
+    if(exec_counter_CHSimpleTest_Log > 0){
+        sendcommand(start_m_ch_CHSimpleTest_Log, ON)
+    }
+    else {
+        logInfo("CHSimpleTest_Log.rules", "exec_counter_CHSimpleTest_Log = 0.")
+        logInfo("CHSimpleTest_Log.rules", "Loops for CHSimpleTest_Log are stopping.")
+    }
+end
+
+rule "Execution stop countdown"
+when
+    Item start_m_ch_CHSimpleTest_Log received command ON
+then
+    if(exec_counter_CHSimpleTest_Log > 0) {
+        exec_counter_CHSimpleTest_Log = exec_counter_CHSimpleTest_Log - 1
+        logInfo("CHSimpleTest_Log.rules", "Execution counter reduced by one. exec_counter_CHSimpleTest_Log = " + exec_counter_CHSimpleTest_Log + ".")
+    }
+    if(exec_counter_CHSimpleTest_Log <= 0) {
+        logInfo("CHSimpleTest_Log.rules", "10 executions have elapsed. Loops will end, then stop.")
+    }
+end
+

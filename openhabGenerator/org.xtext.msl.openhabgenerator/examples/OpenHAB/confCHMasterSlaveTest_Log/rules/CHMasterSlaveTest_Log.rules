@@ -1,0 +1,343 @@
+import java.util.concurrent.locks.ReentrantLock
+
+val ReentrantLock lock_m = new ReentrantLock()
+val ReentrantLock lock_e = new ReentrantLock()
+
+var boolean hs0_CHMasterSlaveTest_Log_mod
+var boolean hs0_CHMasterSlaveTest_Log_priority
+var boolean hs0_CHMasterSlaveTest_Log_call
+var boolean adaptation_required_hs0_CHMasterSlaveTest_Log
+
+var boolean hs1_CHMasterSlaveTest_Log_mod
+var boolean hs1_CHMasterSlaveTest_Log_priority
+var boolean hs1_CHMasterSlaveTest_Log_call
+var boolean adaptation_required_hs1_CHMasterSlaveTest_Log
+
+var Number counter_chm_CHMasterSlaveTest_Log
+var Number counter_hs0_CHMasterSlaveTest_Log
+var Number counter_hs1_CHMasterSlaveTest_Log
+var Number exec_counter_CHMasterSlaveTest_Log
+
+rule "StartLoop_CHMasterSlaveTest_Log"
+when
+    System started
+then
+    logInfo("CHMasterSlaveTest_Log.rules", "Initializing loops for CHMasterSlaveTest_Log.")
+
+    exec_counter_CHMasterSlaveTest_Log = 10
+    logInfo("CHMasterSlaveTest_Log.rules", "Loops will run for 10 iterations.")
+
+    logInfo("CHMasterSlaveTest_Log.rules", "Starting MAPE Loop for groups (chm_CHMasterSlaveTest_Log), (hs0_CHMasterSlaveTest_Log) and (hs1_CHMasterSlaveTest_Log).")
+    counter_chm_CHMasterSlaveTest_Log = 0
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_chm_CHMasterSlaveTest_Log = " + counter_chm_CHMasterSlaveTest_Log + ".")
+    counter_hs0_CHMasterSlaveTest_Log = 0
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_hs0_CHMasterSlaveTest_Log = " + counter_hs0_CHMasterSlaveTest_Log + ".")
+    counter_hs1_CHMasterSlaveTest_Log = 0
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_hs1_CHMasterSlaveTest_Log = " + counter_hs1_CHMasterSlaveTest_Log + ".")
+
+    hs0_CHMasterSlaveTest_Log_mod = false
+    hs0_CHMasterSlaveTest_Log_call = false
+    hs0_CHMasterSlaveTest_Log_priority = false
+    adaptation_required_hs0_CHMasterSlaveTest_Log = false
+
+    hs1_CHMasterSlaveTest_Log_mod = false
+    hs1_CHMasterSlaveTest_Log_call = false
+    hs1_CHMasterSlaveTest_Log_priority = false
+    adaptation_required_hs1_CHMasterSlaveTest_Log = false
+
+
+    createTimer(now.plusSeconds(1)) [|
+        start_a_chm_CHMasterSlaveTest_Log.sendCommand(OFF)
+        start_p_chm_CHMasterSlaveTest_Log.sendCommand(OFF)
+        start_m_hs0_CHMasterSlaveTest_Log.sendCommand(ON)
+        start_e_hs0_CHMasterSlaveTest_Log.sendCommand(OFF)
+        start_m_hs1_CHMasterSlaveTest_Log.sendCommand(ON)
+        start_e_hs1_CHMasterSlaveTest_Log.sendCommand(OFF)
+    |]
+end
+
+rule "Analyze_a_chm_CHMasterSlaveTest_Log"
+when
+    Item start_a_chm_CHMasterSlaveTest_Log received command ON
+then
+    sendcommand(start_a_chm_CHMasterSlaveTest_Log, OFF)
+
+    counter_chm_CHMasterSlaveTest_Log = counter_chm_CHMasterSlaveTest_Log + 1
+    logInfo("CHMasterSlaveTest_Log.rules", "Analyze for group (chm_CHMasterSlaveTest_Log) active.")
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_chm_CHMasterSlaveTest_Log = " + counter_chm_CHMasterSlaveTest_Log + ".")
+
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_hs0_CHMasterSlaveTest_Log = true
+    }
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_hs1_CHMasterSlaveTest_Log = true
+    }
+
+    if(adaptation_required_hs0_CHMasterSlaveTest_Log || adaptation_required_hs1_CHMasterSlaveTest_Log) {
+        if(hs0_CHMasterSlaveTest_Log_call && hs0_CHMasterSlaveTest_Log_priority) {
+            logInfo("CHMasterSlaveTest_Log.rules", "Adaptation required for hs0_CHMasterSlaveTest_Log.")
+
+            hs0_CHMasterSlaveTest_Log_call = false
+            hs0_CHMasterSlaveTest_Log_priority = false
+
+            if(hs1_CHMasterSlaveTest_Log_call && !hs1_CHMasterSlaveTest_Log_priority) {
+                logInfo("CHMasterSlaveTest_Log.rules", "Setting hs1_CHMasterSlaveTest_Log_priority to true.")
+
+                hs1_CHMasterSlaveTest_Log_priority = true
+            }
+
+            hs0_CHMasterSlaveTest_Log_mod = true
+        } else if(hs1_CHMasterSlaveTest_Log_call && hs1_CHMasterSlaveTest_Log_priority) {
+            logInfo("CHMasterSlaveTest_Log.rules", "Adaptation required for hs1_CHMasterSlaveTest_Log.")
+
+            hs1_CHMasterSlaveTest_Log_call = false
+            hs1_CHMasterSlaveTest_Log_priority = false
+
+            if(hs0_CHMasterSlaveTest_Log_call && !hs0_CHMasterSlaveTest_Log_priority) {
+                logInfo("CHMasterSlaveTest_Log.rules", "Setting hs0_CHMasterSlaveTest_Log_priority to true.")
+
+                hs0_CHMasterSlaveTest_Log_priority = true
+            }
+
+            hs1_CHMasterSlaveTest_Log_mod = true
+        }
+
+        sendCommand(start_p_chm_CHMasterSlaveTest_Log, ON)
+    } else {
+        if(hs0_CHMasterSlaveTest_Log_call && hs0_CHMasterSlaveTest_Log_priority) {
+            logInfo("CHMasterSlaveTest_Log.rules", "No adaptation required for hs0_CHMasterSlaveTest_Log.")
+
+            hs0_CHMasterSlaveTest_Log_call = false
+            hs0_CHMasterSlaveTest_Log_priority = false
+
+            if(hs1_CHMasterSlaveTest_Log_call && !hs1_CHMasterSlaveTest_Log_priority) {
+                logInfo("CHMasterSlaveTest_Log.rules", "Setting hs1_CHMasterSlaveTest_Log_priority to true.")
+
+                hs1_CHMasterSlaveTest_Log_priority = true
+            }
+
+            if(exec_counter_CHMasterSlaveTest_Log > 0){
+                logInfo("CHMasterSlaveTest_Log.rules", "Resetting loop.")
+
+                sendCommand(start_m_hs0_CHMasterSlaveTest_Log, ON)
+            }
+            else {
+                logInfo("CHMasterSlaveTest_Log.rules", "exec_counter_CHMasterSlaveTest_Log = 0.")
+                logInfo("CHMasterSlaveTest_Log.rules", "Loops for CHMasterSlaveTest_Log are stopping.")
+            }
+        } else if(hs1_CHMasterSlaveTest_Log_call && hs1_CHMasterSlaveTest_Log_priority) {
+            logInfo("CHMasterSlaveTest_Log.rules", "No adaptation required for hs1_CHMasterSlaveTest_Log.")
+
+            hs1_CHMasterSlaveTest_Log_call = false
+            hs1_CHMasterSlaveTest_Log_priority = false
+
+            if(hs0_CHMasterSlaveTest_Log_call && !hs0_CHMasterSlaveTest_Log_priority) {
+                logInfo("CHMasterSlaveTest_Log.rules", "Setting hs0_CHMasterSlaveTest_Log_priority to true.")
+
+                hs0_CHMasterSlaveTest_Log_priority = true
+            }
+
+            if(exec_counter_CHMasterSlaveTest_Log > 0){
+                logInfo("CHMasterSlaveTest_Log.rules", "Resetting loop.")
+
+                sendCommand(start_m_hs1_CHMasterSlaveTest_Log, ON)
+            }
+            else {
+                logInfo("CHMasterSlaveTest_Log.rules", "exec_counter_CHMasterSlaveTest_Log = 0.")
+                logInfo("CHMasterSlaveTest_Log.rules", "Loops for CHMasterSlaveTest_Log are stopping.")
+            }
+        }
+    }
+end
+
+rule "Plan_p_chm_CHMasterSlaveTest_Log"
+when
+    Item start_p_chm_CHMasterSlaveTest_Log received command ON
+then
+    sendcommand(start_p_chm_CHMasterSlaveTest_Log, OFF)
+
+    counter_chm_CHMasterSlaveTest_Log = counter_chm_CHMasterSlaveTest_Log + 1
+    logInfo("CHMasterSlaveTest_Log.rules", "Plan for group (chm_CHMasterSlaveTest_Log) active.")
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_chm_CHMasterSlaveTest_Log = " + counter_chm_CHMasterSlaveTest_Log + ".")
+    counter_chm_CHMasterSlaveTest_Log = 0
+
+    if(adaptation_required_hs0_CHMasterSlaveTest_Log){
+        logInfo("CHMasterSlaveTest_Log.rules", "Proceeding to Execute_e_hs0_CHMasterSlaveTest_Log.")
+
+        adaptation_required_hs0_CHMasterSlaveTest_Log = false
+        sendCommand(start_e_hs0_CHMasterSlaveTest_Log, ON)
+    }
+
+    if(adaptation_required_hs1_CHMasterSlaveTest_Log){
+        logInfo("CHMasterSlaveTest_Log.rules", "Proceeding to Execute_e_hs1_CHMasterSlaveTest_Log.")
+
+        adaptation_required_hs1_CHMasterSlaveTest_Log = false
+        sendCommand(start_e_hs1_CHMasterSlaveTest_Log, ON)
+    }
+end
+
+rule "Monitor_m_hs0_CHMasterSlaveTest_Log"
+when
+    Item start_m_hs0_CHMasterSlaveTest_Log received command ON
+then
+    sendcommand(start_m_hs0_CHMasterSlaveTest_Log, OFF)
+
+    counter_hs0_CHMasterSlaveTest_Log = counter_hs0_CHMasterSlaveTest_Log + 1
+    logInfo("CHMasterSlaveTest_Log.rules", "Monitor for group (hs0_CHMasterSlaveTest_Log) active.")
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_hs0_CHMasterSlaveTest_Log = " + counter_hs0_CHMasterSlaveTest_Log + ".")
+
+    try {
+        logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs0_CHMasterSlaveTest_Log is requesting a lock on lock_m.")
+        lock_m.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs0_CHMasterSlaveTest_Log obtained a lock on lock_m.")
+        if(!(hs1_CHMasterSlaveTest_Log_priority)) {
+            hs0_CHMasterSlaveTest_Log_priority = true
+        }
+        hs0_CHMasterSlaveTest_Log_call = true
+        lock_m.unlock()
+        logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs0_CHMasterSlaveTest_Log released a lock on lock_m.")
+    }
+
+    sendcommand(start_hs0_to_chm_CHMasterSlaveTest_Log, ON)
+end
+
+rule "Execute_e_hs0_CHMasterSlaveTest_Log"
+when
+    Item start_e_hs0_CHMasterSlaveTest_Log received command ON
+then
+    sendcommand(start_e_hs0_CHMasterSlaveTest_Log, OFF)
+
+    counter_hs0_CHMasterSlaveTest_Log = counter_hs0_CHMasterSlaveTest_Log + 1
+    logInfo("CHMasterSlaveTest_Log.rules", "Execute for group (hs0_CHMasterSlaveTest_Log) active.")
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_hs0_CHMasterSlaveTest_Log = " + counter_hs0_CHMasterSlaveTest_Log + ".")
+    counter_hs0_CHMasterSlaveTest_Log = 0
+
+    try {
+        logInfo("CHMasterSlaveTest_Log.rules", "Execute_e_hs0_CHMasterSlaveTest_Log is requesting a lock on lock_e.")
+        lock_e.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log.rules", "Execute_e_hs0_CHMasterSlaveTest_Log obtained a lock on lock_e.")
+        if(exec_counter_CHMasterSlaveTest_Log > 0){
+            if(hs0_CHMasterSlaveTest_Log_mod){
+                hs0_CHMasterSlaveTest_Log_mod = false
+                sendCommand(start_m_hs0_CHMasterSlaveTest_Log, ON)
+            } else if(hs1_CHMasterSlaveTest_Log_mod){
+                hs1_CHMasterSlaveTest_Log_mod = false
+                sendCommand(start_m_hs1_CHMasterSlaveTest_Log, ON)
+            } 
+        }
+        else {
+            logInfo("CHMasterSlaveTest_Log.rules", "exec_counter_CHMasterSlaveTest_Log = 0.")
+            logInfo("CHMasterSlaveTest_Log.rules", "Loops for CHMasterSlaveTest_Log are stopping.")
+        }
+
+        lock_e.unlock()
+        logInfo("CHMasterSlaveTest_Log.rules", "Execute_e_hs0_CHMasterSlaveTest_Log released a lock on lock_e.")
+    }
+end
+
+rule "Monitor_m_hs1_CHMasterSlaveTest_Log"
+when
+    Item start_m_hs1_CHMasterSlaveTest_Log received command ON
+then
+    sendcommand(start_m_hs1_CHMasterSlaveTest_Log, OFF)
+
+    counter_hs1_CHMasterSlaveTest_Log = counter_hs1_CHMasterSlaveTest_Log + 1
+    logInfo("CHMasterSlaveTest_Log.rules", "Monitor for group (hs1_CHMasterSlaveTest_Log) active.")
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_hs1_CHMasterSlaveTest_Log = " + counter_hs1_CHMasterSlaveTest_Log + ".")
+
+    try {
+        logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs1_CHMasterSlaveTest_Log is requesting a lock on lock_m.")
+        lock_m.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs1_CHMasterSlaveTest_Log obtained a lock on lock_m.")
+        if(!(hs0_CHMasterSlaveTest_Log_priority)) {
+            hs1_CHMasterSlaveTest_Log_priority = true
+        }
+        hs1_CHMasterSlaveTest_Log_call = true
+        lock_m.unlock()
+        logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs1_CHMasterSlaveTest_Log released a lock on lock_m.")
+    }
+
+    sendcommand(start_hs1_to_chm_CHMasterSlaveTest_Log, ON)
+end
+
+rule "Execute_e_hs1_CHMasterSlaveTest_Log"
+when
+    Item start_e_hs1_CHMasterSlaveTest_Log received command ON
+then
+    sendcommand(start_e_hs1_CHMasterSlaveTest_Log, OFF)
+
+    counter_hs1_CHMasterSlaveTest_Log = counter_hs1_CHMasterSlaveTest_Log + 1
+    logInfo("CHMasterSlaveTest_Log.rules", "Execute for group (hs1_CHMasterSlaveTest_Log) active.")
+    logInfo("CHMasterSlaveTest_Log.rules", "counter_hs1_CHMasterSlaveTest_Log = " + counter_hs1_CHMasterSlaveTest_Log + ".")
+    counter_hs1_CHMasterSlaveTest_Log = 0
+
+    try {
+        logInfo("CHMasterSlaveTest_Log.rules", "Execute_e_hs1_CHMasterSlaveTest_Log is requesting a lock on lock_e.")
+        lock_e.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log.rules", "Execute_e_hs1_CHMasterSlaveTest_Log obtained a lock on lock_e.")
+        if(exec_counter_CHMasterSlaveTest_Log > 0){
+            if(hs0_CHMasterSlaveTest_Log_mod){
+                hs0_CHMasterSlaveTest_Log_mod = false
+                sendCommand(start_m_hs0_CHMasterSlaveTest_Log, ON)
+            } else if(hs1_CHMasterSlaveTest_Log_mod){
+                hs1_CHMasterSlaveTest_Log_mod = false
+                sendCommand(start_m_hs1_CHMasterSlaveTest_Log, ON)
+            } 
+        }
+        else {
+            logInfo("CHMasterSlaveTest_Log.rules", "exec_counter_CHMasterSlaveTest_Log = 0.")
+            logInfo("CHMasterSlaveTest_Log.rules", "Loops for CHMasterSlaveTest_Log are stopping.")
+        }
+
+        lock_e.unlock()
+        logInfo("CHMasterSlaveTest_Log.rules", "Execute_e_hs1_CHMasterSlaveTest_Log released a lock on lock_e.")
+    }
+end
+
+rule "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log"
+when
+    Item hs0hs1_to_chm_CHMasterSlaveTest_Log received update ON
+then
+    logInfo("CHMasterSlaveTest_Log.rules", "Aggregating output from start_m_hs0_CHMasterSlaveTest_Log or start_m_hs1_CHMasterSlaveTest_Log to start_a_chm_CHMasterSlaveTest_Log.")
+
+    if(start_hs0_to_chm_CHMasterSlaveTest_Log.state == ON){
+        counter_hs0_CHMasterSlaveTest_Log = counter_hs0_CHMasterSlaveTest_Log + 1
+        logInfo("CHMasterSlaveTest_Log.rules", "counter_hs0_CHMasterSlaveTest_Log = " + counter_hs0_CHMasterSlaveTest_Log + ".")
+
+        sendCommand(start_hs0_to_chm_CHMasterSlaveTest_Log, OFF)
+    } else if (start_hs1_to_chm_CHMasterSlaveTest_Log.state == ON){
+        counter_hs1_CHMasterSlaveTest_Log = counter_hs1_CHMasterSlaveTest_Log + 1
+        logInfo("CHMasterSlaveTest_Log.rules", "counter_hs1_CHMasterSlaveTest_Log = " + counter_hs1_CHMasterSlaveTest_Log + ".")
+
+        sendCommand(start_hs1_to_chm_CHMasterSlaveTest_Log, OFF)
+    }
+
+    do{
+        do{
+            logInfo("CHMasterSlaveTest_Log.rules", "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log is sleeping for 1 second...")
+            Thread::Sleep(1000)
+        } while(hs0_CHMasterSlaveTest_Log_mod || hs1_CHMasterSlaveTest_Log_mod)
+        logInfo("CHMasterSlaveTest_Log.rules", "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log is sleeping for 1 second...")
+        Thread::Sleep(1000)
+    } while(start_a_chm_CHMasterSlaveTest_Log)
+
+    sendcommand(start_a_chm_CHMasterSlaveTest_Log, ON)
+end
+
+rule "Execution stop countdown"
+when
+    Item hs0hs1_to_chm_CHMasterSlaveTest_Log received command ON
+then
+    if(exec_counter_CHMasterSlaveTest_Log > 0) {
+        exec_counter_CHMasterSlaveTest_Log = exec_counter_CHMasterSlaveTest_Log - 1
+        logInfo("CHMasterSlaveTest_Log.rules", "Execution counter reduced by one. exec_counter_CHMasterSlaveTest_Log = " + exec_counter_CHMasterSlaveTest_Log + ".")
+    }
+    if(exec_counter_CHMasterSlaveTest_Log <= 0) {
+        logInfo("CHMasterSlaveTest_Log.rules", "10 executions have elapsed. Loops will end, then stop.")
+    }
+end
+

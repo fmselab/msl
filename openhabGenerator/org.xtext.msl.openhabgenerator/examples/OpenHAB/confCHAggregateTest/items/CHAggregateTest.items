@@ -1,0 +1,22 @@
+Group ch_CHAggregateTest "ch_CHAggregateTest"
+
+Switch start_m_ch_CHAggregateTest "start_m_ch_CHAggregateTest" (ch_CHAggregateTest)
+Switch start_a_ch_CHAggregateTest "start_a_ch_CHAggregateTest" (ch_CHAggregateTest)
+Switch start_p_ch_CHAggregateTest "start_p_ch_CHAggregateTest" (ch_CHAggregateTest)
+Switch start_e_ch_CHAggregateTest "start_e_ch_CHAggregateTest" (ch_CHAggregateTest)
+
+Group h0_CHAggregateTest "h0_CHAggregateTest"
+
+Switch start_m_h0_CHAggregateTest "start_m_h0_CHAggregateTest" (h0_CHAggregateTest)
+Switch start_e_h0_CHAggregateTest "start_e_h0_CHAggregateTest" (h0_CHAggregateTest)
+
+Group h1_CHAggregateTest "h1_CHAggregateTest"
+
+Switch start_m_h1_CHAggregateTest "start_m_h1_CHAggregateTest" (h1_CHAggregateTest)
+Switch start_e_h1_CHAggregateTest "start_e_h1_CHAggregateTest" (h1_CHAggregateTest)
+
+Group:Switch:AND(ON, OFF) h0h1_to_ch_CHAggregateTest "h0h1_to_ch_CHAggregateTest"
+
+Switch start_h0_to_ch_CHAggregateTest "start_h0_to_ch_CHAggregateTest" (h0h1_to_ch_CHAggregateTest)
+Switch start_h1_to_ch_CHAggregateTest "start_h1_to_ch_CHAggregateTest" (h0h1_to_ch_CHAggregateTest)
+

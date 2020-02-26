@@ -74,7 +74,7 @@ public class OpenHABGeneratorHandler extends AbstractHandler {
 			IPreferenceStore store = OpenHABGeneratorActivator.getDefault().getPreferenceStore();
 			boolean pLogMode = store.getBoolean(OpenHABGeneratorPreferencePage.P_LOG_MODE);
 			int numOfSimulations = store.getInt(OpenHABGeneratorPreferencePage.P_NUMBER_SIMULATIONS);
-			openhabGenerator.setExec_number(numOfSimulations);
+			openhabGenerator.setExecNumber(numOfSimulations);
 			openhabGenerator.setWriteLog(pLogMode);
 			openhabGenerator.generate();
 			String openhabText = sw.toString();

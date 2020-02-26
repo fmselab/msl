@@ -1,0 +1,216 @@
+import java.util.concurrent.locks.ReentrantLock
+
+val ReentrantLock lock_m = new ReentrantLock()
+val ReentrantLock lock_e = new ReentrantLock()
+
+var boolean hs0_CHMasterSlaveTest_mod
+var boolean hs0_CHMasterSlaveTest_priority
+var boolean hs0_CHMasterSlaveTest_call
+var boolean adaptation_required_hs0_CHMasterSlaveTest
+
+var boolean hs1_CHMasterSlaveTest_mod
+var boolean hs1_CHMasterSlaveTest_priority
+var boolean hs1_CHMasterSlaveTest_call
+var boolean adaptation_required_hs1_CHMasterSlaveTest
+
+
+rule "StartLoop_CHMasterSlaveTest"
+when
+    System started
+then
+    hs0_CHMasterSlaveTest_mod = false
+    hs0_CHMasterSlaveTest_call = false
+    hs0_CHMasterSlaveTest_priority = false
+    adaptation_required_hs0_CHMasterSlaveTest = false
+
+    hs1_CHMasterSlaveTest_mod = false
+    hs1_CHMasterSlaveTest_call = false
+    hs1_CHMasterSlaveTest_priority = false
+    adaptation_required_hs1_CHMasterSlaveTest = false
+
+
+    createTimer(now.plusSeconds(1)) [|
+        start_a_chm_CHMasterSlaveTest.sendCommand(OFF)
+        start_p_chm_CHMasterSlaveTest.sendCommand(OFF)
+        start_m_hs0_CHMasterSlaveTest.sendCommand(ON)
+        start_e_hs0_CHMasterSlaveTest.sendCommand(OFF)
+        start_m_hs1_CHMasterSlaveTest.sendCommand(ON)
+        start_e_hs1_CHMasterSlaveTest.sendCommand(OFF)
+    |]
+end
+
+rule "Analyze_a_chm_CHMasterSlaveTest"
+when
+    Item start_a_chm_CHMasterSlaveTest received command ON
+then
+    sendcommand(start_a_chm_CHMasterSlaveTest, OFF)
+
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_hs0_CHMasterSlaveTest = true
+    }
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_hs1_CHMasterSlaveTest = true
+    }
+
+    if(adaptation_required_hs0_CHMasterSlaveTest || adaptation_required_hs1_CHMasterSlaveTest) {
+        if(hs0_CHMasterSlaveTest_call && hs0_CHMasterSlaveTest_priority) {
+            hs0_CHMasterSlaveTest_call = false
+            hs0_CHMasterSlaveTest_priority = false
+
+            if(hs1_CHMasterSlaveTest_call && !hs1_CHMasterSlaveTest_priority) {
+                hs1_CHMasterSlaveTest_priority = true
+            }
+
+            hs0_CHMasterSlaveTest_mod = true
+        } else if(hs1_CHMasterSlaveTest_call && hs1_CHMasterSlaveTest_priority) {
+            hs1_CHMasterSlaveTest_call = false
+            hs1_CHMasterSlaveTest_priority = false
+
+            if(hs0_CHMasterSlaveTest_call && !hs0_CHMasterSlaveTest_priority) {
+                hs0_CHMasterSlaveTest_priority = true
+            }
+
+            hs1_CHMasterSlaveTest_mod = true
+        }
+
+        sendCommand(start_p_chm_CHMasterSlaveTest, ON)
+    } else {
+        if(hs0_CHMasterSlaveTest_call && hs0_CHMasterSlaveTest_priority) {
+            hs0_CHMasterSlaveTest_call = false
+            hs0_CHMasterSlaveTest_priority = false
+
+            if(hs1_CHMasterSlaveTest_call && !hs1_CHMasterSlaveTest_priority) {
+                hs1_CHMasterSlaveTest_priority = true
+            }
+
+            sendCommand(start_m_hs0_CHMasterSlaveTest, ON)
+        } else if(hs1_CHMasterSlaveTest_call && hs1_CHMasterSlaveTest_priority) {
+            hs1_CHMasterSlaveTest_call = false
+            hs1_CHMasterSlaveTest_priority = false
+
+            if(hs0_CHMasterSlaveTest_call && !hs0_CHMasterSlaveTest_priority) {
+                hs0_CHMasterSlaveTest_priority = true
+            }
+
+            sendCommand(start_m_hs1_CHMasterSlaveTest, ON)
+        }
+    }
+end
+
+rule "Plan_p_chm_CHMasterSlaveTest"
+when
+    Item start_p_chm_CHMasterSlaveTest received command ON
+then
+    sendcommand(start_p_chm_CHMasterSlaveTest, OFF)
+
+    if(adaptation_required_hs0_CHMasterSlaveTest){
+        adaptation_required_hs0_CHMasterSlaveTest = false
+        sendCommand(start_e_hs0_CHMasterSlaveTest, ON)
+    }
+
+    if(adaptation_required_hs1_CHMasterSlaveTest){
+        adaptation_required_hs1_CHMasterSlaveTest = false
+        sendCommand(start_e_hs1_CHMasterSlaveTest, ON)
+    }
+end
+
+rule "Monitor_m_hs0_CHMasterSlaveTest"
+when
+    Item start_m_hs0_CHMasterSlaveTest received command ON
+then
+    sendcommand(start_m_hs0_CHMasterSlaveTest, OFF)
+
+    try {
+        lock_m.lock()
+    } finally {
+        if(!(hs1_CHMasterSlaveTest_priority)) {
+            hs0_CHMasterSlaveTest_priority = true
+        }
+        hs0_CHMasterSlaveTest_call = true
+        lock_m.unlock()
+    }
+
+    sendcommand(start_hs0_to_chm_CHMasterSlaveTest, ON)
+end
+
+rule "Execute_e_hs0_CHMasterSlaveTest"
+when
+    Item start_e_hs0_CHMasterSlaveTest received command ON
+then
+    sendcommand(start_e_hs0_CHMasterSlaveTest, OFF)
+
+    try {
+        lock_e.lock()
+    } finally {
+        if(hs0_CHMasterSlaveTest_mod){
+            hs0_CHMasterSlaveTest_mod = false
+            sendCommand(start_m_hs0_CHMasterSlaveTest, ON)
+        } else if(hs1_CHMasterSlaveTest_mod){
+            hs1_CHMasterSlaveTest_mod = false
+            sendCommand(start_m_hs1_CHMasterSlaveTest, ON)
+        } 
+
+        lock_e.unlock()
+    }
+end
+
+rule "Monitor_m_hs1_CHMasterSlaveTest"
+when
+    Item start_m_hs1_CHMasterSlaveTest received command ON
+then
+    sendcommand(start_m_hs1_CHMasterSlaveTest, OFF)
+
+    try {
+        lock_m.lock()
+    } finally {
+        if(!(hs0_CHMasterSlaveTest_priority)) {
+            hs1_CHMasterSlaveTest_priority = true
+        }
+        hs1_CHMasterSlaveTest_call = true
+        lock_m.unlock()
+    }
+
+    sendcommand(start_hs1_to_chm_CHMasterSlaveTest, ON)
+end
+
+rule "Execute_e_hs1_CHMasterSlaveTest"
+when
+    Item start_e_hs1_CHMasterSlaveTest received command ON
+then
+    sendcommand(start_e_hs1_CHMasterSlaveTest, OFF)
+
+    try {
+        lock_e.lock()
+    } finally {
+        if(hs0_CHMasterSlaveTest_mod){
+            hs0_CHMasterSlaveTest_mod = false
+            sendCommand(start_m_hs0_CHMasterSlaveTest, ON)
+        } else if(hs1_CHMasterSlaveTest_mod){
+            hs1_CHMasterSlaveTest_mod = false
+            sendCommand(start_m_hs1_CHMasterSlaveTest, ON)
+        } 
+
+        lock_e.unlock()
+    }
+end
+
+rule "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest"
+when
+    Item hs0hs1_to_chm_CHMasterSlaveTest received command ON
+then
+    if(start_hs0_to_chm_CHMasterSlaveTest.state == ON){
+        sendCommand(start_hs0_to_chm_CHMasterSlaveTest, OFF)
+    } else if (start_hs1_to_chm_CHMasterSlaveTest.state == ON){
+        sendCommand(start_hs1_to_chm_CHMasterSlaveTest, OFF)
+    }
+
+    do{
+        do{
+            Thread::Sleep(1000)
+        } while(hs0_CHMasterSlaveTest_mod || hs1_CHMasterSlaveTest_mod)
+        Thread::Sleep(1000)
+    } while(start_a_chm_CHMasterSlaveTest)
+
+    sendcommand(start_a_chm_CHMasterSlaveTest, ON)
+end
+

@@ -1,0 +1,216 @@
+var boolean adaptation_required_a_ch
+
+var Number counter_ch_CHAggregateTest_Log
+var Number counter_h0_CHAggregateTest_Log
+var Number counter_h1_CHAggregateTest_Log
+var Number exec_counter_CHAggregateTest_Log
+
+rule "StartLoop_CHAggregateTest_Log"
+when
+    System started
+then
+    logInfo("CHAggregateTest_Log.rules", "Initializing loops for CHAggregateTest_Log.")
+
+    exec_counter_CHAggregateTest_Log = 10
+    logInfo("CHAggregateTest_Log.rules", "Loops will run for 10 iterations.")
+
+    logInfo("CHAggregateTest_Log.rules", "Starting MAPE Loop for groups (ch_CHAggregateTest_Log), (h0_CHAggregateTest_Log) and (h1_CHAggregateTest_Log).")
+    counter_ch_CHAggregateTest_Log = 0
+    logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
+    counter_h0_CHAggregateTest_Log = 0
+    logInfo("CHAggregateTest_Log.rules", "counter_h0_CHAggregateTest_Log = " + counter_h0_CHAggregateTest_Log + ".")
+    counter_h1_CHAggregateTest_Log = 0
+    logInfo("CHAggregateTest_Log.rules", "counter_h1_CHAggregateTest_Log = " + counter_h1_CHAggregateTest_Log + ".")
+
+    adaptation_required_a_ch = false
+
+    createTimer(now.plusSeconds(1)) [|
+        start_m_ch_CHAggregateTest_Log.sendCommand(OFF)
+        start_a_ch_CHAggregateTest_Log.sendCommand(OFF)
+        start_p_ch_CHAggregateTest_Log.sendCommand(OFF)
+        start_e_ch_CHAggregateTest_Log.sendCommand(OFF)
+        start_m_h0_CHAggregateTest_Log.sendCommand(ON)
+        start_e_h0_CHAggregateTest_Log.sendCommand(OFF)
+        start_m_h1_CHAggregateTest_Log.sendCommand(ON)
+        start_e_h1_CHAggregateTest_Log.sendCommand(OFF)
+    |]
+end
+
+rule "Monitor_m_ch_CHAggregateTest_Log"
+when
+    Item start_m_ch_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_m_ch_CHAggregateTest_Log, OFF)
+
+    counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Monitor for group (ch_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
+
+    sendcommand(start_a_ch_CHAggregateTest_Log, ON)
+end
+
+rule "Analyze_a_ch_CHAggregateTest_Log"
+when
+    Item start_a_ch_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_a_ch_CHAggregateTest_Log, OFF)
+
+    counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Analyze for group (ch_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
+
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_a_ch = true
+    }
+    else {
+        adaptation_required_a_ch = false
+    }
+
+    if(adaptation_required_a_ch){
+        logInfo("CHAggregateTest_Log.rules", "Adaptation required for CHAggregateTest_Log.")
+        logInfo("CHAggregateTest_Log.rules", "Proceeding with loop.")
+
+        sendcommand(start_p_ch_CHAggregateTest_Log, ON)
+    }
+    else {
+        logInfo("CHAggregateTest_Log.rules", "Adaptation not required for CHAggregateTest_Log.")
+        counter_ch_CHAggregateTest_Log = 0
+
+        if(exec_counter_CHAggregateTest_Log > 0){
+            logInfo("CHAggregateTest_Log.rules", "Resetting loop.")
+
+            sendcommand(start_m_h0_CHAggregateTest_Log, ON)
+        sendcommand(start_m_h1_CHAggregateTest_Log, ON)
+        }
+        else {
+            logInfo("CHAggregateTest_Log.rules", "exec_counter_CHAggregateTest_Log = 0.")
+            logInfo("CHAggregateTest_Log.rules", "Loops for CHAggregateTest_Log are stopping.")
+        }
+    }
+end
+
+rule "Plan_p_ch_CHAggregateTest_Log"
+when
+    Item start_p_ch_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_p_ch_CHAggregateTest_Log, OFF)
+
+    counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Plan for group (ch_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
+
+    sendcommand(start_e_ch_CHAggregateTest_Log, ON)
+end
+
+rule "Execute_e_ch_CHAggregateTest_Log"
+when
+    Item start_e_ch_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_e_ch_CHAggregateTest_Log, OFF)
+
+    counter_ch_CHAggregateTest_Log = counter_ch_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Execute for group (ch_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_ch_CHAggregateTest_Log = " + counter_ch_CHAggregateTest_Log + ".")
+    counter_ch_CHAggregateTest_Log = 0
+
+    sendcommand(start_e_h0_CHAggregateTest_Log, ON)
+    sendcommand(start_e_h1_CHAggregateTest_Log, ON)
+end
+
+rule "Monitor_m_h0_CHAggregateTest_Log"
+when
+    Item start_m_h0_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_m_h0_CHAggregateTest_Log, OFF)
+
+    counter_h0_CHAggregateTest_Log = counter_h0_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Monitor for group (h0_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_h0_CHAggregateTest_Log = " + counter_h0_CHAggregateTest_Log + ".")
+
+    sendcommand(start_h0_to_ch_CHAggregateTest_Log, ON)
+end
+
+rule "Execute_e_h0_CHAggregateTest_Log"
+when
+    Item start_e_h0_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_e_h0_CHAggregateTest_Log, OFF)
+
+    counter_h0_CHAggregateTest_Log = counter_h0_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Execute for group (h0_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_h0_CHAggregateTest_Log = " + counter_h0_CHAggregateTest_Log + ".")
+    counter_h0_CHAggregateTest_Log = 0
+
+    if(exec_counter_CHAggregateTest_Log > 0){
+        sendcommand(start_m_h0_CHAggregateTest_Log, ON)
+    }
+    else {
+        logInfo("CHAggregateTest_Log.rules", "exec_counter_CHAggregateTest_Log = 0.")
+        logInfo("CHAggregateTest_Log.rules", "Loops for CHAggregateTest_Log are stopping.")
+    }
+end
+
+rule "Monitor_m_h1_CHAggregateTest_Log"
+when
+    Item start_m_h1_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_m_h1_CHAggregateTest_Log, OFF)
+
+    counter_h1_CHAggregateTest_Log = counter_h1_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Monitor for group (h1_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_h1_CHAggregateTest_Log = " + counter_h1_CHAggregateTest_Log + ".")
+
+    sendcommand(start_h1_to_ch_CHAggregateTest_Log, ON)
+end
+
+rule "Execute_e_h1_CHAggregateTest_Log"
+when
+    Item start_e_h1_CHAggregateTest_Log received command ON
+then
+    sendcommand(start_e_h1_CHAggregateTest_Log, OFF)
+
+    counter_h1_CHAggregateTest_Log = counter_h1_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "Execute for group (h1_CHAggregateTest_Log) active.")
+    logInfo("CHAggregateTest_Log.rules", "counter_h1_CHAggregateTest_Log = " + counter_h1_CHAggregateTest_Log + ".")
+    counter_h1_CHAggregateTest_Log = 0
+
+    if(exec_counter_CHAggregateTest_Log > 0){
+        sendcommand(start_m_h1_CHAggregateTest_Log, ON)
+    }
+    else {
+        logInfo("CHAggregateTest_Log.rules", "exec_counter_CHAggregateTest_Log = 0.")
+        logInfo("CHAggregateTest_Log.rules", "Loops for CHAggregateTest_Log are stopping.")
+    }
+end
+
+rule "Aggregate_h0h1_to_ch_CHAggregateTest_Log"
+when
+    Item h0h1_to_ch_CHAggregateTest_Log received command ON
+then
+    logInfo("CHAggregateTest_Log.rules", "Aggregating output from start_m_h0_CHAggregateTest_Log and start_m_h1_CHAggregateTest_Log to start_m_ch_CHAggregateTest_Log.")
+
+    counter_h0_CHAggregateTest_Log = counter_h0_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "counter_h0_CHAggregateTest_Log = " + counter_h0_CHAggregateTest_Log + ".")
+
+    counter_h1_CHAggregateTest_Log = counter_h1_CHAggregateTest_Log + 1
+    logInfo("CHAggregateTest_Log.rules", "counter_h1_CHAggregateTest_Log = " + counter_h1_CHAggregateTest_Log + ".")
+
+    sendcommand(start_h0_to_ch_CHAggregateTest_Log, OFF)
+    sendcommand(start_h1_to_ch_CHAggregateTest_Log, OFF)
+
+    sendcommand(start_m_ch_CHAggregateTest_Log, ON)
+end
+
+rule "Execution stop countdown"
+when
+    Item h0h1_to_ch_CHAggregateTest_Log received command ON
+then
+    if(exec_counter_CHAggregateTest_Log > 0) {
+        exec_counter_CHAggregateTest_Log = exec_counter_CHAggregateTest_Log - 1
+        logInfo("CHAggregateTest_Log.rules", "Execution counter reduced by one. exec_counter_CHAggregateTest_Log = " + exec_counter_CHAggregateTest_Log + ".")
+    }
+    if(exec_counter_CHAggregateTest_Log <= 0) {
+        logInfo("CHAggregateTest_Log.rules", "10 executions have elapsed. Loops will end, then stop.")
+    }
+end
+

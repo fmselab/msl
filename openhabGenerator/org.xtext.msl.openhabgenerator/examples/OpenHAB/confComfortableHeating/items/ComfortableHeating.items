@@ -1,19 +1,20 @@
-Group chm "chm"
+Group chm_ComfortableHeating "chm_ComfortableHeating"
 
-Switch start_a_chm "a_chm" (chm)
-Switch start_p_chm "p_chm" (chm)
+Switch start_a_chm_ComfortableHeating "start_a_chm_ComfortableHeating" (chm_ComfortableHeating)
+Switch start_p_chm_ComfortableHeating "start_p_chm_ComfortableHeating" (chm_ComfortableHeating)
 
-Group hs0 "hs0"
+Group hs0_ComfortableHeating "hs0_ComfortableHeating"
 
-Switch start_m_hs0 "m_hs0" (hs0)
-Switch start_e_hs0 "e_hs0" (hs0)
+Switch start_m_hs0_ComfortableHeating "start_m_hs0_ComfortableHeating" (hs0_ComfortableHeating)
+Switch start_e_hs0_ComfortableHeating "start_e_hs0_ComfortableHeating" (hs0_ComfortableHeating)
 
-Group hs1 "hs1"
+Group hs1_ComfortableHeating "hs1_ComfortableHeating"
 
-Switch start_m_hs1 "m_hs1" (hs1)
-Switch start_e_hs1 "e_hs1" (hs1)
+Switch start_m_hs1_ComfortableHeating "start_m_hs1_ComfortableHeating" (hs1_ComfortableHeating)
+Switch start_e_hs1_ComfortableHeating "start_e_hs1_ComfortableHeating" (hs1_ComfortableHeating)
 
-Group:Switch:AND(ON, OFF) hs0hs1_to_chm "hs0hs1_to_chm"
+Group:Switch:OR(ON, OFF) hs0hs1_to_chm_ComfortableHeating "hs0hs1_to_chm_ComfortableHeating"
 
-Switch hs0_to_chm "hs0_to_chm" (hs0hs1_to_chm)
-Switch hs1_to_chm "hs1_to_chm" (hs0hs1_to_chm)
+Switch start_hs0_to_chm_ComfortableHeating "start_hs0_to_chm_ComfortableHeating" (hs0hs1_to_chm_ComfortableHeating)
+Switch start_hs1_to_chm_ComfortableHeating "start_hs1_to_chm_ComfortableHeating" (hs0hs1_to_chm_ComfortableHeating)
+

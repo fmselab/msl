@@ -1,20 +1,40 @@
+var Number counter_ch
+var Number exec_counter
 var boolean adaptation_required_a_ch
+
+rule "Execution stop countdown"
+when
+	Item start_m_ch received command ON
+then
+	if(exec_counter > 0) {
+		exec_counter = exec_counter-1
+		logInfo("ComfortableHeatingOne.rules", "Execution counter reduced by one. exec_counter = " + exec_counter)
+	}
+	if(exec_counter <= 0) {
+		logInfo("ComfortableHeatingOne.rules", "10 executions have elapsed. Loops will end then stop.")
+	}
+end
 
 rule "StartLoop_ComfortableHeatingOne"
 when
 	System started
 then
+	logInfo("ComfortableHeatingOne.rules", "Loops will run for " + 10 + " iterations.")
+	counter_ch = 0
+	logInfo("ComfortableHeatingOne.rules", "Starting MAPE loop for group (ch), counter_ch = " + counter_ch)
+	exec_counter = 10
 	start_m_ch.sendCommand(ON)
 	start_a_ch.sendCommand(OFF)
 	start_p_ch.sendCommand(OFF)
 	start_e_ch.sendCommand(OFF)
-	adaptation_required_a_ch = true
 end
 
 rule "Monitor_m_ch"
 when
 	Item start_m_ch received command ON
 then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeatingOne.rules", "Monitor for group (ch) active, counter_ch = " + counter_ch)
 	sendCommand(start_m_ch, OFF)
 	sendCommand(start_a_ch, ON)
 end
@@ -23,6 +43,8 @@ rule "Analyze_a_ch"
 when
 	Item start_a_ch received command ON
 then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeatingOne.rules", "Analyze for group (ch) active, counter_ch = " + counter_ch)
 	sendCommand(start_a_ch, OFF)
 	if(((Math::random * 100.0).intValue + 1) <= 50 ){
 		adaptation_required_a_ch = true
@@ -31,10 +53,15 @@ then
 		adaptation_required_a_ch = false
 	}
 	if(adaptation_required_a_ch){
+		logInfo("ComfortableHeatingOne.rules", "Adaptation required for a_ch, proceeding with loop.")
 		sendCommand(start_p_ch, ON)
 	}
 	else{
-		sendCommand(start_m_ch, ON)
+		logInfo("ComfortableHeatingOne.rules", "Adaptation not required for a_ch, resetting loop.")
+		counter_ch = 0
+		if(exec_counter > 0) {
+			sendCommand(start_m_ch, ON)
+		}
 	}
 end
 
@@ -42,6 +69,8 @@ rule "Plan_p_ch"
 when
 	Item start_p_ch received command ON
 then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeatingOne.rules", "Plan for group (ch) active, counter_ch = " + counter_ch)
 	sendCommand(start_p_ch, OFF)
 	sendCommand(start_e_ch, ON)
 end
@@ -50,7 +79,12 @@ rule "Exec_e_ch"
 when
 	Item start_e_ch received command ON
 then
+	counter_ch = counter_ch + 1
+	logInfo("ComfortableHeatingOne.rules", "Exec active for group (ch), counter_ch = " + counter_ch)
+	counter_ch = 0
 	sendCommand(start_e_ch, OFF)
-	sendCommand(start_m_ch, ON)
+	if(exec_counter > 0) {
+		sendCommand(start_m_ch, ON)
+	}
 end
 
