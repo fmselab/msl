@@ -54,19 +54,23 @@ then
 
     if(adaptation_required_hs0_CHMasterSlaveTest || adaptation_required_hs1_CHMasterSlaveTest) {
         if(hs0_CHMasterSlaveTest_call && hs0_CHMasterSlaveTest_priority) {
+
             hs0_CHMasterSlaveTest_call = false
             hs0_CHMasterSlaveTest_priority = false
 
             if(hs1_CHMasterSlaveTest_call && !hs1_CHMasterSlaveTest_priority) {
+
                 hs1_CHMasterSlaveTest_priority = true
             }
 
             hs0_CHMasterSlaveTest_mod = true
         } else if(hs1_CHMasterSlaveTest_call && hs1_CHMasterSlaveTest_priority) {
+
             hs1_CHMasterSlaveTest_call = false
             hs1_CHMasterSlaveTest_priority = false
 
             if(hs0_CHMasterSlaveTest_call && !hs0_CHMasterSlaveTest_priority) {
+
                 hs0_CHMasterSlaveTest_priority = true
             }
 
@@ -76,19 +80,23 @@ then
         sendCommand(start_p_chm_CHMasterSlaveTest, ON)
     } else {
         if(hs0_CHMasterSlaveTest_call && hs0_CHMasterSlaveTest_priority) {
+
             hs0_CHMasterSlaveTest_call = false
             hs0_CHMasterSlaveTest_priority = false
 
             if(hs1_CHMasterSlaveTest_call && !hs1_CHMasterSlaveTest_priority) {
+
                 hs1_CHMasterSlaveTest_priority = true
             }
 
             sendCommand(start_m_hs0_CHMasterSlaveTest, ON)
         } else if(hs1_CHMasterSlaveTest_call && hs1_CHMasterSlaveTest_priority) {
+
             hs1_CHMasterSlaveTest_call = false
             hs1_CHMasterSlaveTest_priority = false
 
             if(hs0_CHMasterSlaveTest_call && !hs0_CHMasterSlaveTest_priority) {
+
                 hs0_CHMasterSlaveTest_priority = true
             }
 
@@ -196,7 +204,7 @@ end
 
 rule "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest"
 when
-    Item hs0hs1_to_chm_CHMasterSlaveTest received command ON
+    Item hs0hs1_to_chm_CHMasterSlaveTest received update ON
 then
     if(start_hs0_to_chm_CHMasterSlaveTest.state == ON){
         sendCommand(start_hs0_to_chm_CHMasterSlaveTest, OFF)

@@ -1,0 +1,7 @@
+Group ch_CHSimpleTest_Log_NE "ch_CHSimpleTest_Log_NE"
+
+Switch start_m_ch_CHSimpleTest_Log_NE "start_m_ch_CHSimpleTest_Log_NE" (ch_CHSimpleTest_Log_NE)
+Switch start_a_ch_CHSimpleTest_Log_NE "start_a_ch_CHSimpleTest_Log_NE" (ch_CHSimpleTest_Log_NE)
+Switch start_p_ch_CHSimpleTest_Log_NE "start_p_ch_CHSimpleTest_Log_NE" (ch_CHSimpleTest_Log_NE)
+Switch start_e_ch_CHSimpleTest_Log_NE "start_e_ch_CHSimpleTest_Log_NE" (ch_CHSimpleTest_Log_NE)
+

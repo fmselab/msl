@@ -1,0 +1,302 @@
+import java.util.concurrent.locks.ReentrantLock
+
+val ReentrantLock lock_m = new ReentrantLock()
+val ReentrantLock lock_e = new ReentrantLock()
+
+var boolean hs0_CHMasterSlaveTest_Log_NE_mod
+var boolean hs0_CHMasterSlaveTest_Log_NE_priority
+var boolean hs0_CHMasterSlaveTest_Log_NE_call
+var boolean adaptation_required_hs0_CHMasterSlaveTest_Log_NE
+
+var boolean hs1_CHMasterSlaveTest_Log_NE_mod
+var boolean hs1_CHMasterSlaveTest_Log_NE_priority
+var boolean hs1_CHMasterSlaveTest_Log_NE_call
+var boolean adaptation_required_hs1_CHMasterSlaveTest_Log_NE
+
+var Number counter_chm_CHMasterSlaveTest_Log_NE
+var Number counter_hs0_CHMasterSlaveTest_Log_NE
+var Number counter_hs1_CHMasterSlaveTest_Log_NE
+
+rule "StartLoop_CHMasterSlaveTest_Log_NE"
+when
+    System started
+then
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Initializing loops for CHMasterSlaveTest_Log_NE.")
+
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Starting MAPE Loop for groups (chm_CHMasterSlaveTest_Log_NE), (hs0_CHMasterSlaveTest_Log_NE) and (hs1_CHMasterSlaveTest_Log_NE).")
+    counter_chm_CHMasterSlaveTest_Log_NE = 0
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_chm_CHMasterSlaveTest_Log_NE = " + counter_chm_CHMasterSlaveTest_Log_NE + ".")
+    counter_hs0_CHMasterSlaveTest_Log_NE = 0
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs0_CHMasterSlaveTest_Log_NE = " + counter_hs0_CHMasterSlaveTest_Log_NE + ".")
+    counter_hs1_CHMasterSlaveTest_Log_NE = 0
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs1_CHMasterSlaveTest_Log_NE = " + counter_hs1_CHMasterSlaveTest_Log_NE + ".")
+
+    hs0_CHMasterSlaveTest_Log_NE_mod = false
+    hs0_CHMasterSlaveTest_Log_NE_call = false
+    hs0_CHMasterSlaveTest_Log_NE_priority = false
+    adaptation_required_hs0_CHMasterSlaveTest_Log_NE = false
+
+    hs1_CHMasterSlaveTest_Log_NE_mod = false
+    hs1_CHMasterSlaveTest_Log_NE_call = false
+    hs1_CHMasterSlaveTest_Log_NE_priority = false
+    adaptation_required_hs1_CHMasterSlaveTest_Log_NE = false
+
+
+    createTimer(now.plusSeconds(1)) [|
+        start_a_chm_CHMasterSlaveTest_Log_NE.sendCommand(OFF)
+        start_p_chm_CHMasterSlaveTest_Log_NE.sendCommand(OFF)
+        start_m_hs0_CHMasterSlaveTest_Log_NE.sendCommand(ON)
+        start_e_hs0_CHMasterSlaveTest_Log_NE.sendCommand(OFF)
+        start_m_hs1_CHMasterSlaveTest_Log_NE.sendCommand(ON)
+        start_e_hs1_CHMasterSlaveTest_Log_NE.sendCommand(OFF)
+    |]
+end
+
+rule "Analyze_a_chm_CHMasterSlaveTest_Log_NE"
+when
+    Item start_a_chm_CHMasterSlaveTest_Log_NE received command ON
+then
+    sendcommand(start_a_chm_CHMasterSlaveTest_Log_NE, OFF)
+
+    counter_chm_CHMasterSlaveTest_Log_NE = counter_chm_CHMasterSlaveTest_Log_NE + 1
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Analyze for group (chm_CHMasterSlaveTest_Log_NE) active.")
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_chm_CHMasterSlaveTest_Log_NE = " + counter_chm_CHMasterSlaveTest_Log_NE + ".")
+
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_hs0_CHMasterSlaveTest_Log_NE = true
+    }
+    if(((Math::random * 100.0).intValue + 1) <= 50 ){
+        adaptation_required_hs1_CHMasterSlaveTest_Log_NE = true
+    }
+
+    if(adaptation_required_hs0_CHMasterSlaveTest_Log_NE || adaptation_required_hs1_CHMasterSlaveTest_Log_NE) {
+        if(hs0_CHMasterSlaveTest_Log_NE_call && hs0_CHMasterSlaveTest_Log_NE_priority) {
+            logInfo("CHMasterSlaveTest_Log_NE.rules", "Adaptation required for hs0_CHMasterSlaveTest_Log_NE.")
+
+            hs0_CHMasterSlaveTest_Log_NE_call = false
+            hs0_CHMasterSlaveTest_Log_NE_priority = false
+
+            if(hs1_CHMasterSlaveTest_Log_NE_call && !hs1_CHMasterSlaveTest_Log_NE_priority) {
+                logInfo("CHMasterSlaveTest_Log_NE.rules", "Setting hs1_CHMasterSlaveTest_Log_NE_priority to true.")
+
+                hs1_CHMasterSlaveTest_Log_NE_priority = true
+            }
+
+            hs0_CHMasterSlaveTest_Log_NE_mod = true
+        } else if(hs1_CHMasterSlaveTest_Log_NE_call && hs1_CHMasterSlaveTest_Log_NE_priority) {
+            logInfo("CHMasterSlaveTest_Log_NE.rules", "Adaptation required for hs1_CHMasterSlaveTest_Log_NE.")
+
+            hs1_CHMasterSlaveTest_Log_NE_call = false
+            hs1_CHMasterSlaveTest_Log_NE_priority = false
+
+            if(hs0_CHMasterSlaveTest_Log_NE_call && !hs0_CHMasterSlaveTest_Log_NE_priority) {
+                logInfo("CHMasterSlaveTest_Log_NE.rules", "Setting hs0_CHMasterSlaveTest_Log_NE_priority to true.")
+
+                hs0_CHMasterSlaveTest_Log_NE_priority = true
+            }
+
+            hs1_CHMasterSlaveTest_Log_NE_mod = true
+        }
+
+        sendCommand(start_p_chm_CHMasterSlaveTest_Log_NE, ON)
+    } else {
+        if(hs0_CHMasterSlaveTest_Log_NE_call && hs0_CHMasterSlaveTest_Log_NE_priority) {
+            logInfo("CHMasterSlaveTest_Log_NE.rules", "No adaptation required for hs0_CHMasterSlaveTest_Log_NE.")
+
+            hs0_CHMasterSlaveTest_Log_NE_call = false
+            hs0_CHMasterSlaveTest_Log_NE_priority = false
+
+            if(hs1_CHMasterSlaveTest_Log_NE_call && !hs1_CHMasterSlaveTest_Log_NE_priority) {
+                logInfo("CHMasterSlaveTest_Log_NE.rules", "Setting hs1_CHMasterSlaveTest_Log_NE_priority to true.")
+
+                hs1_CHMasterSlaveTest_Log_NE_priority = true
+            }
+
+            logInfo("CHMasterSlaveTest_Log_NE.rules", "Resetting loop.")
+
+            sendCommand(start_m_hs0_CHMasterSlaveTest_Log_NE, ON)
+        } else if(hs1_CHMasterSlaveTest_Log_NE_call && hs1_CHMasterSlaveTest_Log_NE_priority) {
+            logInfo("CHMasterSlaveTest_Log_NE.rules", "No adaptation required for hs1_CHMasterSlaveTest_Log_NE.")
+
+            hs1_CHMasterSlaveTest_Log_NE_call = false
+            hs1_CHMasterSlaveTest_Log_NE_priority = false
+
+            if(hs0_CHMasterSlaveTest_Log_NE_call && !hs0_CHMasterSlaveTest_Log_NE_priority) {
+                logInfo("CHMasterSlaveTest_Log_NE.rules", "Setting hs0_CHMasterSlaveTest_Log_NE_priority to true.")
+
+                hs0_CHMasterSlaveTest_Log_NE_priority = true
+            }
+
+            logInfo("CHMasterSlaveTest_Log_NE.rules", "Resetting loop.")
+
+            sendCommand(start_m_hs1_CHMasterSlaveTest_Log_NE, ON)
+        }
+    }
+end
+
+rule "Plan_p_chm_CHMasterSlaveTest_Log_NE"
+when
+    Item start_p_chm_CHMasterSlaveTest_Log_NE received command ON
+then
+    sendcommand(start_p_chm_CHMasterSlaveTest_Log_NE, OFF)
+
+    counter_chm_CHMasterSlaveTest_Log_NE = counter_chm_CHMasterSlaveTest_Log_NE + 1
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Plan for group (chm_CHMasterSlaveTest_Log_NE) active.")
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_chm_CHMasterSlaveTest_Log_NE = " + counter_chm_CHMasterSlaveTest_Log_NE + ".")
+    counter_chm_CHMasterSlaveTest_Log_NE = 0
+
+    if(adaptation_required_hs0_CHMasterSlaveTest_Log_NE){
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Proceeding to Execute_e_hs0_CHMasterSlaveTest_Log_NE.")
+
+        adaptation_required_hs0_CHMasterSlaveTest_Log_NE = false
+        sendCommand(start_e_hs0_CHMasterSlaveTest_Log_NE, ON)
+    }
+
+    if(adaptation_required_hs1_CHMasterSlaveTest_Log_NE){
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Proceeding to Execute_e_hs1_CHMasterSlaveTest_Log_NE.")
+
+        adaptation_required_hs1_CHMasterSlaveTest_Log_NE = false
+        sendCommand(start_e_hs1_CHMasterSlaveTest_Log_NE, ON)
+    }
+end
+
+rule "Monitor_m_hs0_CHMasterSlaveTest_Log_NE"
+when
+    Item start_m_hs0_CHMasterSlaveTest_Log_NE received command ON
+then
+    sendcommand(start_m_hs0_CHMasterSlaveTest_Log_NE, OFF)
+
+    counter_hs0_CHMasterSlaveTest_Log_NE = counter_hs0_CHMasterSlaveTest_Log_NE + 1
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor for group (hs0_CHMasterSlaveTest_Log_NE) active.")
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs0_CHMasterSlaveTest_Log_NE = " + counter_hs0_CHMasterSlaveTest_Log_NE + ".")
+
+    try {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor_m_hs0_CHMasterSlaveTest_Log_NE is requesting a lock on lock_m.")
+        lock_m.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor_m_hs0_CHMasterSlaveTest_Log_NE obtained a lock on lock_m.")
+        if(!(hs1_CHMasterSlaveTest_Log_NE_priority)) {
+            hs0_CHMasterSlaveTest_Log_NE_priority = true
+        }
+        hs0_CHMasterSlaveTest_Log_NE_call = true
+        lock_m.unlock()
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor_m_hs0_CHMasterSlaveTest_Log_NE released a lock on lock_m.")
+    }
+
+    sendcommand(start_hs0_to_chm_CHMasterSlaveTest_Log_NE, ON)
+end
+
+rule "Execute_e_hs0_CHMasterSlaveTest_Log_NE"
+when
+    Item start_e_hs0_CHMasterSlaveTest_Log_NE received command ON
+then
+    sendcommand(start_e_hs0_CHMasterSlaveTest_Log_NE, OFF)
+
+    counter_hs0_CHMasterSlaveTest_Log_NE = counter_hs0_CHMasterSlaveTest_Log_NE + 1
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute for group (hs0_CHMasterSlaveTest_Log_NE) active.")
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs0_CHMasterSlaveTest_Log_NE = " + counter_hs0_CHMasterSlaveTest_Log_NE + ".")
+    counter_hs0_CHMasterSlaveTest_Log_NE = 0
+
+    try {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute_e_hs0_CHMasterSlaveTest_Log_NE is requesting a lock on lock_e.")
+        lock_e.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute_e_hs0_CHMasterSlaveTest_Log_NE obtained a lock on lock_e.")
+        if(hs0_CHMasterSlaveTest_Log_NE_mod){
+            hs0_CHMasterSlaveTest_Log_NE_mod = false
+            sendCommand(start_m_hs0_CHMasterSlaveTest_Log_NE, ON)
+        } else if(hs1_CHMasterSlaveTest_Log_NE_mod){
+            hs1_CHMasterSlaveTest_Log_NE_mod = false
+            sendCommand(start_m_hs1_CHMasterSlaveTest_Log_NE, ON)
+        } 
+
+        lock_e.unlock()
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute_e_hs0_CHMasterSlaveTest_Log_NE released a lock on lock_e.")
+    }
+end
+
+rule "Monitor_m_hs1_CHMasterSlaveTest_Log_NE"
+when
+    Item start_m_hs1_CHMasterSlaveTest_Log_NE received command ON
+then
+    sendcommand(start_m_hs1_CHMasterSlaveTest_Log_NE, OFF)
+
+    counter_hs1_CHMasterSlaveTest_Log_NE = counter_hs1_CHMasterSlaveTest_Log_NE + 1
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor for group (hs1_CHMasterSlaveTest_Log_NE) active.")
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs1_CHMasterSlaveTest_Log_NE = " + counter_hs1_CHMasterSlaveTest_Log_NE + ".")
+
+    try {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor_m_hs1_CHMasterSlaveTest_Log_NE is requesting a lock on lock_m.")
+        lock_m.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor_m_hs1_CHMasterSlaveTest_Log_NE obtained a lock on lock_m.")
+        if(!(hs0_CHMasterSlaveTest_Log_NE_priority)) {
+            hs1_CHMasterSlaveTest_Log_NE_priority = true
+        }
+        hs1_CHMasterSlaveTest_Log_NE_call = true
+        lock_m.unlock()
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Monitor_m_hs1_CHMasterSlaveTest_Log_NE released a lock on lock_m.")
+    }
+
+    sendcommand(start_hs1_to_chm_CHMasterSlaveTest_Log_NE, ON)
+end
+
+rule "Execute_e_hs1_CHMasterSlaveTest_Log_NE"
+when
+    Item start_e_hs1_CHMasterSlaveTest_Log_NE received command ON
+then
+    sendcommand(start_e_hs1_CHMasterSlaveTest_Log_NE, OFF)
+
+    counter_hs1_CHMasterSlaveTest_Log_NE = counter_hs1_CHMasterSlaveTest_Log_NE + 1
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute for group (hs1_CHMasterSlaveTest_Log_NE) active.")
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs1_CHMasterSlaveTest_Log_NE = " + counter_hs1_CHMasterSlaveTest_Log_NE + ".")
+    counter_hs1_CHMasterSlaveTest_Log_NE = 0
+
+    try {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute_e_hs1_CHMasterSlaveTest_Log_NE is requesting a lock on lock_e.")
+        lock_e.lock()
+    } finally {
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute_e_hs1_CHMasterSlaveTest_Log_NE obtained a lock on lock_e.")
+        if(hs0_CHMasterSlaveTest_Log_NE_mod){
+            hs0_CHMasterSlaveTest_Log_NE_mod = false
+            sendCommand(start_m_hs0_CHMasterSlaveTest_Log_NE, ON)
+        } else if(hs1_CHMasterSlaveTest_Log_NE_mod){
+            hs1_CHMasterSlaveTest_Log_NE_mod = false
+            sendCommand(start_m_hs1_CHMasterSlaveTest_Log_NE, ON)
+        } 
+
+        lock_e.unlock()
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Execute_e_hs1_CHMasterSlaveTest_Log_NE released a lock on lock_e.")
+    }
+end
+
+rule "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log_NE"
+when
+    Item hs0hs1_to_chm_CHMasterSlaveTest_Log_NE received update ON
+then
+    logInfo("CHMasterSlaveTest_Log_NE.rules", "Aggregating output from start_m_hs0_CHMasterSlaveTest_Log_NE or start_m_hs1_CHMasterSlaveTest_Log_NE to start_a_chm_CHMasterSlaveTest_Log_NE.")
+
+    if(start_hs0_to_chm_CHMasterSlaveTest_Log_NE.state == ON){
+        counter_hs0_CHMasterSlaveTest_Log_NE = counter_hs0_CHMasterSlaveTest_Log_NE + 1
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs0_CHMasterSlaveTest_Log_NE = " + counter_hs0_CHMasterSlaveTest_Log_NE + ".")
+
+        sendCommand(start_hs0_to_chm_CHMasterSlaveTest_Log_NE, OFF)
+    } else if (start_hs1_to_chm_CHMasterSlaveTest_Log_NE.state == ON){
+        counter_hs1_CHMasterSlaveTest_Log_NE = counter_hs1_CHMasterSlaveTest_Log_NE + 1
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "counter_hs1_CHMasterSlaveTest_Log_NE = " + counter_hs1_CHMasterSlaveTest_Log_NE + ".")
+
+        sendCommand(start_hs1_to_chm_CHMasterSlaveTest_Log_NE, OFF)
+    }
+
+    do{
+        do{
+            logInfo("CHMasterSlaveTest_Log_NE.rules", "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log_NE is sleeping for 1 second...")
+            Thread::Sleep(1000)
+        } while(hs0_CHMasterSlaveTest_Log_NE_mod || hs1_CHMasterSlaveTest_Log_NE_mod)
+        logInfo("CHMasterSlaveTest_Log_NE.rules", "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log_NE is sleeping for 1 second...")
+        Thread::Sleep(1000)
+    } while(start_a_chm_CHMasterSlaveTest_Log_NE)
+
+    sendcommand(start_a_chm_CHMasterSlaveTest_Log_NE, ON)
+end
+

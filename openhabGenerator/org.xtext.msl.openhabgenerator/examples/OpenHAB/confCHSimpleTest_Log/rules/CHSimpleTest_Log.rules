@@ -100,6 +100,7 @@ then
     counter_ch_CHSimpleTest_Log = counter_ch_CHSimpleTest_Log + 1
     logInfo("CHSimpleTest_Log.rules", "Execute for group (ch_CHSimpleTest_Log) active.")
     logInfo("CHSimpleTest_Log.rules", "counter_ch_CHSimpleTest_Log = " + counter_ch_CHSimpleTest_Log + ".")
+    counter_ch_CHSimpleTest_Log = 0
 
     if(exec_counter_CHSimpleTest_Log > 0){
         sendcommand(start_m_ch_CHSimpleTest_Log, ON)

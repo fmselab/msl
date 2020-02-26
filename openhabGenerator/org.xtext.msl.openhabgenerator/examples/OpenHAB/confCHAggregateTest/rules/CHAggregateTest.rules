@@ -33,6 +33,7 @@ when
     Item start_a_ch_CHAggregateTest received command ON
 then
     sendcommand(start_a_ch_CHAggregateTest, OFF)
+
     if(((Math::random * 100.0).intValue + 1) <= 50 ){
         adaptation_required_a_ch = true
     }
@@ -54,6 +55,7 @@ when
     Item start_p_ch_CHAggregateTest received command ON
 then
     sendcommand(start_p_ch_CHAggregateTest, OFF)
+
     sendcommand(start_e_ch_CHAggregateTest, ON)
 end
 
@@ -62,6 +64,7 @@ when
     Item start_e_ch_CHAggregateTest received command ON
 then
     sendcommand(start_e_ch_CHAggregateTest, OFF)
+
     sendcommand(start_e_h0_CHAggregateTest, ON)
     sendcommand(start_e_h1_CHAggregateTest, ON)
 end
@@ -80,6 +83,7 @@ when
     Item start_e_h0_CHAggregateTest received command ON
 then
     sendcommand(start_e_h0_CHAggregateTest, OFF)
+
     sendcommand(start_m_h0_CHAggregateTest, ON)
 end
 
@@ -97,12 +101,13 @@ when
     Item start_e_h1_CHAggregateTest received command ON
 then
     sendcommand(start_e_h1_CHAggregateTest, OFF)
+
     sendcommand(start_m_h1_CHAggregateTest, ON)
 end
 
 rule "Aggregate_h0h1_to_ch_CHAggregateTest"
 when
-    Item h0h1_to_ch_CHAggregateTest received command ON
+    Item h0h1_to_ch_CHAggregateTest received update ON
 then
     sendcommand(start_h0_to_ch_CHAggregateTest, OFF)
     sendcommand(start_h1_to_ch_CHAggregateTest, OFF)

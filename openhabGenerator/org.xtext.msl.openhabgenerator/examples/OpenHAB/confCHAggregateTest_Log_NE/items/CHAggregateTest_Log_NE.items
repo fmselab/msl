@@ -1,0 +1,22 @@
+Group ch_CHAggregateTest_Log_NE "ch_CHAggregateTest_Log_NE"
+
+Switch start_m_ch_CHAggregateTest_Log_NE "start_m_ch_CHAggregateTest_Log_NE" (ch_CHAggregateTest_Log_NE)
+Switch start_a_ch_CHAggregateTest_Log_NE "start_a_ch_CHAggregateTest_Log_NE" (ch_CHAggregateTest_Log_NE)
+Switch start_p_ch_CHAggregateTest_Log_NE "start_p_ch_CHAggregateTest_Log_NE" (ch_CHAggregateTest_Log_NE)
+Switch start_e_ch_CHAggregateTest_Log_NE "start_e_ch_CHAggregateTest_Log_NE" (ch_CHAggregateTest_Log_NE)
+
+Group h0_CHAggregateTest_Log_NE "h0_CHAggregateTest_Log_NE"
+
+Switch start_m_h0_CHAggregateTest_Log_NE "start_m_h0_CHAggregateTest_Log_NE" (h0_CHAggregateTest_Log_NE)
+Switch start_e_h0_CHAggregateTest_Log_NE "start_e_h0_CHAggregateTest_Log_NE" (h0_CHAggregateTest_Log_NE)
+
+Group h1_CHAggregateTest_Log_NE "h1_CHAggregateTest_Log_NE"
+
+Switch start_m_h1_CHAggregateTest_Log_NE "start_m_h1_CHAggregateTest_Log_NE" (h1_CHAggregateTest_Log_NE)
+Switch start_e_h1_CHAggregateTest_Log_NE "start_e_h1_CHAggregateTest_Log_NE" (h1_CHAggregateTest_Log_NE)
+
+Group:Switch:AND(ON, OFF) h0h1_to_ch_CHAggregateTest_Log_NE "h0h1_to_ch_CHAggregateTest_Log_NE"
+
+Switch start_h0_to_ch_CHAggregateTest_Log_NE "start_h0_to_ch_CHAggregateTest_Log_NE" (h0h1_to_ch_CHAggregateTest_Log_NE)
+Switch start_h1_to_ch_CHAggregateTest_Log_NE "start_h1_to_ch_CHAggregateTest_Log_NE" (h0h1_to_ch_CHAggregateTest_Log_NE)
+

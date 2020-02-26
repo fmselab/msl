@@ -185,7 +185,7 @@ end
 
 rule "Aggregate_h0h1_to_ch_CHAggregateTest_Log"
 when
-    Item h0h1_to_ch_CHAggregateTest_Log received command ON
+    Item h0h1_to_ch_CHAggregateTest_Log received update ON
 then
     logInfo("CHAggregateTest_Log.rules", "Aggregating output from start_m_h0_CHAggregateTest_Log and start_m_h1_CHAggregateTest_Log to start_m_ch_CHAggregateTest_Log.")
 

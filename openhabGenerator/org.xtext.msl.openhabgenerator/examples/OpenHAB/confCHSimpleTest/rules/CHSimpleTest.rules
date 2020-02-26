@@ -20,6 +20,7 @@ when
     Item start_m_ch_CHSimpleTest received command ON
 then
     sendcommand(start_m_ch_CHSimpleTest, OFF)
+
     sendcommand(start_a_ch_CHSimpleTest, ON)
 end
 
@@ -28,6 +29,7 @@ when
     Item start_a_ch_CHSimpleTest received command ON
 then
     sendcommand(start_a_ch_CHSimpleTest, OFF)
+
     if(((Math::random * 100.0).intValue + 1) <= 50 ){
         adaptation_required_a_ch = true
     }
@@ -48,6 +50,7 @@ when
     Item start_p_ch_CHSimpleTest received command ON
 then
     sendcommand(start_p_ch_CHSimpleTest, OFF)
+
     sendcommand(start_e_ch_CHSimpleTest, ON)
 end
 
@@ -56,6 +59,7 @@ when
     Item start_e_ch_CHSimpleTest received command ON
 then
     sendcommand(start_e_ch_CHSimpleTest, OFF)
+
     sendcommand(start_m_ch_CHSimpleTest, ON)
 end
 
