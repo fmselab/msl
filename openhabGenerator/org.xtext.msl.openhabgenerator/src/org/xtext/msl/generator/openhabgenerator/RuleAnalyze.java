@@ -234,6 +234,21 @@ public class RuleAnalyze extends OpenHABRule {
 				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Adaptation not required for " + OpenHABGenerator.concern + ".");
 				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + getCounterVarName() + " = 0\n";
 				
+				for(OpenHABRule ohrVisitor : getIn()) {
+					if (ohrVisitor instanceof RuleMonitor && ((RuleMonitor)ohrVisitor).isStart()) {
+						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ohrVisitor.getCounterVarName() + " = 0\n";
+					} else {
+						ohrVisitor = ohrVisitor.getIn().get(0);
+						if(ohrVisitor instanceof RuleAggregate) {
+							for(OpenHABRule ohr : ohrVisitor.getIn()) {
+								if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
+									temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getCounterVarName() + " = 0\n";
+								}
+							}
+						}
+					}
+				}
+				
 				//If there is a max number of executions if clause to stop loops
 				if(needEndLoop) {
 					temp += "\n";
@@ -247,17 +262,19 @@ public class RuleAnalyze extends OpenHABRule {
 			//If there is no adaptation required, the loop needs to reset
 			//If there is a maximum number of executions loops stop
 			for(OpenHABRule ohrVisitor : getIn()) {
-				if(needEndLoop) {
-					temp += OpenHABGenerator.tab;
-				}
 				if (ohrVisitor instanceof RuleMonitor && ((RuleMonitor)ohrVisitor).isStart()) {
-					
+					if(needEndLoop) {
+						temp += OpenHABGenerator.tab;
+					}
 					//Turning on monitor switch
 					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohrVisitor.getTriggers().get(0).getName() + ", ON)\n";
 				} else {
 					ohrVisitor = ohrVisitor.getIn().get(0);
 					if(ohrVisitor instanceof RuleAggregate) {
 						for(OpenHABRule ohr : ohrVisitor.getIn()) {
+							if(needEndLoop) {
+								temp += OpenHABGenerator.tab;
+							}
 							if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
 								temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 							}

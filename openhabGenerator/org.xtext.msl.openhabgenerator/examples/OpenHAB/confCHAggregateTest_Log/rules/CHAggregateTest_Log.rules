@@ -25,6 +25,8 @@ then
     adaptation_required_a_ch = false
 
     //createTimer(now.plusSeconds(1)) [|
+        start_h0_to_ch_CHAggregateTest_Log.sendCommand(OFF)
+        start_h1_to_ch_CHAggregateTest_Log.sendCommand(OFF)
         start_m_ch_CHAggregateTest_Log.sendCommand(OFF)
         start_a_ch_CHAggregateTest_Log.sendCommand(OFF)
         start_p_ch_CHAggregateTest_Log.sendCommand(OFF)
@@ -75,12 +77,14 @@ then
     else {
         logInfo("CHAggregateTest_Log.rules", "Adaptation not required for CHAggregateTest_Log.")
         counter_ch_CHAggregateTest_Log = 0
+        counter_h0_CHAggregateTest_Log = 0
+        counter_h1_CHAggregateTest_Log = 0
 
         if(exec_counter_CHAggregateTest_Log > 0){
             logInfo("CHAggregateTest_Log.rules", "Resetting loop.")
 
             sendCommand(start_m_h0_CHAggregateTest_Log, ON)
-        sendCommand(start_m_h1_CHAggregateTest_Log, ON)
+            sendCommand(start_m_h1_CHAggregateTest_Log, ON)
         }
         else {
             logInfo("CHAggregateTest_Log.rules", "exec_counter_CHAggregateTest_Log = 0.")

@@ -101,15 +101,26 @@ public class RuleStart {
 		temp += OpenHABGenerator.tab + "//createTimer(now.plusSeconds(1)) [|\n";
 		
 		//Switch state initialization
+		//Work1 is for the Loop switches; they need to be set first to avoid issues with Group switches
+		//Work2 is for all the other switches
+		String work1 = "";
+		String work2 = "";
 		for(OpenHABRule ohr : configurationRules) {
 			if(!(ohr instanceof RuleAggregate)) {
 				if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getTriggers().get(0).getName() + ".sendCommand(ON)\n";
+					work2 += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getTriggers().get(0).getName() + ".sendCommand(ON)\n";
 				} else {
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getTriggers().get(0).getName() + ".sendCommand(OFF)\n";
+					work2 += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getTriggers().get(0).getName() + ".sendCommand(OFF)\n";
+				}
+			} else {
+				for (OpenHABRule r : ohr.getIn()) {
+					if(r instanceof RuleMonitor && ((RuleMonitor)r).isStart()) {
+						work1 += OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)r).getLoopSwitch().getName() + ".sendCommand(OFF)\n";
+					}
 				}
 			}
 		}
+		temp += work1 + work2;
 		temp += OpenHABGenerator.tab + "//|]\n";
 		temp += "end\n";
 		return temp;
