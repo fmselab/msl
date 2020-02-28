@@ -46,21 +46,23 @@ then
     adaptation_required_hs1_CHMasterSlaveTest_Log = false
 
 
-    createTimer(now.plusSeconds(1)) [|
+    //createTimer(now.plusSeconds(1)) [|
+        start_hs0_to_chm_CHMasterSlaveTest_Log.sendCommand(OFF)
+        start_hs1_to_chm_CHMasterSlaveTest_Log.sendCommand(OFF)
         start_a_chm_CHMasterSlaveTest_Log.sendCommand(OFF)
         start_p_chm_CHMasterSlaveTest_Log.sendCommand(OFF)
         start_m_hs0_CHMasterSlaveTest_Log.sendCommand(ON)
         start_e_hs0_CHMasterSlaveTest_Log.sendCommand(OFF)
         start_m_hs1_CHMasterSlaveTest_Log.sendCommand(ON)
         start_e_hs1_CHMasterSlaveTest_Log.sendCommand(OFF)
-    |]
+    //|]
 end
 
 rule "Analyze_a_chm_CHMasterSlaveTest_Log"
 when
     Item start_a_chm_CHMasterSlaveTest_Log received command ON
 then
-    sendcommand(start_a_chm_CHMasterSlaveTest_Log, OFF)
+    sendCommand(start_a_chm_CHMasterSlaveTest_Log, OFF)
 
     counter_chm_CHMasterSlaveTest_Log = counter_chm_CHMasterSlaveTest_Log + 1
     logInfo("CHMasterSlaveTest_Log.rules", "Analyze for group (chm_CHMasterSlaveTest_Log) active.")
@@ -154,7 +156,7 @@ rule "Plan_p_chm_CHMasterSlaveTest_Log"
 when
     Item start_p_chm_CHMasterSlaveTest_Log received command ON
 then
-    sendcommand(start_p_chm_CHMasterSlaveTest_Log, OFF)
+    sendCommand(start_p_chm_CHMasterSlaveTest_Log, OFF)
 
     counter_chm_CHMasterSlaveTest_Log = counter_chm_CHMasterSlaveTest_Log + 1
     logInfo("CHMasterSlaveTest_Log.rules", "Plan for group (chm_CHMasterSlaveTest_Log) active.")
@@ -180,7 +182,7 @@ rule "Monitor_m_hs0_CHMasterSlaveTest_Log"
 when
     Item start_m_hs0_CHMasterSlaveTest_Log received command ON
 then
-    sendcommand(start_m_hs0_CHMasterSlaveTest_Log, OFF)
+    sendCommand(start_m_hs0_CHMasterSlaveTest_Log, OFF)
 
     counter_hs0_CHMasterSlaveTest_Log = counter_hs0_CHMasterSlaveTest_Log + 1
     logInfo("CHMasterSlaveTest_Log.rules", "Monitor for group (hs0_CHMasterSlaveTest_Log) active.")
@@ -199,14 +201,14 @@ then
         logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs0_CHMasterSlaveTest_Log released a lock on lock_m.")
     }
 
-    sendcommand(start_hs0_to_chm_CHMasterSlaveTest_Log, ON)
+    sendCommand(start_hs0_to_chm_CHMasterSlaveTest_Log, ON)
 end
 
 rule "Execute_e_hs0_CHMasterSlaveTest_Log"
 when
     Item start_e_hs0_CHMasterSlaveTest_Log received command ON
 then
-    sendcommand(start_e_hs0_CHMasterSlaveTest_Log, OFF)
+    sendCommand(start_e_hs0_CHMasterSlaveTest_Log, OFF)
 
     counter_hs0_CHMasterSlaveTest_Log = counter_hs0_CHMasterSlaveTest_Log + 1
     logInfo("CHMasterSlaveTest_Log.rules", "Execute for group (hs0_CHMasterSlaveTest_Log) active.")
@@ -241,7 +243,7 @@ rule "Monitor_m_hs1_CHMasterSlaveTest_Log"
 when
     Item start_m_hs1_CHMasterSlaveTest_Log received command ON
 then
-    sendcommand(start_m_hs1_CHMasterSlaveTest_Log, OFF)
+    sendCommand(start_m_hs1_CHMasterSlaveTest_Log, OFF)
 
     counter_hs1_CHMasterSlaveTest_Log = counter_hs1_CHMasterSlaveTest_Log + 1
     logInfo("CHMasterSlaveTest_Log.rules", "Monitor for group (hs1_CHMasterSlaveTest_Log) active.")
@@ -260,14 +262,14 @@ then
         logInfo("CHMasterSlaveTest_Log.rules", "Monitor_m_hs1_CHMasterSlaveTest_Log released a lock on lock_m.")
     }
 
-    sendcommand(start_hs1_to_chm_CHMasterSlaveTest_Log, ON)
+    sendCommand(start_hs1_to_chm_CHMasterSlaveTest_Log, ON)
 end
 
 rule "Execute_e_hs1_CHMasterSlaveTest_Log"
 when
     Item start_e_hs1_CHMasterSlaveTest_Log received command ON
 then
-    sendcommand(start_e_hs1_CHMasterSlaveTest_Log, OFF)
+    sendCommand(start_e_hs1_CHMasterSlaveTest_Log, OFF)
 
     counter_hs1_CHMasterSlaveTest_Log = counter_hs1_CHMasterSlaveTest_Log + 1
     logInfo("CHMasterSlaveTest_Log.rules", "Execute for group (hs1_CHMasterSlaveTest_Log) active.")
@@ -319,18 +321,18 @@ then
     do{
         do{
             logInfo("CHMasterSlaveTest_Log.rules", "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log is sleeping for 1 second...")
-            Thread::Sleep(1000)
+            Thread::sleep(1000)
         } while(hs0_CHMasterSlaveTest_Log_mod || hs1_CHMasterSlaveTest_Log_mod)
         logInfo("CHMasterSlaveTest_Log.rules", "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log is sleeping for 1 second...")
-        Thread::Sleep(1000)
+        Thread::sleep(1000)
     } while(start_a_chm_CHMasterSlaveTest_Log)
 
-    sendcommand(start_a_chm_CHMasterSlaveTest_Log, ON)
+    sendCommand(start_a_chm_CHMasterSlaveTest_Log, ON)
 end
 
 rule "Execution stop countdown"
 when
-    Item hs0hs1_to_chm_CHMasterSlaveTest_Log received command ON
+    Item hs0hs1_to_chm_CHMasterSlaveTest_Log received update ON
 then
     if(exec_counter_CHMasterSlaveTest_Log > 0) {
         exec_counter_CHMasterSlaveTest_Log = exec_counter_CHMasterSlaveTest_Log - 1

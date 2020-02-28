@@ -474,14 +474,13 @@ public class OpenHABGenerator extends Generator {
 		//If there is none, chooses the start monitor trigger
 		for(OpenHABRule ohr : openHABRules) { 
 			if(ohr instanceof RuleAggregate) {
-				work = ((RuleAggregate)ohr).getGroupSwitch().getName();
+				work = ((RuleAggregate)ohr).getGroupSwitch().getName() + " received update ON\n";
 				break;
 			} else if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-				work = ohr.getTriggers().get(0).getName();
+				work = ohr.getTriggers().get(0).getName() + " received command ON\n";
 			}
 		}
 		temp += work;
-		temp += " received command ON\n";
 		
 		//Body starts here
 		temp += "then\n";
