@@ -102,6 +102,11 @@ public class RuleExecute extends OpenHABRule {
 			if(needEndLoop) {
 				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "}\n";
 				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "else {\n";
+				for(OpenHABRule ohr : ohrVisitor.getIn()) {
+					if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
+						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopMod() + " = false\n";
+					}
+				}				
 				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, OpenHABGenerator.execCounterVarName + " = 0.");
 				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Loops for " + OpenHABGenerator.concern + " are stopping.");
 				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "}\n";

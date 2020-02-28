@@ -96,6 +96,10 @@ public class RuleAggregate extends OpenHABRule {
 			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "Thread::sleep(1000)\n";
 			temp += OpenHABGenerator.tab + "} while(" + getOut().get(0).getTriggers().get(0).getName() + ")\n";
 			temp += "\n";
+			if(OpenHABGenerator.writeLog) {
+				temp += String.format(OpenHABGenerator.logTemplate, getName() + " stopped sleeping.");
+				temp += "\n";
+			}
 			
 		} else {
 			//Aggregate, Simple

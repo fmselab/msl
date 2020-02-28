@@ -230,6 +230,8 @@ then
             } 
         }
         else {
+            hs0_CHMasterSlaveTest_Log_mod = false
+            hs1_CHMasterSlaveTest_Log_mod = false
             logInfo("CHMasterSlaveTest_Log.rules", "exec_counter_CHMasterSlaveTest_Log = 0.")
             logInfo("CHMasterSlaveTest_Log.rules", "Loops for CHMasterSlaveTest_Log are stopping.")
         }
@@ -291,6 +293,8 @@ then
             } 
         }
         else {
+            hs0_CHMasterSlaveTest_Log_mod = false
+            hs1_CHMasterSlaveTest_Log_mod = false
             logInfo("CHMasterSlaveTest_Log.rules", "exec_counter_CHMasterSlaveTest_Log = 0.")
             logInfo("CHMasterSlaveTest_Log.rules", "Loops for CHMasterSlaveTest_Log are stopping.")
         }
@@ -327,16 +331,19 @@ then
         Thread::sleep(1000)
     } while(start_a_chm_CHMasterSlaveTest_Log)
 
+    logInfo("CHMasterSlaveTest_Log.rules", "Aggregate_hs0hs1_to_chm_CHMasterSlaveTest_Log stopped sleeping.")
+
     sendCommand(start_a_chm_CHMasterSlaveTest_Log, ON)
 end
 
 rule "Execution stop countdown"
 when
-    Item hs0hs1_to_chm_CHMasterSlaveTest_Log received update ON
+    Item start_a_chm_CHMasterSlaveTest_Log received command ON
 then
     if(exec_counter_CHMasterSlaveTest_Log > 0) {
         exec_counter_CHMasterSlaveTest_Log = exec_counter_CHMasterSlaveTest_Log - 1
-        logInfo("CHMasterSlaveTest_Log.rules", "Execution counter reduced by one. exec_counter_CHMasterSlaveTest_Log = " + exec_counter_CHMasterSlaveTest_Log + ".")
+        logInfo("CHMasterSlaveTest_Log.rules", "Execution counter reduced by one.")
+        logInfo("CHMasterSlaveTest_Log.rules", "exec_counter_CHMasterSlaveTest_Log = " + exec_counter_CHMasterSlaveTest_Log + ".")
     }
     if(exec_counter_CHMasterSlaveTest_Log <= 0) {
         logInfo("CHMasterSlaveTest_Log.rules", "10 executions have elapsed. Loops will end, then stop.")

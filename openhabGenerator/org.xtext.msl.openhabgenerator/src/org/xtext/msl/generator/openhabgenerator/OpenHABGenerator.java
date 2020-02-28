@@ -470,11 +470,11 @@ public class OpenHABGenerator extends Generator {
 		temp += tab + "Item ";
 		String work = "";
 		
-		//Chooses the aggregate rule trigger to mark the start of a new loop. 
+		//Chooses the exit of the aggregate rule trigger to mark the start of a new loop. (Should be an Analyze) 
 		//If there is none, chooses the start monitor trigger
 		for(OpenHABRule ohr : openHABRules) { 
 			if(ohr instanceof RuleAggregate) {
-				work = ((RuleAggregate)ohr).getGroupSwitch().getName() + " received update ON\n";
+				work = ((RuleAggregate)ohr).getOut().get(0).getTriggers().get(0).getName() + " received command ON\n";
 				break;
 			} else if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
 				work = ohr.getTriggers().get(0).getName() + " received command ON\n";
@@ -489,7 +489,8 @@ public class OpenHABGenerator extends Generator {
 		temp += tab + "if(" + execCounterVarName + " > 0) {\n";
 		temp += tab + tab + execCounterVarName  + " = "; 
 		temp += execCounterVarName + " - 1\n";
-		temp += tab + String.format(logTemplate, "Execution counter reduced by one. " + execCounterVarName + " = \" + " + execCounterVarName + " + \".");
+		temp += tab + String.format(logTemplate, "Execution counter reduced by one.");
+		temp += tab + String.format(logTemplate, execCounterVarName + " = \" + " + execCounterVarName + " + \".");
 		temp += tab + "}\n";
 		
 		//announces that loops are stopping
