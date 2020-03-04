@@ -487,8 +487,7 @@ public class OpenHABGenerator extends Generator {
 		
 		//reduces the execution counter by one
 		temp += tab + "if(" + execCounterVarName + " > 0) {\n";
-		temp += tab + tab + execCounterVarName  + " = "; 
-		temp += execCounterVarName + " - 1\n";
+		temp += tab + tab + execCounterVarName  + " = " + execCounterVarName + " - 1\n";
 		temp += tab + String.format(logTemplate, "Execution counter reduced by one.");
 		temp += tab + String.format(logTemplate, execCounterVarName + " = \" + " + execCounterVarName + " + \".");
 		temp += tab + "}\n";
