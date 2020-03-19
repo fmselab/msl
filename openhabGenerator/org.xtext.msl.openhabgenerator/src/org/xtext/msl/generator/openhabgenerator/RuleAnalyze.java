@@ -33,16 +33,16 @@ public class RuleAnalyze extends OpenHABRule {
 		String temp = "rule \"" + getName() + "\"\n";
 		
 		temp += "when\n";
-		temp += OpenHABGenerator.tab + "Item " + getTriggers().get(0).getName() + " received command ON\n";
+		temp += OpenHABGenerator.TAB + "Item " + getTriggers().get(0).getName() + " received command ON\n";
 
 		//Body starts here
 		temp += "then\n";
 		
 		//Turning switch OFF
-		temp += OpenHABGenerator.tab + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
+		temp += OpenHABGenerator.TAB + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
 		
 		if(OpenHABGenerator.writeLog) {
-			temp += "\n" + OpenHABGenerator.tab + getCounterVarName() + " = " + getCounterVarName() + " + 1\n";
+			temp += "\n" + OpenHABGenerator.TAB + getCounterVarName() + " = " + getCounterVarName() + " + 1\n";
 			temp += String.format(OpenHABGenerator.logTemplate, "Analyze for group (" + getGroupName() + ") active.");
 			temp += String.format(OpenHABGenerator.logTemplate, getCounterVarName() + " = \" + " + getCounterVarName() + " + \".");
 		}
@@ -59,12 +59,12 @@ public class RuleAnalyze extends OpenHABRule {
 			
 			//random adaptation decision
 			//work is an OR clause of adaptation variables within an if construct
-			String work = OpenHABGenerator.tab + "if(";
+			String work = OpenHABGenerator.TAB + "if(";
 			for(OpenHABRule ohr : ohrVisitor.getIn()) {
 				if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-					temp += OpenHABGenerator.tab + "if(((Math::random * 100.0).intValue + 1) <= 50 ){\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopAdaptationRequired() + " = true\n";
-					temp += OpenHABGenerator.tab + "}\n";
+					temp += OpenHABGenerator.TAB + "if(((Math::random * 100.0).intValue + 1) <= 50 ){\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopAdaptationRequired() + " = true\n";
+					temp += OpenHABGenerator.TAB + "}\n";
 					work += ((RuleMonitor)ohr).getLoopAdaptationRequired() + " || ";
 				}
 			}
@@ -74,21 +74,21 @@ public class RuleAnalyze extends OpenHABRule {
 			//Some adaptation required starts here
 			
 			//For each monitor, creates an if/else if(call && priority)
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "if(";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "if(";
 			for(OpenHABRule ohr : ohrVisitor.getIn()) {
 				if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
 					temp += ((RuleMonitor)ohr).getLoopCall() + " && " + ((RuleMonitor)ohr).getLoopPriority() + ") {\n";
 					
 					if(OpenHABGenerator.writeLog) {
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab 
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB 
 							+ String.format(OpenHABGenerator.logTemplate, "Adaptation required for " + ohr.getGroupName() + ".");
 					}
 					
 					temp += "\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopCall() + " = false\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopPriority() + " = false\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopCall() + " = false\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopPriority() + " = false\n";
 					temp += "\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "if(";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "if(";
 					
 					//For each OTHER monitor, creates an if/else if(call && !priority)
 					for(OpenHABRule ohrOther : ohrVisitor.getIn()) { //TODO risolvere il fatto che dipende dall'ordine delle componenti
@@ -96,24 +96,24 @@ public class RuleAnalyze extends OpenHABRule {
 							temp += ((RuleMonitor)ohrOther).getLoopCall() + " && !" + ((RuleMonitor)ohrOther).getLoopPriority() + ") {\n";
 							
 							if(OpenHABGenerator.writeLog) {
-								temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab +
+								temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB +
 									String.format(OpenHABGenerator.logTemplate, "Setting " + ((RuleMonitor)ohrOther).getLoopPriority() + " to true.");
 							}
 								
 							temp += "\n";
 							
-							temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab 
+							temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB 
 									+ ((RuleMonitor)ohrOther).getLoopPriority() + " = true\n";
 							
-							temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "} else if(";
+							temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "} else if(";
 						}
 					}
 					//OTHER monitor if clause ends here
 					
 					temp = temp.substring(0, temp.length() - 9) + "\n";
 					temp += "\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopMod() + " = true\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "} else if(";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopMod() + " = true\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "} else if(";
 				}
 			}
 			//monitor if clause ends here
@@ -122,27 +122,27 @@ public class RuleAnalyze extends OpenHABRule {
 			temp += "\n";
 			
 			//Turns ON exit switch
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + getOut().get(0).getTriggers().get(0).getName() +  ", ON)\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "sendCommand(" + getOut().get(0).getTriggers().get(0).getName() +  ", ON)\n";
 			
-			temp += OpenHABGenerator.tab + "} else {\n";
+			temp += OpenHABGenerator.TAB + "} else {\n";
 			//No adaptation required starts here
 			
 			//TODO there is some repeated code here
 			//For each monitor, creates an if/else if(call && priority)
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "if(";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "if(";
 			for(OpenHABRule ohr : ohrVisitor.getIn()) {
 				if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
 					temp += ((RuleMonitor)ohr).getLoopCall() + " && " + ((RuleMonitor)ohr).getLoopPriority() + ") {\n";
 					
 					if(OpenHABGenerator.writeLog) {
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab 
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB 
 							+ String.format(OpenHABGenerator.logTemplate, "No adaptation required for " + ohr.getGroupName() + ".");
 					}
 					temp += "\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopCall() + " = false\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopPriority() + " = false\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopCall() + " = false\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopPriority() + " = false\n";
 					temp += "\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "if(";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "if(";
 					
 					//For each OTHER monitor, creates an if/else if(call && !priority)
 					for(OpenHABRule ohrOther : ohrVisitor.getIn()) { //TODO risolvere il fatto che dipende dall'ordine delle componenti
@@ -150,16 +150,16 @@ public class RuleAnalyze extends OpenHABRule {
 							temp += ((RuleMonitor)ohrOther).getLoopCall() + " && !" + ((RuleMonitor)ohrOther).getLoopPriority() + ") {\n";
 							
 							if(OpenHABGenerator.writeLog) {
-								temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab +
+								temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB +
 									String.format(OpenHABGenerator.logTemplate, "Setting " + ((RuleMonitor)ohrOther).getLoopPriority() + " to true.");
 							}
 							
 							temp += "\n";
 							
-							temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab 
+							temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB 
 									+ ((RuleMonitor)ohrOther).getLoopPriority() + " = true\n";
 							
-							temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "} else if(";
+							temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "} else if(";
 						}
 					}
 					//OTHER monitor if clause ends here
@@ -168,81 +168,81 @@ public class RuleAnalyze extends OpenHABRule {
 					temp += "\n";
 					
 					if(needEndLoop) {
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "if(" + OpenHABGenerator.execCounterVarName + " > 0){\n";
-						temp += OpenHABGenerator.tab;
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "if(" + OpenHABGenerator.execCounterVarName + " > 0){\n";
+						temp += OpenHABGenerator.TAB;
 					}
 					if(OpenHABGenerator.writeLog) {
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Resetting loop.");
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, "Resetting loop.");
 						temp += "\n";
 					}
 					if(needEndLoop) {
-						temp += OpenHABGenerator.tab;
+						temp += OpenHABGenerator.TAB;
 					}
 					//Turns monitor switches ON (with infrastructure to stop loops if needed)
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 					
 					if(needEndLoop) {
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "}\n";
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "else {\n";
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "}\n";
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "else {\n";
 						
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab 
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB 
 								+ String.format(OpenHABGenerator.logTemplate, OpenHABGenerator.execCounterVarName + " = 0.");
 						
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab 
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB 
 								+ String.format(OpenHABGenerator.logTemplate, "Loops for " + OpenHABGenerator.concern + " are stopping.");
 						
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "}\n";
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "}\n";
 					}
 					
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "} else if(";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "} else if(";
 				}
 			}
 			//monitor if clause ends here
 			
 			temp = temp.substring(0, temp.length() - 9) + "\n";
-			temp += OpenHABGenerator.tab + "}\n";	
+			temp += OpenHABGenerator.TAB + "}\n";	
 			
 		} else {
 			//Aggregate, Simple
 			
 			//Random adaptation required generation
-			temp += OpenHABGenerator.tab + "if(((Math::random * 100.0).intValue + 1) <= 50 ){\n";
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + adaptReqs + " = true\n";
-			temp += OpenHABGenerator.tab + "}\n";
-			temp += OpenHABGenerator.tab + "else {\n";
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + adaptReqs + " = false\n";
-			temp += OpenHABGenerator.tab + "}\n\n";
+			temp += OpenHABGenerator.TAB + "if(((Math::random * 100.0).intValue + 1) <= 50 ){\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + adaptReqs + " = true\n";
+			temp += OpenHABGenerator.TAB + "}\n";
+			temp += OpenHABGenerator.TAB + "else {\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + adaptReqs + " = false\n";
+			temp += OpenHABGenerator.TAB + "}\n\n";
 			
 			//If adaptation required
-			temp += OpenHABGenerator.tab + "if(" + adaptReqs + "){\n";
+			temp += OpenHABGenerator.TAB + "if(" + adaptReqs + "){\n";
 			if(OpenHABGenerator.writeLog) {
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Adaptation required for " + OpenHABGenerator.concern + ".");
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Proceeding with loop.");
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, "Adaptation required for " + OpenHABGenerator.concern + ".");
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, "Proceeding with loop.");
 				temp += "\n";
 			}
 			
 			//Turning exit switch ON
 			for(OpenHABRule ohr : getOut())
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
-			temp += OpenHABGenerator.tab + "}\n";
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+			temp += OpenHABGenerator.TAB + "}\n";
 			//IF adaptation required ends here
 			
-			temp += OpenHABGenerator.tab + "else {\n";
+			temp += OpenHABGenerator.TAB + "else {\n";
 			//No adaptation required
 			
 			if(OpenHABGenerator.writeLog) {
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Adaptation not required for " + OpenHABGenerator.concern + ".");
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + getCounterVarName() + " = 0\n";
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, "Adaptation not required for " + OpenHABGenerator.concern + ".");
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + getCounterVarName() + " = 0\n";
 				
 				for(OpenHABRule ohrVisitor : getIn()) {
 					if (ohrVisitor instanceof RuleMonitor && ((RuleMonitor)ohrVisitor).isStart()) {
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ohrVisitor.getCounterVarName() + " = 0\n";
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ohrVisitor.getCounterVarName() + " = 0\n";
 					} else {
 						ohrVisitor = ohrVisitor.getIn().get(0);
 						if(ohrVisitor instanceof RuleAggregate) {
 							for(OpenHABRule ohr : ohrVisitor.getIn()) {
 								if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-									temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getCounterVarName() + " = 0\n";
+									temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ohr.getCounterVarName() + " = 0\n";
 								}
 							}
 						}
@@ -252,10 +252,10 @@ public class RuleAnalyze extends OpenHABRule {
 				//If there is a max number of executions if clause to stop loops
 				if(needEndLoop) {
 					temp += "\n";
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "if(" + OpenHABGenerator.execCounterVarName + " > 0){\n";
-					temp += OpenHABGenerator.tab;
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "if(" + OpenHABGenerator.execCounterVarName + " > 0){\n";
+					temp += OpenHABGenerator.TAB;
 				}
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Resetting loop.");
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, "Resetting loop.");
 				temp += "\n";
 			}
 			
@@ -264,19 +264,19 @@ public class RuleAnalyze extends OpenHABRule {
 			for(OpenHABRule ohrVisitor : getIn()) {
 				if (ohrVisitor instanceof RuleMonitor && ((RuleMonitor)ohrVisitor).isStart()) {
 					if(needEndLoop) {
-						temp += OpenHABGenerator.tab;
+						temp += OpenHABGenerator.TAB;
 					}
 					//Turning on monitor switch
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohrVisitor.getTriggers().get(0).getName() + ", ON)\n";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "sendCommand(" + ohrVisitor.getTriggers().get(0).getName() + ", ON)\n";
 				} else {
 					ohrVisitor = ohrVisitor.getIn().get(0);
 					if(ohrVisitor instanceof RuleAggregate) {
 						for(OpenHABRule ohr : ohrVisitor.getIn()) {
 							if(needEndLoop) {
-								temp += OpenHABGenerator.tab;
+								temp += OpenHABGenerator.TAB;
 							}
 							if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-								temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+								temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 							}
 						}
 					}
@@ -285,13 +285,13 @@ public class RuleAnalyze extends OpenHABRule {
 			
 			//If there are no more executions left, doesn't reset loop
 			if(needEndLoop) {
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "}\n";
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "else {\n";
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, OpenHABGenerator.execCounterVarName + " = 0.");
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Loops for " + OpenHABGenerator.concern + " are stopping.");
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "}\n";
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "}\n";
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "else {\n";
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, OpenHABGenerator.execCounterVarName + " = 0.");
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, "Loops for " + OpenHABGenerator.concern + " are stopping.");
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "}\n";
 			}
-			temp += OpenHABGenerator.tab + "}\n";
+			temp += OpenHABGenerator.TAB + "}\n";
 		}
 		temp += "end\n";
 		return temp;

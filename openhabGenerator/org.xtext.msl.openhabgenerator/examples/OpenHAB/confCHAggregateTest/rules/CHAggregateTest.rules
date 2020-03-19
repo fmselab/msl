@@ -7,7 +7,9 @@ when
 then
     adaptation_required_a_ch = false
 
-    createTimer(now.plusSeconds(1)) [|
+    //createTimer(now.plusSeconds(1)) [|
+        start_h0_to_ch_CHAggregateTest.sendCommand(OFF)
+        start_h1_to_ch_CHAggregateTest.sendCommand(OFF)
         start_m_ch_CHAggregateTest.sendCommand(OFF)
         start_a_ch_CHAggregateTest.sendCommand(OFF)
         start_p_ch_CHAggregateTest.sendCommand(OFF)
@@ -16,23 +18,23 @@ then
         start_e_h0_CHAggregateTest.sendCommand(OFF)
         start_m_h1_CHAggregateTest.sendCommand(ON)
         start_e_h1_CHAggregateTest.sendCommand(OFF)
-    |]
+    //|]
 end
 
 rule "Monitor_m_ch_CHAggregateTest"
 when
     Item start_m_ch_CHAggregateTest received command ON
 then
-    sendcommand(start_m_ch_CHAggregateTest, OFF)
+    sendCommand(start_m_ch_CHAggregateTest, OFF)
 
-    sendcommand(start_a_ch_CHAggregateTest, ON)
+    sendCommand(start_a_ch_CHAggregateTest, ON)
 end
 
 rule "Analyze_a_ch_CHAggregateTest"
 when
     Item start_a_ch_CHAggregateTest received command ON
 then
-    sendcommand(start_a_ch_CHAggregateTest, OFF)
+    sendCommand(start_a_ch_CHAggregateTest, OFF)
 
     if(((Math::random * 100.0).intValue + 1) <= 50 ){
         adaptation_required_a_ch = true
@@ -42,11 +44,11 @@ then
     }
 
     if(adaptation_required_a_ch){
-        sendcommand(start_p_ch_CHAggregateTest, ON)
+        sendCommand(start_p_ch_CHAggregateTest, ON)
     }
     else {
-        sendcommand(start_m_h0_CHAggregateTest, ON)
-        sendcommand(start_m_h1_CHAggregateTest, ON)
+        sendCommand(start_m_h0_CHAggregateTest, ON)
+        sendCommand(start_m_h1_CHAggregateTest, ON)
     }
 end
 
@@ -54,64 +56,64 @@ rule "Plan_p_ch_CHAggregateTest"
 when
     Item start_p_ch_CHAggregateTest received command ON
 then
-    sendcommand(start_p_ch_CHAggregateTest, OFF)
+    sendCommand(start_p_ch_CHAggregateTest, OFF)
 
-    sendcommand(start_e_ch_CHAggregateTest, ON)
+    sendCommand(start_e_ch_CHAggregateTest, ON)
 end
 
 rule "Execute_e_ch_CHAggregateTest"
 when
     Item start_e_ch_CHAggregateTest received command ON
 then
-    sendcommand(start_e_ch_CHAggregateTest, OFF)
+    sendCommand(start_e_ch_CHAggregateTest, OFF)
 
-    sendcommand(start_e_h0_CHAggregateTest, ON)
-    sendcommand(start_e_h1_CHAggregateTest, ON)
+    sendCommand(start_e_h0_CHAggregateTest, ON)
+    sendCommand(start_e_h1_CHAggregateTest, ON)
 end
 
 rule "Monitor_m_h0_CHAggregateTest"
 when
     Item start_m_h0_CHAggregateTest received command ON
 then
-    sendcommand(start_m_h0_CHAggregateTest, OFF)
+    sendCommand(start_m_h0_CHAggregateTest, OFF)
 
-    sendcommand(start_h0_to_ch_CHAggregateTest, ON)
+    sendCommand(start_h0_to_ch_CHAggregateTest, ON)
 end
 
 rule "Execute_e_h0_CHAggregateTest"
 when
     Item start_e_h0_CHAggregateTest received command ON
 then
-    sendcommand(start_e_h0_CHAggregateTest, OFF)
+    sendCommand(start_e_h0_CHAggregateTest, OFF)
 
-    sendcommand(start_m_h0_CHAggregateTest, ON)
+    sendCommand(start_m_h0_CHAggregateTest, ON)
 end
 
 rule "Monitor_m_h1_CHAggregateTest"
 when
     Item start_m_h1_CHAggregateTest received command ON
 then
-    sendcommand(start_m_h1_CHAggregateTest, OFF)
+    sendCommand(start_m_h1_CHAggregateTest, OFF)
 
-    sendcommand(start_h1_to_ch_CHAggregateTest, ON)
+    sendCommand(start_h1_to_ch_CHAggregateTest, ON)
 end
 
 rule "Execute_e_h1_CHAggregateTest"
 when
     Item start_e_h1_CHAggregateTest received command ON
 then
-    sendcommand(start_e_h1_CHAggregateTest, OFF)
+    sendCommand(start_e_h1_CHAggregateTest, OFF)
 
-    sendcommand(start_m_h1_CHAggregateTest, ON)
+    sendCommand(start_m_h1_CHAggregateTest, ON)
 end
 
 rule "Aggregate_h0h1_to_ch_CHAggregateTest"
 when
     Item h0h1_to_ch_CHAggregateTest received update ON
 then
-    sendcommand(start_h0_to_ch_CHAggregateTest, OFF)
-    sendcommand(start_h1_to_ch_CHAggregateTest, OFF)
+    sendCommand(start_h0_to_ch_CHAggregateTest, OFF)
+    sendCommand(start_h1_to_ch_CHAggregateTest, OFF)
 
-    sendcommand(start_m_ch_CHAggregateTest, ON)
+    sendCommand(start_m_ch_CHAggregateTest, ON)
 end
 

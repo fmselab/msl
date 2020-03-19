@@ -20,7 +20,7 @@ public class RuleAggregate extends OpenHABRule {
 		String temp = "rule \"" + getName() + "\"\n";
 		
 		temp += "when\n";
-		temp += OpenHABGenerator.tab + "Item " + groupSwitch.getName() + " received update ON\n";
+		temp += OpenHABGenerator.TAB + "Item " + groupSwitch.getName() + " received update ON\n";
 
 		//Body starts here
 		temp += "then\n";
@@ -48,7 +48,7 @@ public class RuleAggregate extends OpenHABRule {
 			if(!OpenHABGenerator.needMutex) {
 				//Aggregate, Simple only
 				for(OpenHABRule ohr : getIn()) {
-					temp += OpenHABGenerator.tab + ohr.getCounterVarName() + " = " + ohr.getCounterVarName() + " + 1\n";
+					temp += OpenHABGenerator.TAB + ohr.getCounterVarName() + " = " + ohr.getCounterVarName() + " + 1\n";
 					temp += String.format(OpenHABGenerator.logTemplate, ohr.getCounterVarName() + " = \" + " + ohr.getCounterVarName() + " + \"." );
 					temp += "\n";
 				}
@@ -57,7 +57,7 @@ public class RuleAggregate extends OpenHABRule {
 		if(OpenHABGenerator.needMutex) {
 			//MasterSlave
 			
-			temp += OpenHABGenerator.tab + "if(";
+			temp += OpenHABGenerator.TAB + "if(";
 			String work = "";
 			for(OpenHABRule ohr : getIn()) {
 				
@@ -66,12 +66,12 @@ public class RuleAggregate extends OpenHABRule {
 				if(ohr instanceof RuleMonitor) {
 					temp += ((RuleMonitor)ohr).getLoopSwitch().getName() + ".state == ON){\n";
 					if(OpenHABGenerator.writeLog) {
-						temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getCounterVarName() + " = " + ohr.getCounterVarName() + " + 1\n";
-						temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, ohr.getCounterVarName() + " = \" + " + ohr.getCounterVarName() + " + \"." );
+						temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ohr.getCounterVarName() + " = " + ohr.getCounterVarName() + " + 1\n";
+						temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, ohr.getCounterVarName() + " = \" + " + ohr.getCounterVarName() + " + \"." );
 						temp += "\n";
 					}
-					temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ((RuleMonitor)ohr).getLoopSwitch().getName() + ", OFF)\n";
-					temp += OpenHABGenerator.tab + "} else if (";
+					temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "sendCommand(" + ((RuleMonitor)ohr).getLoopSwitch().getName() + ", OFF)\n";
+					temp += OpenHABGenerator.TAB + "} else if (";
 					work += ((RuleMonitor)ohr).getLoopMod() + " || ";
 				}
 			}
@@ -80,21 +80,21 @@ public class RuleAggregate extends OpenHABRule {
 			//do-whiles to guarantee mutual exclusion
 			work = work.substring(0, work.length() - 4);
 			temp += "\n";
-			temp += OpenHABGenerator.tab + "do{\n";
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "do{\n";
+			temp += OpenHABGenerator.TAB + "do{\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "do{\n";
 			if(OpenHABGenerator.writeLog) {
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, getName() + " is sleeping for 1 second...");
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, getName() + " is sleeping for 1 second...");
 			}
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + "Thread::sleep(1000)\n";
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "} while(";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + "Thread::sleep(1000)\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "} while(";
 				//work is used here
 			temp += work;
 			temp += ")\n";
 			if(OpenHABGenerator.writeLog) {
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, getName() + " is sleeping for 1 second...");
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, getName() + " is sleeping for 1 second...");
 			}
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "Thread::sleep(1000)\n";
-			temp += OpenHABGenerator.tab + "} while(" + getOut().get(0).getTriggers().get(0).getName() + ")\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "Thread::sleep(1000)\n";
+			temp += OpenHABGenerator.TAB + "} while(" + getOut().get(0).getTriggers().get(0).getName() + ")\n";
 			temp += "\n";
 			if(OpenHABGenerator.writeLog) {
 				temp += String.format(OpenHABGenerator.logTemplate, getName() + " stopped sleeping.");
@@ -106,14 +106,14 @@ public class RuleAggregate extends OpenHABRule {
 			
 			//Turning OFF switches
 			for(OpenHABSwitch ohs : this.getTriggers()) {
-				temp += OpenHABGenerator.tab + "sendCommand(" + ohs.getName() + ", OFF)\n";
+				temp += OpenHABGenerator.TAB + "sendCommand(" + ohs.getName() + ", OFF)\n";
 			}
 			temp += "\n";
 		}
 		
 		//Turning ON exit switch
 		for(OpenHABRule ohr : getOut()) {
-			temp += OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+			temp += OpenHABGenerator.TAB + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 		}
 		temp += "end\n";
 		return temp;

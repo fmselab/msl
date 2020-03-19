@@ -16,42 +16,48 @@ import org.xtext.msl.mSL.*;
 
 public class OpenHABGenerator extends Generator {
 	
-	// The concern is the domain of the OpenHAB loop and it is taken from the configuration name. 
-	// If two Collections of OpenHAB entities are generated with different concerns, they should be able to be
-	// Merged without interference
-	public static String concern;
 
 	// An indentation standard for all methods.
-	public static final String tab = "    ";
+	public static final String TAB = "    ";
+	public static final boolean WRITELOG_DEFAULT = false;
+	public static final int EXECNUMBER_DEFAULT = 10;
 	
 	// Methods will refer to this field to see if they need to print mutual exclusion infrastructure
 	// (only if there is any interaction with multiplicity [*-SOME/ONE])
 	public static boolean needMutex;
+	
+	// The concern is the domain of the OpenHAB loop and it is taken from the configuration name. 
+	// If two Collections of OpenHAB entities are generated with different concerns, they should be able to be
+	// Merged without interference
+	public static String concern;
 	
 	// Methods will refer to these fields to see if, how and to where they need to print logging infrastructure
 	public static boolean writeLog;
 	public static int execNumber;
 	public static String execCounterVarName;
 	public static String logTemplate;
-	public static final boolean writeLog_default = false;
-	public static final int execNumber_default = 10;
 	
-	
-	private Map<ComponentInstance, AbstractComponent> concrToAbsComponents; // Map that links a ComponentInstance with
-																			// the corresponding AbstractComponent
-	private Map<Interaction, AbstractInteraction> concrToAbsInteractions; // Map that links an Interaction with the
-																			// corresponding AbstractInteraction
+
 	private Map<ComponentInstance, ConcreteGroup> compToGroupConcrete; // Map that links a ComponentInstance with the
 																		// ConcreteGroup containing it
+	
 	private Map<AbstractComponent, AbstractGroup> compToGroupAbs; // Map that links an AbstractComponent with the
 																	// AbstractGroup containing it
 
 	private Map<ComponentInstance, List<Interaction>> interactWithSameStart; // Map that links a ComponentInstance with
 																				// a list of Interactions with at least
 																				// 2 elements that start from it
+	
 	private Map<ComponentInstance, List<Interaction>> interactWithSameEnd; // Map that links a ComponentInstance with a
 																			// list of Interactions with at least 2
 																			// elements that end in it
+	
+	private Map<ComponentInstance, AbstractComponent> concrToAbsComponents; // Map that links a ComponentInstance with
+																			// the corresponding AbstractComponent
+	
+	private Map<Interaction, AbstractInteraction> concrToAbsInteractions; // Map that links an Interaction with the
+																			// corresponding AbstractInteraction
+
 	
 	private Map<ComponentInstance, OpenHABRule> compToRule; // Map that links a ComponentInstance to the
 															 // OpenHAB rule that represents it.
@@ -114,8 +120,9 @@ public class OpenHABGenerator extends Generator {
 			}
 		}
 		
-		if(writeLog)
-			logTemplate = OpenHABGenerator.tab + "logInfo(\"" + concern + ".rules\", \"%s\")\n";
+		if(writeLog) {
+			logTemplate = OpenHABGenerator.TAB + "logInfo(\"" + concern + ".rules\", \"%s\")\n";
+		}
 		
 		
 		// Populates a series of data structures that support the generation of OpenHAB items and rules. 
@@ -261,8 +268,8 @@ public class OpenHABGenerator extends Generator {
 			//Links the rules representing each component to each other as specified by the abstract interactions
 			for(AbstractInteraction aI : absInteractions) {
 				if(compToGroupAbs.get(aI.getStart().getType()) == compToGroupAbs.get(aI.getEnd().getType())) {
-					OpenHABRule start = new OpenHABRule("start");
-					OpenHABRule end = new OpenHABRule("end");
+					OpenHABRule start = new RuleMonitor("start", null, false);
+					OpenHABRule end = new RuleExecute("end", null);
 					for(ComponentInstance cI : cG.getComponents()) {
 						if(concrToAbsComponents.get(cI) == aI.getStart().getType()) {
 							start = compToRule.get(cI);
@@ -270,8 +277,10 @@ public class OpenHABGenerator extends Generator {
 							end = compToRule.get(cI);
 						}
 					}
-					start.addOut(end);
-					end.addIn(start);
+					if(!start.getName().equals("start") && !end.getName().equals("end")) {
+						start.addOut(end);
+						end.addIn(start);
+					}
 				}
 			}
 			
@@ -467,7 +476,7 @@ public class OpenHABGenerator extends Generator {
 		String temp = "rule \"Execution stop countdown\"\n";
 		
 		temp += "when\n";
-		temp += tab + "Item ";
+		temp += TAB + "Item ";
 		String work = "";
 		
 		//Chooses the exit of the aggregate rule trigger to mark the start of a new loop. (Should be an Analyze) 
@@ -486,16 +495,16 @@ public class OpenHABGenerator extends Generator {
 		temp += "then\n";
 		
 		//reduces the execution counter by one
-		temp += tab + "if(" + execCounterVarName + " > 0) {\n";
-		temp += tab + tab + execCounterVarName  + " = " + execCounterVarName + " - 1\n";
-		temp += tab + String.format(logTemplate, "Execution counter reduced by one.");
-		temp += tab + String.format(logTemplate, execCounterVarName + " = \" + " + execCounterVarName + " + \".");
-		temp += tab + "}\n";
+		temp += TAB + "if(" + execCounterVarName + " > 0) {\n";
+		temp += TAB + TAB + execCounterVarName  + " = " + execCounterVarName + " - 1\n";
+		temp += TAB + String.format(logTemplate, "Execution counter reduced by one.");
+		temp += TAB + String.format(logTemplate, execCounterVarName + " = \" + " + execCounterVarName + " + \".");
+		temp += TAB + "}\n";
 		
 		//announces that loops are stopping
-		temp += tab + "if(" + execCounterVarName + " <= 0) {\n";
-		temp += tab + String.format(logTemplate, execNumber + " executions have elapsed. Loops will end, then stop.");
-		temp += tab + "}\n";
+		temp += TAB + "if(" + execCounterVarName + " <= 0) {\n";
+		temp += TAB + String.format(logTemplate, execNumber + " executions have elapsed. Loops will end, then stop.");
+		temp += TAB + "}\n";
 		temp += "end\n";
 		
 		return temp;
@@ -528,14 +537,14 @@ public class OpenHABGenerator extends Generator {
 		// naming conventions are the same as those found in the OpenHAB folder
 		// output logs from OpenHAB are found in the OpenHAB folder under
 		// userdata/logs/openhab.log
-		int exec = execNumber_default;
-		boolean logMode = writeLog_default;
+		int exec = EXECNUMBER_DEFAULT;
+		boolean logMode = WRITELOG_DEFAULT;
 
 		if (args.length > 1) {
 			try {
 				exec = Integer.parseInt(args[1]);
 			} catch (Exception e) {
-				exec = execNumber_default;
+				exec = EXECNUMBER_DEFAULT;
 			}
 		}
 
@@ -543,7 +552,7 @@ public class OpenHABGenerator extends Generator {
 			try {
 				logMode = Boolean.parseBoolean(args[2]);
 			} catch (Exception e) {
-				logMode = writeLog_default;
+				logMode = WRITELOG_DEFAULT;
 			}
 		}
 

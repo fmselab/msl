@@ -34,17 +34,17 @@ public class RuleMonitor extends OpenHABRule {
 		String temp = "rule \"" + getName() + "\"\n";
 		
 		temp += "when\n";
-		temp += OpenHABGenerator.tab + "Item " + getTriggers().get(0).getName() + " received command ON\n";
+		temp += OpenHABGenerator.TAB + "Item " + getTriggers().get(0).getName() + " received command ON\n";
 
 		//Body starts here
 		temp += "then\n";
 		
 		//Turning switch OFF
-		temp += OpenHABGenerator.tab + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
+		temp += OpenHABGenerator.TAB + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
 		
 		//Logging infrastructure
 		if(OpenHABGenerator.writeLog) {
-			temp += "\n" + OpenHABGenerator.tab + getCounterVarName() + " = " + getCounterVarName() + " + 1\n";
+			temp += "\n" + OpenHABGenerator.TAB + getCounterVarName() + " = " + getCounterVarName() + " + 1\n";
 			temp += String.format(OpenHABGenerator.logTemplate, "Monitor for group (" + getGroupName() + ") active.");
 			temp += String.format(OpenHABGenerator.logTemplate, getCounterVarName() + " = \" + " + getCounterVarName() + " + \".");
 		}
@@ -56,20 +56,20 @@ public class RuleMonitor extends OpenHABRule {
 			//Try/Finally for mutual exclusion
 			
 			//Try
-			temp += OpenHABGenerator.tab + "try {\n";
+			temp += OpenHABGenerator.TAB + "try {\n";
 			if(OpenHABGenerator.writeLog) {
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, getName() + " is requesting a lock on lock_m.");
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, getName() + " is requesting a lock on lock_m.");
 			}
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "lock_m.lock()\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "lock_m.lock()\n";
 			
 			//Finally
-			temp += OpenHABGenerator.tab + "} finally {\n";
+			temp += OpenHABGenerator.TAB + "} finally {\n";
 			if(OpenHABGenerator.writeLog) {
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, getName() + " obtained a lock on lock_m.");
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, getName() + " obtained a lock on lock_m.");
 			}
 			
 			//Setting Priority true if no other priority is true
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "if(!(";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "if(!(";
 			String work = "";
 			OpenHABRule ohrVisitor = getOut().get(0);
 			if(ohrVisitor instanceof RuleAggregate) {
@@ -83,25 +83,25 @@ public class RuleMonitor extends OpenHABRule {
 				work = work.substring(0, work.length() - 2) + ")) {\n";
 			}
 			temp += work;
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + OpenHABGenerator.tab + getLoopPriority() + " = true\n";
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "}\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + OpenHABGenerator.TAB + getLoopPriority() + " = true\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "}\n";
 			
 			//Setting call true & unlocking
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + getLoopCall() + " = true\n";
-			temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "lock_m.unlock()\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + getLoopCall() + " = true\n";
+			temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "lock_m.unlock()\n";
 			if(OpenHABGenerator.writeLog) {
-				temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, getName() + " released a lock on lock_m.");
+				temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, getName() + " released a lock on lock_m.");
 			}
-			temp += OpenHABGenerator.tab + "}\n";
+			temp += OpenHABGenerator.TAB + "}\n";
 			temp += "\n";
 		}
 		for(OpenHABRule ohr : getOut()) {
 			
 			//Turning exit switch ON
 			if(ohr instanceof RuleAggregate) {
-				temp += OpenHABGenerator.tab + "sendCommand(" + getLoopSwitch().getName() + ", ON)\n";
+				temp += OpenHABGenerator.TAB + "sendCommand(" + getLoopSwitch().getName() + ", ON)\n";
 			} else {
-				temp += OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+				temp += OpenHABGenerator.TAB + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 			}
 		}
 		temp += "end\n";

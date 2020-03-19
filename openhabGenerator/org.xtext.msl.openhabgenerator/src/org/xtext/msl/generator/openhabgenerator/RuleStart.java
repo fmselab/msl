@@ -32,7 +32,7 @@ public class RuleStart {
 		String temp = "rule \"" + name + "\"\n";
 		
 		temp += "when\n";
-		temp += OpenHABGenerator.tab + "System started\n";
+		temp += OpenHABGenerator.TAB + "System started\n";
 		
 		//Body starts here
 		temp += "then\n";
@@ -41,7 +41,7 @@ public class RuleStart {
 			
 			//Execution counter initialization
 			if(OpenHABGenerator.execNumber > 0) {
-				temp += OpenHABGenerator.tab + OpenHABGenerator.execCounterVarName + " = " + OpenHABGenerator.execNumber + "\n";
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.execCounterVarName + " = " + OpenHABGenerator.execNumber + "\n";
 				temp += String.format(OpenHABGenerator.logTemplate, "Loops will run for " + OpenHABGenerator.execNumber + " iterations.");
 				temp += "\n";
 			}
@@ -65,7 +65,7 @@ public class RuleStart {
 				work += " (" + groupNames.get(0) + ").";
 			temp += String.format(OpenHABGenerator.logTemplate, work);
 			for(String s : groupCounters) {
-				temp += OpenHABGenerator.tab + s + " = 0\n";
+				temp += OpenHABGenerator.TAB + s + " = 0\n";
 				temp += String.format(OpenHABGenerator.logTemplate, s + " = \" + " + s + " + \".");
 			}
 			temp += "\n";
@@ -77,10 +77,10 @@ public class RuleStart {
 			for(OpenHABRule ohr : configurationRules) {
 				if(!(ohr instanceof RuleAggregate)) {
 					if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-						temp += OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopMod() + " = false\n";
-						temp += OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopCall() + " = false\n";
-						temp += OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopPriority() + " = false\n";
-						temp += OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopAdaptationRequired() + " = false\n";
+						temp += OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopMod() + " = false\n";
+						temp += OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopCall() + " = false\n";
+						temp += OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopPriority() + " = false\n";
+						temp += OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopAdaptationRequired() + " = false\n";
 						temp += "\n";
 					}
 				}
@@ -91,14 +91,14 @@ public class RuleStart {
 			//Adaptation Required variable initialization
 			for(OpenHABRule ohr : configurationRules) {
 				if(ohr instanceof RuleAnalyze) {
-					temp += OpenHABGenerator.tab + ((RuleAnalyze)ohr).getAdaptReqs() + " = false\n";
+					temp += OpenHABGenerator.TAB + ((RuleAnalyze)ohr).getAdaptReqs() + " = false\n";
 				}
 			}
 		}
 		temp += "\n";
 		
 		//Not sure this timer is needed
-		temp += OpenHABGenerator.tab + "//createTimer(now.plusSeconds(1)) [|\n";
+		temp += OpenHABGenerator.TAB + "//createTimer(now.plusSeconds(1)) [|\n";
 		
 		//Switch state initialization
 		//Work1 is for the Loop switches; they need to be set first to avoid issues with Group switches
@@ -108,20 +108,20 @@ public class RuleStart {
 		for(OpenHABRule ohr : configurationRules) {
 			if(!(ohr instanceof RuleAggregate)) {
 				if(ohr instanceof RuleMonitor && ((RuleMonitor)ohr).isStart()) {
-					work2 += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getTriggers().get(0).getName() + ".sendCommand(ON)\n";
+					work2 += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ohr.getTriggers().get(0).getName() + ".sendCommand(ON)\n";
 				} else {
-					work2 += OpenHABGenerator.tab + OpenHABGenerator.tab + ohr.getTriggers().get(0).getName() + ".sendCommand(OFF)\n";
+					work2 += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ohr.getTriggers().get(0).getName() + ".sendCommand(OFF)\n";
 				}
 			} else {
 				for (OpenHABRule r : ohr.getIn()) {
 					if(r instanceof RuleMonitor && ((RuleMonitor)r).isStart()) {
-						work1 += OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)r).getLoopSwitch().getName() + ".sendCommand(OFF)\n";
+						work1 += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)r).getLoopSwitch().getName() + ".sendCommand(OFF)\n";
 					}
 				}
 			}
 		}
 		temp += work1 + work2;
-		temp += OpenHABGenerator.tab + "//|]\n";
+		temp += OpenHABGenerator.TAB + "//|]\n";
 		temp += "end\n";
 		return temp;
 	}

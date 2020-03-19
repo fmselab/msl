@@ -19,21 +19,21 @@ public class RulePlan extends OpenHABRule{
 		String temp = "rule \"" + getName() + "\"\n";
 		
 		temp += "when\n";
-		temp += OpenHABGenerator.tab + "Item " + getTriggers().get(0).getName() + " received command ON\n";
+		temp += OpenHABGenerator.TAB + "Item " + getTriggers().get(0).getName() + " received command ON\n";
 		
 		//Body starts here
 		temp += "then\n";
 		
 		//Turns switch off
-		temp += OpenHABGenerator.tab + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
+		temp += OpenHABGenerator.TAB + "sendCommand(" + getTriggers().get(0).getName() + ", OFF)\n";
 		
 		//Logging infrastructure
 		if(OpenHABGenerator.writeLog) {
-			temp += "\n" + OpenHABGenerator.tab + getCounterVarName() + " = " + getCounterVarName() + " + 1\n";
+			temp += "\n" + OpenHABGenerator.TAB + getCounterVarName() + " = " + getCounterVarName() + " + 1\n";
 			temp += String.format(OpenHABGenerator.logTemplate, "Plan for group (" + getGroupName() + ") active.");
 			temp += String.format(OpenHABGenerator.logTemplate, getCounterVarName() + " = \" + " + getCounterVarName() + " + \".");
 			if(!getOut().get(0).getGroupName().equals(getGroupName())) {
-				temp += OpenHABGenerator.tab + getCounterVarName() + " = 0\n";
+				temp += OpenHABGenerator.TAB + getCounterVarName() + " = 0\n";
 			}
 		}
 		temp += "\n";
@@ -50,14 +50,14 @@ public class RulePlan extends OpenHABRule{
 			//For each monitor, sets up an If clause with the adaptation required flag
 			//To turn the respective execute ON
 			for(OpenHABRule ohr : ohrVisitor.getIn()) {
-				temp += OpenHABGenerator.tab + "if(" + ((RuleMonitor)ohr).getLoopAdaptationRequired() + "){\n";
+				temp += OpenHABGenerator.TAB + "if(" + ((RuleMonitor)ohr).getLoopAdaptationRequired() + "){\n";
 				if(OpenHABGenerator.writeLog) {
-					temp += OpenHABGenerator.tab + String.format(OpenHABGenerator.logTemplate, "Proceeding to " + ohr.getIn().get(0).getName() + ".");
+					temp += OpenHABGenerator.TAB + String.format(OpenHABGenerator.logTemplate, "Proceeding to " + ohr.getIn().get(0).getName() + ".");
 					temp += "\n";
 				}
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + ((RuleMonitor)ohr).getLoopAdaptationRequired() + " = false\n";
-				temp += OpenHABGenerator.tab + OpenHABGenerator.tab + "sendCommand(" + ohr.getIn().get(0).getTriggers().get(0).getName() + ", ON)\n";
-				temp += OpenHABGenerator.tab + "}\n";
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + ((RuleMonitor)ohr).getLoopAdaptationRequired() + " = false\n";
+				temp += OpenHABGenerator.TAB + OpenHABGenerator.TAB + "sendCommand(" + ohr.getIn().get(0).getTriggers().get(0).getName() + ", ON)\n";
+				temp += OpenHABGenerator.TAB + "}\n";
 				temp += "\n";
 			}
 			temp = temp.substring(0, temp.length() - 1);
@@ -66,7 +66,7 @@ public class RulePlan extends OpenHABRule{
 			
 			//Turn exit switch ON
 			for(OpenHABRule ohr : getOut())
-				temp += OpenHABGenerator.tab + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
+				temp += OpenHABGenerator.TAB + "sendCommand(" + ohr.getTriggers().get(0).getName() + ", ON)\n";
 		}
 		temp += "end\n";
 		return temp;

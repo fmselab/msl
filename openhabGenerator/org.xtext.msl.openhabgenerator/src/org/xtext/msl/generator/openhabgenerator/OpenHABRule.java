@@ -3,7 +3,7 @@ package org.xtext.msl.generator.openhabgenerator;
 import java.util.List;
 import java.util.ArrayList;
 
-public class OpenHABRule {
+public abstract class OpenHABRule {
 	private String name;
 	
 	//if logging is not requested, these are empty

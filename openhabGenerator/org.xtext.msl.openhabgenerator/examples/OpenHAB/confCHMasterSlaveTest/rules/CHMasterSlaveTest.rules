@@ -29,21 +29,23 @@ then
     adaptation_required_hs1_CHMasterSlaveTest = false
 
 
-    createTimer(now.plusSeconds(1)) [|
+    //createTimer(now.plusSeconds(1)) [|
+        start_hs0_to_chm_CHMasterSlaveTest.sendCommand(OFF)
+        start_hs1_to_chm_CHMasterSlaveTest.sendCommand(OFF)
         start_a_chm_CHMasterSlaveTest.sendCommand(OFF)
         start_p_chm_CHMasterSlaveTest.sendCommand(OFF)
         start_m_hs0_CHMasterSlaveTest.sendCommand(ON)
         start_e_hs0_CHMasterSlaveTest.sendCommand(OFF)
         start_m_hs1_CHMasterSlaveTest.sendCommand(ON)
         start_e_hs1_CHMasterSlaveTest.sendCommand(OFF)
-    |]
+    //|]
 end
 
 rule "Analyze_a_chm_CHMasterSlaveTest"
 when
     Item start_a_chm_CHMasterSlaveTest received command ON
 then
-    sendcommand(start_a_chm_CHMasterSlaveTest, OFF)
+    sendCommand(start_a_chm_CHMasterSlaveTest, OFF)
 
     if(((Math::random * 100.0).intValue + 1) <= 50 ){
         adaptation_required_hs0_CHMasterSlaveTest = true
@@ -109,7 +111,7 @@ rule "Plan_p_chm_CHMasterSlaveTest"
 when
     Item start_p_chm_CHMasterSlaveTest received command ON
 then
-    sendcommand(start_p_chm_CHMasterSlaveTest, OFF)
+    sendCommand(start_p_chm_CHMasterSlaveTest, OFF)
 
     if(adaptation_required_hs0_CHMasterSlaveTest){
         adaptation_required_hs0_CHMasterSlaveTest = false
@@ -126,7 +128,7 @@ rule "Monitor_m_hs0_CHMasterSlaveTest"
 when
     Item start_m_hs0_CHMasterSlaveTest received command ON
 then
-    sendcommand(start_m_hs0_CHMasterSlaveTest, OFF)
+    sendCommand(start_m_hs0_CHMasterSlaveTest, OFF)
 
     try {
         lock_m.lock()
@@ -138,14 +140,14 @@ then
         lock_m.unlock()
     }
 
-    sendcommand(start_hs0_to_chm_CHMasterSlaveTest, ON)
+    sendCommand(start_hs0_to_chm_CHMasterSlaveTest, ON)
 end
 
 rule "Execute_e_hs0_CHMasterSlaveTest"
 when
     Item start_e_hs0_CHMasterSlaveTest received command ON
 then
-    sendcommand(start_e_hs0_CHMasterSlaveTest, OFF)
+    sendCommand(start_e_hs0_CHMasterSlaveTest, OFF)
 
     try {
         lock_e.lock()
@@ -166,7 +168,7 @@ rule "Monitor_m_hs1_CHMasterSlaveTest"
 when
     Item start_m_hs1_CHMasterSlaveTest received command ON
 then
-    sendcommand(start_m_hs1_CHMasterSlaveTest, OFF)
+    sendCommand(start_m_hs1_CHMasterSlaveTest, OFF)
 
     try {
         lock_m.lock()
@@ -178,14 +180,14 @@ then
         lock_m.unlock()
     }
 
-    sendcommand(start_hs1_to_chm_CHMasterSlaveTest, ON)
+    sendCommand(start_hs1_to_chm_CHMasterSlaveTest, ON)
 end
 
 rule "Execute_e_hs1_CHMasterSlaveTest"
 when
     Item start_e_hs1_CHMasterSlaveTest received command ON
 then
-    sendcommand(start_e_hs1_CHMasterSlaveTest, OFF)
+    sendCommand(start_e_hs1_CHMasterSlaveTest, OFF)
 
     try {
         lock_e.lock()
@@ -214,11 +216,11 @@ then
 
     do{
         do{
-            Thread::Sleep(1000)
+            Thread::sleep(1000)
         } while(hs0_CHMasterSlaveTest_mod || hs1_CHMasterSlaveTest_mod)
-        Thread::Sleep(1000)
+        Thread::sleep(1000)
     } while(start_a_chm_CHMasterSlaveTest)
 
-    sendcommand(start_a_chm_CHMasterSlaveTest, ON)
+    sendCommand(start_a_chm_CHMasterSlaveTest, ON)
 end
 
