@@ -17,7 +17,7 @@ public class Loader {
 	}
 
 	public static Specification loadSpec(File f) {
-		new org.eclipse.emf.mwe.utils.StandaloneSetup().setPlatformUri("./");
+		//new org.eclipse.emf.mwe.utils.StandaloneSetup().setPlatformUri("./");
 		Injector injector = new MSLStandaloneSetupGenerated().createInjectorAndDoEMFRegistration();
 		XtextResourceSet resourceSet = injector.getInstance(XtextResourceSet.class);
 		// resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
