@@ -16,7 +16,7 @@ The framework also provides a translator (**MSL2OpenHAB**) from MSL models to [*
 
 [Library of MAPE patterns](http://fmse.di.unimi.it/sw/msl/MAPEpatterns.zip)
 
-Eclipse update site of MSL editor, ASM generator, and OpenHAB generator: [http://fmse.di.unimi.it/sw/msl/updatesite/](http://fmse.di.unimi.it/sw/msl/updatesite/)
+Eclipse update site of MSL editor, ASM generator, and OpenHAB generator: [https://raw.githubusercontent.com/fmselab/msl/master/org.xtext.msl.repository/](https://raw.githubusercontent.com/fmselab/msl/master/org.xtext.msl.repository/)
 
 [Smart heating case study for ECSA 2018 (MAPE concretization, generated ASM, and refined ASM)](http://fmse.di.unimi.it/sw/msl/smartHeatingCaseStudyECSA2018.zip)
 
